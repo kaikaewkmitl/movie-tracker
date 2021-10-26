@@ -1,9 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
 
-from tmdb_api.api import p
-
-p()
+from tmdb_api.api import getTrending
 
 root = tk.Tk()
 root.title("movie tracker")
@@ -31,10 +29,10 @@ myList = tk.Listbox(frame1,
                     )
 myList.pack(side=tk.LEFT)
 
-stuff = ["eat food", "sleep", "learn math", "asdfasf", "apsadfsdafple", "pie"]
-
-for s in stuff:
-    myList.insert(tk.END, s)
+trendingList = [movie['original_title'] if 'original_title' in movie else movie['name']
+                for movie in getTrending()]
+for movie in trendingList:
+    myList.insert(tk.END, movie)
 
 scrollbar = tk.Scrollbar(frame1)
 scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
