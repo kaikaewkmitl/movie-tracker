@@ -7,18 +7,42 @@ root = tk.Tk()
 root.title("movie tracker")
 root.geometry("800x800")
 
+
 myFont = Font(
-    family="Noteworthy",
-    size=30,
+    family="Helvetica",
+    size=25,
     weight="bold"
 )
+
+appName = tk.Label(root,
+                   text="Movie Tracker",
+                   font=myFont
+                   )
+appName.pack(pady=10)
+
+searchbar = tk.Entry(root,
+                     bg="white",
+                     width=30,
+                     fg="black",
+                     font=myFont,
+                     insertbackground="gray"
+                     )
+searchbar.insert(0, "Search for movies")
+searchbar.bind("<FocusIn>",
+               lambda _: searchbar.get() == "Search for movies" and searchbar.delete(0, tk.END)
+               )
+searchbar.bind("<FocusOut>",
+               lambda _:  len(searchbar.get()) == 0 and searchbar.insert(
+                   0, "Search for movies")
+               )
+searchbar.pack()
 
 frame1 = tk.Frame(root)
 frame1.pack(pady=10)
 
 myList = tk.Listbox(frame1,
                     font=myFont,
-                    width=25,
+                    width=30,
                     height=5,
                     bg="white",
                     bd=0,
@@ -29,7 +53,7 @@ myList = tk.Listbox(frame1,
                     )
 myList.pack(side=tk.LEFT)
 
-trendingList = [movie['original_title'] if 'original_title' in movie else movie['name']
+trendingList = [movie['title'] if 'title' in movie else movie['name']
                 for movie in getTrending()]
 for movie in trendingList:
     myList.insert(tk.END, movie)
