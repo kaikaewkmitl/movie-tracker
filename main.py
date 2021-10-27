@@ -1,12 +1,11 @@
 import tkinter as tk
 from tkinter.font import Font
 
-from tmdb_api.api import getTrending
+from tmdb_api.api import *
 
 root = tk.Tk()
 root.title("movie tracker")
 root.geometry("800x800")
-
 
 myFont = Font(
     family="Helvetica",
@@ -53,8 +52,13 @@ myList = tk.Listbox(frame1,
                     )
 myList.pack(side=tk.LEFT)
 
+movies = get_trending()
+
+for i in range(1):
+    get_poster(movies[i]["poster_path"], i)
+
 trendingList = [movie['title'] if 'title' in movie else movie['name']
-                for movie in getTrending()]
+                for movie in movies]
 for movie in trendingList:
     myList.insert(tk.END, movie)
 
