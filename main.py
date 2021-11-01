@@ -3,7 +3,7 @@ from tkinter.font import Font
 import shutil
 import signal
 
-from tmdb_api.api import *
+from tmdb_api.api import TheMovieDBAPI
 
 root = tk.Tk()
 root.title("movie tracker")
@@ -69,9 +69,11 @@ myList = tk.Listbox(frame1,
                     )
 myList.pack(side=tk.LEFT)
 
-movies = get_trending()
+tmdb_api = TheMovieDBAPI()
 
-get_poster(movies[0]["poster_path"])
+movies = tmdb_api.get_trending()
+
+tmdb_api.get_poster(movies[0]["poster_path"])
 
 trendingList = [movie['title'] if 'title' in movie else movie['name']
                 for movie in movies]
