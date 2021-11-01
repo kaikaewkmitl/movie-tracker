@@ -1,6 +1,5 @@
 import configparser
 import requests
-import shutil
 import os
 
 BASE_URL = "api.themoviedb.org"
@@ -24,7 +23,7 @@ def get_config():
         return response.json()
 
 
-def get_poster(poster_path: str, i: int):
+def get_poster(poster_path: str):
     poster_config = get_config()
     poster_base_url = poster_config["images"]["base_url"]
     poster_size = poster_config["images"]["poster_sizes"][1]
@@ -34,4 +33,5 @@ def get_poster(poster_path: str, i: int):
             os.makedirs("posters")
 
         with open(os.path.join("posters", poster_path[1:]), "wb") as f:
-            shutil.copyfileobj(response.raw, f)
+            for chunk in response:
+                f.write(chunk)

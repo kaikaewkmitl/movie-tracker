@@ -1,11 +1,28 @@
 import tkinter as tk
 from tkinter.font import Font
+import shutil
+import signal
 
 from tmdb_api.api import *
 
 root = tk.Tk()
 root.title("movie tracker")
 root.geometry("800x800")
+
+
+def interrupt():
+    print("terminate by ctrl c")
+    root.destroy()
+
+
+signal.signal(signal.SIGINT, lambda x, y: interrupt())
+
+
+def check():
+    root.after(50, check)
+
+
+root.after(50, check)
 
 myFont = Font(
     family="Helvetica",
@@ -54,8 +71,7 @@ myList.pack(side=tk.LEFT)
 
 movies = get_trending()
 
-for i in range(1):
-    get_poster(movies[i]["poster_path"], i)
+get_poster(movies[0]["poster_path"])
 
 trendingList = [movie['title'] if 'title' in movie else movie['name']
                 for movie in movies]
@@ -69,3 +85,4 @@ myList.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=myList.yview)
 
 root.mainloop()
+shutil.rmtree("posters")
