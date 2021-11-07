@@ -4,16 +4,25 @@ import shutil
 import signal
 
 from tmdb_api.api import TheMovieDBAPI
+from my_utils import *
 
 tmdb_api = TheMovieDBAPI()
+
+print("getting treding movies...")
 movies = tmdb_api.get_trending()
 
+trendingMovies = [movie['title'] if 'title' in movie else movie['name']
+                  for movie in movies]
+
 # test downloading image from internet
-tmdb_api.get_poster(movies[0]["poster_path"])
+# print("downloading poster...")
+# tmdb_api.get_poster(movies[0]["poster_path"])
 
 
 class App:
     def __init__(self):
+        print("creating an app...")
+
         self.root = tk.Tk()
         self.root.title("movie tracker")
         self.root.geometry("800x800")
@@ -22,24 +31,42 @@ class App:
 
         self.root.after(50, self.check)
 
-        myFont = Font(
-            family="Helvetica",
-            size=25,
-            weight="bold"
-        )
+        bigFont = get_big_font()
+        mediumFont = get_medium_font()
+        smallFont = get_small_font()
 
-        appName = tk.Label(self.root,
-                           text="Movie Tracker",
-                           font=myFont
-                           )
+        navbar = tk.Frame(self.root)
+        navbar.pack(fill=tk.X)
+
+        myListBtn = tk.Button(navbar,
+                              text="My List",
+                              font=smallFont
+                              )
+        myListBtn.pack(side=tk.LEFT, padx=10)
+
+        signupBtn = tk.Button(navbar,
+                              text="Signup",
+                              font=smallFont,
+                              )
+        signupBtn.pack(side=tk.RIGHT, pady=10, padx=10)
+
+        loginBtn = tk.Button(navbar,
+                             text="Login",
+                             font=smallFont
+                             )
+        loginBtn.pack(side=tk.RIGHT, pady=10)
+
+        appName = MyHeading(self.root,
+                            text="Movie Tracker"
+                            )
         appName.pack(pady=10)
 
         searchbar = tk.Entry(self.root,
                              bg="white",
-                             width=30,
                              fg="black",
-                             font=myFont,
-                             insertbackground="gray"
+                             width=30,
+                             font=mediumFont,
+                             insertbackground="gray",
                              )
         searchbar.insert(0, "Search for movies")
         searchbar.bind("<FocusIn>",
@@ -49,36 +76,41 @@ class App:
                        lambda _:  len(searchbar.get()) == 0 and searchbar.insert(
                            0, "Search for movies")
                        )
-        searchbar.pack()
+        searchbar.pack(pady=20)
 
-        frame1 = tk.Frame(self.root)
-        frame1.pack(pady=10)
+        trendingListHeading = MyHeading(self.root,
+                                        text="Trending Movies"
+                                        )
+        trendingListHeading.pack(pady=10)
 
-        myList = tk.Listbox(frame1,
-                            font=myFont,
-                            width=30,
-                            height=5,
-                            bg="white",
-                            bd=0,
-                            fg="blue",
-                            highlightthickness=0,
-                            selectbackground="black",
-                            activestyle="none"
-                            )
-        myList.pack(side=tk.LEFT)
+        trendingListContainer = tk.Frame(self.root)
+        trendingListContainer.pack(pady=20)
 
-        trendingList = [movie['title'] if 'title' in movie else movie['name']
-                        for movie in movies]
-        for movie in trendingList:
-            myList.insert(tk.END, movie)
+        trendingList = tk.Listbox(trendingListContainer,
+                                  font=mediumFont,
+                                  width=30,
+                                  height=15,
+                                  bg="white",
+                                  fg="blue",
+                                  bd=0,
+                                  highlightthickness=0,
+                                  selectbackground="gray",
+                                  selectforeground="orange",
+                                  activestyle="dotbox"
+                                  )
+        trendingList.pack(side=tk.LEFT)
 
-        scrollbar = tk.Scrollbar(frame1)
+        for movie in trendingMovies:
+            trendingList.insert(tk.END, movie)
+
+        scrollbar = tk.Scrollbar(trendingListContainer)
         scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
 
-        myList.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=myList.yview)
+        trendingList.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=trendingList.yview)
 
         self.root.mainloop()
+
         shutil.rmtree("posters")
 
     def interrupt(self):
