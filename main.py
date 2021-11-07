@@ -1,20 +1,18 @@
 from tkinter import Tk
 import shutil
 import signal
-from typing import List
+from typing import Dict
 
 from tmdb_api.api import TheMovieDBAPI
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
+from utils.const import *
 
 tmdb_api = TheMovieDBAPI()
 
 print("getting treding movies...")
-movies = tmdb_api.get_trending()
-
-trending_movies: List[str] = [movie['title'] if 'title' in movie else movie['name']
-                              for movie in movies]
+trending_movies = tmdb_api.get_trending()
 
 # test downloading image from internet
 # print("downloading poster...")
@@ -33,12 +31,16 @@ class App:
 
         self.__root.after(50, self.check)
 
-        self.__pages: List[Page] = [
-            MainPage(self.__root, trending_movies),
-            MovieInfoPage(self.__root)
-        ]
+        self.__pages: Dict[str][Page] = {
+            MAIN_PAGE: MainPage(
+                self.__root, trending_movies, self.change_page_callback
+            ),
+            MOVIE_INFO_PAGE: MovieInfoPage(
+                self.__root, self.change_page_callback
+            )
+        }
 
-        self.__pages[0].set_on_display(True)
+        self.__pages[MAIN_PAGE].set_on_display(True)
 
         self.__root.mainloop()
 
@@ -50,6 +52,13 @@ class App:
 
     def check(self) -> None:
         self.__root.after(50, self.check)
+
+    def change_page_callback(self, page_name: str):
+        for k, v in self.__pages.items():
+            if k == page_name:
+                v.set_on_display(True)
+            else:
+                v.set_on_display(False)
 
 
 App()

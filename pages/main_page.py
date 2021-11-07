@@ -1,13 +1,14 @@
 import tkinter as tk
-from typing import List
+from typing import Callable, List, Dict, Any
 
-from utils.utils import *
+from utils.my_widgets import *
+from utils.const import *
 from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent: tk.Misc, trending_movies: List[str], on_display: bool = False,
-                 *args, **kwargs) -> None:
+    def __init__(self, parent: tk.Misc, trending_movies: List[Dict[str, Any]], callback: Callable[[str], None],
+                 on_display: bool = False, *args, **kwargs) -> None:
         page = tk.Frame(parent, *args, **kwargs)
         super().__init__(on_display, page)
 
@@ -65,10 +66,18 @@ class MainPage(Page):
                                    selectforeground="orange",
                                    activestyle="dotbox"
                                    )
+        # trending_list.bind("<<ListboxSelect>>", lambda e: print(
+        #     trending_list.curselection()[0])
+        # )
+        trending_list.bind("<Double-Button-1>",
+                           lambda _: callback(MOVIE_INFO_PAGE)
+                           )
         trending_list.pack(side=tk.LEFT)
 
         for movie in trending_movies:
-            trending_list.insert(tk.END, movie)
+            trending_list.insert(
+                tk.END, movie["title"] if "title" in movie else movie["name"]
+            )
 
         scrollbar = tk.Scrollbar(trending_list_container)
         scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
