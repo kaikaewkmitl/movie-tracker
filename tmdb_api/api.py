@@ -1,4 +1,5 @@
 import configparser
+from typing import List
 import requests
 import os
 
@@ -13,7 +14,7 @@ class TheMovieDBAPI:
 
         self.__api_key = config[self.__base_url]["API_KEY"]
 
-    def get_trending(self):
+    def get_trending(self) -> List[str]:
         url = f"{self.__base_url_with_https}/trending/all/day?api_key={self.__api_key}"
         with requests.get(url) as response:
             return response.json()["results"]

@@ -8,11 +8,13 @@ class Page(ABC):
         self.__page = page
 
     @abstractmethod
-    def is_on_display(self):
-        return self.__on_display
-
-    @abstractmethod
     def set_on_display(self, on_display: bool):
         self.__on_display = on_display
         if self.__on_display:
-            self.__page.tkraise()
+            self.__page.pack(fill=tk.BOTH)
+        else:
+            self.__page.pack_forget()
+
+    @abstractmethod
+    def is_on_display(self):
+        return self.__on_display

@@ -1,9 +1,12 @@
-import tkinter as tk
+from tkinter import Tk
 import shutil
 import signal
+from typing import List
 
 from tmdb_api.api import TheMovieDBAPI
+from pages.abc_page import Page
 from pages.main_page import MainPage
+from pages.movie_info_page import MovieInfoPage
 
 tmdb_api = TheMovieDBAPI()
 
@@ -22,7 +25,7 @@ class App:
     def __init__(self):
         print("creating an app...")
 
-        self.__root = tk.Tk()
+        self.__root = Tk()
         self.__root.title("movie tracker")
         self.__root.geometry("800x800")
 
@@ -30,9 +33,10 @@ class App:
 
         self.__root.after(50, self.check)
 
-        current_page = MainPage(self.__root, trending_movies)
-        # current_page.pack(fill=tk.BOTH)
-        # current_page.tkraise()
+        self.__pages: List[Page] = [MainPage(self.__root, trending_movies),
+                                    MovieInfoPage(self.__root)]
+
+        self.__pages[0].set_on_display(True)
 
         self.__root.mainloop()
 

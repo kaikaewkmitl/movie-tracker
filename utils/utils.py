@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import Label, Button
 from tkinter.font import Font
 
 
@@ -26,7 +26,7 @@ def get_small_font() -> Font:
     )
 
 
-class MyHeading(tk.Label):
+class MyHeading(Label):
     def __init__(self, parent, font: Font = ("Helvetica", 30, "bold"), text="", *args, **kwargs):
         super().__init__(parent, font=font, text=text, fg="orange", *args, **kwargs)
 
@@ -34,7 +34,7 @@ class MyHeading(tk.Label):
         super().pack(pady=15)
 
 
-class MyButton(tk.Button):
+class MyButton(Button):
     def __init__(self, parent, font: Font = ("Helvetica", 15, "bold"), text="", *args, **kwargs):
         super().__init__(parent, font=font, text=text, *args, **kwargs)
 

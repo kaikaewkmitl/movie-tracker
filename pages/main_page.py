@@ -5,9 +5,8 @@ from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent, trending_movies, on_display=False, *args, **kwargs):
+    def __init__(self, parent, trending_movies, on_display: bool = False, *args, **kwargs):
         page = tk.Frame(parent, *args, **kwargs)
-        page.pack(fill=tk.BOTH)
         super().__init__(on_display, page)
 
         bigFont = get_big_font()
@@ -75,8 +74,8 @@ class MainPage(Page):
         trending_list.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=trending_list.yview)
 
+    def set_on_display(self, on_display: bool):
+        return super().set_on_display(on_display)
+
     def is_on_display(self):
         return super().is_on_display()
-
-    def set_on_display(self, on_display: bool):
-        super().set_on_display(on_display)
