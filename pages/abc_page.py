@@ -8,7 +8,7 @@ class Page(ABC):
         self.__page = page
 
     @abstractmethod
-    def set_on_display(self, on_display: bool):
+    def set_on_display(self, on_display: bool) -> None:
         self.__on_display = on_display
         if self.__on_display:
             self.__page.pack(fill=tk.BOTH)
@@ -16,5 +16,5 @@ class Page(ABC):
             self.__page.pack_forget()
 
     @abstractmethod
-    def is_on_display(self):
+    def is_on_display(self) -> bool:
         return self.__on_display

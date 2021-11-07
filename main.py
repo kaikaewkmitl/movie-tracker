@@ -13,8 +13,8 @@ tmdb_api = TheMovieDBAPI()
 print("getting treding movies...")
 movies = tmdb_api.get_trending()
 
-trending_movies = [movie['title'] if 'title' in movie else movie['name']
-                   for movie in movies]
+trending_movies: List[str] = [movie['title'] if 'title' in movie else movie['name']
+                              for movie in movies]
 
 # test downloading image from internet
 # print("downloading poster...")
@@ -22,7 +22,7 @@ trending_movies = [movie['title'] if 'title' in movie else movie['name']
 
 
 class App:
-    def __init__(self):
+    def __init__(self) -> None:
         print("creating an app...")
 
         self.__root = Tk()
@@ -33,8 +33,10 @@ class App:
 
         self.__root.after(50, self.check)
 
-        self.__pages: List[Page] = [MainPage(self.__root, trending_movies),
-                                    MovieInfoPage(self.__root)]
+        self.__pages: List[Page] = [
+            MainPage(self.__root, trending_movies),
+            MovieInfoPage(self.__root)
+        ]
 
         self.__pages[0].set_on_display(True)
 
@@ -42,11 +44,11 @@ class App:
 
         shutil.rmtree("posters")
 
-    def interrupt(self):
+    def interrupt(self) -> None:
         print("terminate by ctrl c")
         self.__root.destroy()
 
-    def check(self):
+    def check(self) -> None:
         self.__root.after(50, self.check)
 
 
