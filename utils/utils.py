@@ -27,5 +27,16 @@ def get_small_font() -> Font:
 
 
 class MyHeading(tk.Label):
-    def __init__(self, master, font: Font = ("Helvetica", 30, "bold"), text="", *args, **kwargs):
-        super().__init__(master=master, font=font, text=text, fg="orange", *args, **kwargs)
+    def __init__(self, parent, font: Font = ("Helvetica", 30, "bold"), text="", *args, **kwargs):
+        super().__init__(parent, font=font, text=text, fg="orange", *args, **kwargs)
+
+    def pack(self, *args, **kwargs):
+        super().pack(pady=15)
+
+
+class MyButton(tk.Button):
+    def __init__(self, parent, font: Font = ("Helvetica", 15, "bold"), text="", *args, **kwargs):
+        super().__init__(parent, font=font, text=text, *args, **kwargs)
+
+    def pack(self, *args, **kwargs):
+        super().pack(pady=10, *args, **kwargs)

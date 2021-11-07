@@ -1,43 +1,35 @@
 import tkinter as tk
 
 from utils.utils import *
+from .abc_page import Page
 
 
-class MainPage(tk.Frame):
-    def __init__(self, master, trending_movies, *args, **kwargs):
-        super().__init__(master, *args, **kwargs)
+class MainPage(Page):
+    def __init__(self, parent, trending_movies, on_display=False, *args, **kwargs):
+        page = tk.Frame(parent, *args, **kwargs)
+        page.pack(fill=tk.BOTH)
+        super().__init__(on_display, page)
 
         bigFont = get_big_font()
         mediumFont = get_medium_font()
         smallFont = get_small_font()
 
-        navbar = tk.Frame(self)
+        navbar = tk.Frame(page)
         navbar.pack(fill=tk.X)
 
-        myListBtn = tk.Button(navbar,
-                              text="My List",
-                              font=smallFont
-                              )
-        myListBtn.pack(side=tk.LEFT, padx=10)
+        my_list_btn = MyButton(navbar, text="My List")
+        my_list_btn.pack(side=tk.LEFT, padx=10)
 
-        signupBtn = tk.Button(navbar,
-                              text="Signup",
-                              font=smallFont,
-                              )
-        signupBtn.pack(side=tk.RIGHT, pady=10, padx=10)
+        signup_btn = MyButton(navbar, text="Signup")
+        signup_btn.pack(side=tk.RIGHT, padx=10)
 
-        loginBtn = tk.Button(navbar,
-                             text="Login",
-                             font=smallFont
-                             )
-        loginBtn.pack(side=tk.RIGHT, pady=10)
+        login_btn = MyButton(navbar, text="Login")
+        login_btn.pack(side=tk.RIGHT)
 
-        appName = MyHeading(self,
-                            text="Movie Tracker"
-                            )
-        appName.pack(pady=10)
+        appName = MyHeading(page, text="Movie Tracker")
+        appName.pack()
 
-        searchbar = tk.Entry(self,
+        searchbar = tk.Entry(page,
                              bg="white",
                              fg="black",
                              width=30,
@@ -54,12 +46,10 @@ class MainPage(tk.Frame):
                        )
         searchbar.pack(pady=20)
 
-        trending_list_heading = MyHeading(self,
-                                          text="Trending Movies"
-                                          )
-        trending_list_heading.pack(pady=10)
+        trending_list_heading = MyHeading(page, text="Trending Movies")
+        trending_list_heading.pack()
 
-        trending_list_container = tk.Frame(self)
+        trending_list_container = tk.Frame(page)
         trending_list_container.pack(pady=20)
 
         trending_list = tk.Listbox(trending_list_container,
@@ -84,3 +74,9 @@ class MainPage(tk.Frame):
 
         trending_list.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=trending_list.yview)
+
+    def is_on_display(self):
+        return super().is_on_display()
+
+    def set_on_display(self, on_display: bool):
+        super().set_on_display(on_display)

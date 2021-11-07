@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.font import Font
 import shutil
 import signal
 
@@ -11,8 +10,8 @@ tmdb_api = TheMovieDBAPI()
 print("getting treding movies...")
 movies = tmdb_api.get_trending()
 
-trendingMovies = [movie['title'] if 'title' in movie else movie['name']
-                  for movie in movies]
+trending_movies = [movie['title'] if 'title' in movie else movie['name']
+                   for movie in movies]
 
 # test downloading image from internet
 # print("downloading poster...")
@@ -23,28 +22,28 @@ class App:
     def __init__(self):
         print("creating an app...")
 
-        self.root = tk.Tk()
-        self.root.title("movie tracker")
-        self.root.geometry("800x800")
+        self.__root = tk.Tk()
+        self.__root.title("movie tracker")
+        self.__root.geometry("800x800")
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
-        self.root.after(50, self.check)
+        self.__root.after(50, self.check)
 
-        current_page = MainPage(self.root, trendingMovies)
-        current_page.pack(fill=tk.BOTH)
-        current_page.tkraise()
+        current_page = MainPage(self.__root, trending_movies)
+        # current_page.pack(fill=tk.BOTH)
+        # current_page.tkraise()
 
-        self.root.mainloop()
+        self.__root.mainloop()
 
         shutil.rmtree("posters")
 
     def interrupt(self):
         print("terminate by ctrl c")
-        self.root.destroy()
+        self.__root.destroy()
 
     def check(self):
-        self.root.after(50, self.check)
+        self.__root.after(50, self.check)
 
 
 App()
