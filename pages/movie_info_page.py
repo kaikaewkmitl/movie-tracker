@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import Misc, Frame
 from typing import Callable
 
 from .abc_page import Page
@@ -6,9 +6,9 @@ from utils.my_widgets import MyHeading
 
 
 class MovieInfoPage(Page):
-    def __init__(self, parent: tk.Misc, callback: Callable[[str], None],
+    def __init__(self, parent: Misc, callback: Callable[[str], None],
                  on_display: bool = False, *args, **kwargs) -> None:
-        page = tk.Frame(parent, *args, **kwargs)
+        page = Frame(parent, *args, **kwargs)
         super().__init__(on_display, page)
 
         test = MyHeading(page, text="TESTING")

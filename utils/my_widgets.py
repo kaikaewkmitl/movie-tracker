@@ -2,43 +2,40 @@ from tkinter import Label, Button, Misc
 from tkinter.font import Font
 
 
-def get_big_font() -> Font:
-    return Font(
-        family="Helvetica",
-        size=30,
-        weight="bold"
-    )
+class MyBigFont(Font):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(family="Helvetica", size=30, weight="bold", *args, **kwargs)
 
 
-def get_medium_font() -> Font:
-    return Font(
-        family="Helvetica",
-        size=20,
-        weight="bold"
-    )
+class MyMediumFont(Font):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(family="Helvetica", size=20, weight="bold", *args, **kwargs)
 
 
-def get_small_font() -> Font:
-    return Font(
-        family="Helvetica",
-        size=15,
-        weight="bold"
-    )
+class MySmallFont(Font):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(family="Helvetica", size=15, weight="bold", *args, **kwargs)
 
 
 class MyHeading(Label):
-    def __init__(self, parent: Misc, font: Font = ("Helvetica", 30, "bold"),
+    def __init__(self, parent: Misc, font: Font = MyBigFont,
                  text: str = "", *args, **kwargs) -> None:
-        super().__init__(parent, font=font, text=text, fg="orange", *args, **kwargs)
+        super().__init__(parent,
+                         font=font() if type(font) == type else font,
+                         text=text, fg="orange", *args, **kwargs
+                         )
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(pady=15, *args, **kwargs)
 
 
 class MyButton(Button):
-    def __init__(self, parent: Misc, font: Font = ("Helvetica", 15, "bold"),
+    def __init__(self, parent: Misc, font: Font = MySmallFont,
                  text: str = "", *args, **kwargs) -> None:
-        super().__init__(parent, font=font, text=text, *args, **kwargs)
+        super().__init__(parent,
+                         font=font() if type(font) == type else font,
+                         text=text, *args, **kwargs
+                         )
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(pady=10, *args, **kwargs)

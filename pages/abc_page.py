@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-import tkinter as tk
+from tkinter import Frame, BOTH
 
 
 class Page(ABC):
-    def __init__(self, on_display: bool = False, page: tk.Frame = None) -> None:
+    def __init__(self, on_display: bool, page: Frame) -> None:
         self.__on_display = on_display
         self.__page = page
 
@@ -11,7 +11,7 @@ class Page(ABC):
     def set_on_display(self, on_display: bool) -> None:
         self.__on_display = on_display
         if self.__on_display:
-            self.__page.pack(fill=tk.BOTH)
+            self.__page.pack(fill=BOTH)
         else:
             self.__page.pack_forget()
 

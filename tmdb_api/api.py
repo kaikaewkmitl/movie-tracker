@@ -3,24 +3,23 @@ from typing import Any, Dict, List
 import requests
 import os
 
+from utils.const import *
+
 
 class TheMovieDBAPI:
     def __init__(self) -> None:
-        self.__base_url = "api.themoviedb.org"
-        self.__base_url_with_https = f"https://{self.__base_url}/3"
-
         config = configparser.ConfigParser()
         config.read("./tmdb_api/config.ini")
 
-        self.__api_key = config[self.__base_url]["API_KEY"]
+        self.__api_key = config[BASE_URL]["API_KEY"]
 
     def get_trending(self) -> List[Dict[str, Any]]:
-        url = f"{self.__base_url_with_https}/trending/all/day?api_key={self.__api_key}"
+        url = f"{BASE_URL_WITH_HTTPS}/trending/all/day?api_key={self.__api_key}"
         with requests.get(url) as response:
             return response.json()["results"]
 
     def get_config(self) -> Dict[str, Any]:
-        url = f"{self.__base_url_with_https}/configuration?api_key={self.__api_key}"
+        url = f"{BASE_URL_WITH_HTTPS}/configuration?api_key={self.__api_key}"
         with requests.get(url) as response:
             return response.json()
 
