@@ -13,3 +13,8 @@ MOVIE_POSTER_PATH = "poster_path"
 MOVIE_POSTER_IMG = "poster_img"
 
 POSTERS_DIR = "posters"
+
+MY_LIST_BTN = "my_list_btn"
+SIGNUP_BTN = "signup_btn"
+LOGIN_BTN = "login_btn"
+BACK_BTN = "back_btn"

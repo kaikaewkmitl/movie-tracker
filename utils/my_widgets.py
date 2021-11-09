@@ -1,7 +1,7 @@
 from tkinter import Frame, Label, Button, Misc
 from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict
 
 from utils.const import *
 
@@ -49,27 +49,49 @@ class MyNavbar(Frame):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
+        self.__change_page_cb = change_page_callback
 
-        self.__my_list_btn = MyButton(self, text="My List")
-        self.__my_list_btn.pack(side=LEFT, padx=10)
+        self.__btns: Dict[str, MyButton] = {
+            MY_LIST_BTN: MyButton(
+                self, text="My List"
+            ),
+            SIGNUP_BTN: MyButton(
+                self, text="Signup",
+                command=lambda: self.focus_and_change_page(
+                    SIGNUP_BTN, SIGNUP_PAGE
+                )
+            ),
+            LOGIN_BTN: MyButton(
+                self, text="Login",
+                command=lambda: self.focus_and_change_page(
+                    LOGIN_BTN, LOGIN_PAGE
+                )
+            ),
+            BACK_BTN: MyButton(
+                self, text="Back",
+                command=lambda: self.focus_and_change_page(
+                    "", MAIN_PAGE
+                )
+            )
+        }
 
-        self.__signup_btn = MyButton(
-            self, text="Signup", command=lambda: change_page_callback(SIGNUP_PAGE)
-        )
-        self.__signup_btn.pack(side=RIGHT, padx=10)
-
-        self.__login_btn = MyButton(self, text="Login")
-        self.__login_btn.pack(side=RIGHT)
-
-        self.__back_btn = MyButton(
-            self, text="Back", command=lambda: change_page_callback(MAIN_PAGE)
-        )
+        self.__btns[MY_LIST_BTN].pack(side=LEFT, padx=10)
+        self.__btns[SIGNUP_BTN].pack(side=RIGHT, padx=10)
+        self.__btns[LOGIN_BTN].pack(side=RIGHT, padx=10)
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(fill=X, *args, **kwargs)
 
+    def focus_and_change_page(self, btn_name: str, page_name: str) -> None:
+        self.focus_btn(btn_name)
+        self.__change_page_cb(page_name)
+
     def display_back_btn(self) -> None:
-        self.__back_btn.pack(side=RIGHT, padx=10)
+        self.__btns[BACK_BTN].pack(side=RIGHT, padx=10)
 
     def remove_back_btn(self) -> None:
-        self.__back_btn.pack_forget()
+        self.__btns[BACK_BTN].pack_forget()
+
+    def focus_btn(self, btn_name: str) -> None:
+        for k, v in self.__btns.items():
+            v.config(fg="orange" if k == btn_name else "black")

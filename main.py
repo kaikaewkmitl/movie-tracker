@@ -8,6 +8,7 @@ from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
 from pages.signup_page import SignupPage
+from pages.login_page import LoginPage
 from utils.my_widgets import MyNavbar
 from utils.const import *
 
@@ -34,7 +35,12 @@ class App:
             MOVIE_INFO_PAGE: MovieInfoPage(
                 self.__root, self.change_page_callback
             ),
-            SIGNUP_PAGE: SignupPage(self.__root, self.change_page_callback)
+            SIGNUP_PAGE: SignupPage(
+                self.__root, self.change_page_callback
+            ),
+            LOGIN_PAGE: LoginPage(
+                self.__root, self.change_page_callback
+            )
         }
 
         self.__pages[MAIN_PAGE].set_on_display(True)
