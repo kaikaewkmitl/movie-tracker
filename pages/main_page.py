@@ -10,13 +10,11 @@ from .abc_page import Page
 class MainPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  trending_movies: List[Dict[str, Any]]) -> None:
-        super().__init__(False, parent, change_page_callback)
+        super().__init__(parent, change_page_callback)
         self.__trending_movies = trending_movies
         self.display()
 
     def display(self) -> None:
-        # page = self.get_page()
-
         appName = MyHeading(self._page, text="Movie Tracker")
         appName.pack()
 
@@ -25,7 +23,7 @@ class MainPage(Page):
                           fg="black",
                           width=30,
                           font=MyMediumFont(),
-                          insertbackground="gray",
+                          insertbackground="black",
                           )
         searchbar.insert(0, "Search for movies")
         searchbar.bind("<FocusIn>",
@@ -74,4 +72,3 @@ class MainPage(Page):
 
         trending_list.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=trending_list.yview)
-        return super().display()

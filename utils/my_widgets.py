@@ -53,7 +53,9 @@ class MyNavbar(Frame):
         self.__my_list_btn = MyButton(self, text="My List")
         self.__my_list_btn.pack(side=LEFT, padx=10)
 
-        self.__signup_btn = MyButton(self, text="Signup")
+        self.__signup_btn = MyButton(
+            self, text="Signup", command=lambda: change_page_callback(SIGNUP_PAGE)
+        )
         self.__signup_btn.pack(side=RIGHT, padx=10)
 
         self.__login_btn = MyButton(self, text="Login")

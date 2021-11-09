@@ -12,7 +12,7 @@ from utils.const import *
 
 class MovieInfoPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None]) -> None:
-        super().__init__(False, parent, change_page_callback)
+        super().__init__(parent, change_page_callback)
         self.__movie: Dict[str, Any] = {}
         self.__movie[MOVIE_POSTER_IMG] = None
         self.__movie[MOVIE_TITLE] = ""
@@ -20,8 +20,6 @@ class MovieInfoPage(Page):
         self.display()
 
     def display(self) -> None:
-        # page = self.get_page()
-
         movie_title = MyHeading(
             self._page, text=f"{self.__movie[MOVIE_TITLE]}"
         )
@@ -41,7 +39,7 @@ class MovieInfoPage(Page):
                         font=MySmallFont(),
                         wrap="word"
                         )
-        overview.insert(END, self.__movie[MOVIE_OVERVIEW])
+        overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
 

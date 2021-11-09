@@ -4,10 +4,11 @@ import signal
 from typing import Dict, cast
 
 from tmdb_api.api import get_trending
-from utils.my_widgets import MyNavbar
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
+from pages.signup_page import SignupPage
+from utils.my_widgets import MyNavbar
 from utils.const import *
 
 
@@ -32,7 +33,8 @@ class App:
             ),
             MOVIE_INFO_PAGE: MovieInfoPage(
                 self.__root, self.change_page_callback
-            )
+            ),
+            SIGNUP_PAGE: SignupPage(self.__root, self.change_page_callback)
         }
 
         self.__pages[MAIN_PAGE].set_on_display(True)
