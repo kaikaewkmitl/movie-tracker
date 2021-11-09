@@ -12,6 +12,7 @@ class MainPage(Page):
                  trending_movies: List[Dict[str, Any]]) -> None:
         super().__init__(False, parent, change_page_callback)
         self.__trending_movies = trending_movies
+        self.display()
 
     def display(self) -> None:
         page = self.get_page()

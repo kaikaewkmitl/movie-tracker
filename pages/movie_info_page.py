@@ -13,6 +13,10 @@ class MovieInfoPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str], None]) -> None:
         super().__init__(False, parent, change_page_callback)
         self.__movie: Dict[str, Any] = {}
+        self.__movie[MOVIE_POSTER_IMG] = None
+        self.__movie[MOVIE_TITLE] = ""
+        self.__movie[MOVIE_OVERVIEW] = ""
+        self.display()
 
     def display(self) -> None:
         page = self.get_page()
@@ -44,8 +48,13 @@ class MovieInfoPage(Page):
         poster.pack(padx=20, pady=20)
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
+        page = self.get_page()
+        for widget in page.winfo_children():
+            widget.destroy()
+
         self.__movie = movie
         get_poster(movie[MOVIE_POSTER_PATH])
         path = os.path.join(POSTERS_DIR, self.__movie[MOVIE_POSTER_PATH][1:])
         self.__movie[MOVIE_POSTER_IMG] = ImageTk.PhotoImage(Image.open(path))
+        self.display()
         self.set_on_display(True)

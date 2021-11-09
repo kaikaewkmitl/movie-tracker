@@ -18,7 +18,7 @@ class Page(ABC):
         self.__on_display = on_display
         if self.__on_display:
             self.__page.pack(fill=BOTH)
-            self.display()
+            # self.display()
         else:
             self.__page.pack_forget()
 

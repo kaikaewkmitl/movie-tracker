@@ -16,7 +16,7 @@ class App:
         print("creating an app...")
         self.__root = Tk()
         self.__root.title("movie tracker")
-        self.__root.geometry("800x650")
+        self.__root.geometry("800x700")
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
