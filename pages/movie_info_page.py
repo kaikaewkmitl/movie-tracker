@@ -1,5 +1,5 @@
 from tkinter import Label, Misc, Frame, Text
-from tkinter.constants import END, LEFT, N, RIGHT
+from tkinter.constants import BOTH, END, LEFT, N, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict
 

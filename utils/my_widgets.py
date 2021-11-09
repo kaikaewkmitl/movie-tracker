@@ -3,6 +3,8 @@ from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
 from typing import Callable
 
+from utils.const import MAIN_PAGE
+
 
 class MyBigFont(Font):
     def __init__(self, *args, **kwargs) -> None:
@@ -57,7 +59,10 @@ class MyNavbar(Frame):
         self.__login_btn = MyButton(self, text="Login")
         self.__login_btn.pack(side=RIGHT)
 
-        self.__back_btn = MyButton(self, text="Back")
+        self.__back_btn = MyButton(
+            self, text="Back", command=lambda: change_page_callback(MAIN_PAGE)
+        )
+        self.__back_btn.pack(side=RIGHT, padx=10)
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(fill=X, *args, **kwargs)

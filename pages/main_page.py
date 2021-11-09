@@ -1,5 +1,5 @@
 from tkinter import Misc, Frame, Entry, Listbox, Scrollbar
-from tkinter.constants import *
+from tkinter.constants import BOTH, LEFT, END, RIGHT
 from typing import Callable, List, Dict, Any
 
 from utils.my_widgets import MyHeading, MyButton, MyMediumFont
@@ -15,18 +15,6 @@ class MainPage(Page):
 
     def display(self) -> None:
         page = self.get_page()
-
-        # navbar = Frame(page)
-        # navbar.pack(fill=X)
-
-        # my_list_btn = MyButton(navbar, text="My List")
-        # my_list_btn.pack(side=LEFT, padx=10)
-
-        # signup_btn = MyButton(navbar, text="Signup")
-        # signup_btn.pack(side=RIGHT, padx=10)
-
-        # login_btn = MyButton(navbar, text="Login")
-        # login_btn.pack(side=RIGHT)
 
         appName = MyHeading(page, text="Movie Tracker")
         appName.pack()
