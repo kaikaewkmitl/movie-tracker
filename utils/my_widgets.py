@@ -1,9 +1,9 @@
 from tkinter import Frame, Label, Button, Misc
 from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
-from typing import Callable
+from typing import Callable, Optional
 
-from utils.const import MAIN_PAGE
+from utils.const import *
 
 
 class MyBigFont(Font):
@@ -46,7 +46,7 @@ class MyButton(Button):
 
 
 class MyNavbar(Frame):
-    def __init__(self, parent: Misc, change_page_callback: Callable[[str], None],
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
 
@@ -62,7 +62,6 @@ class MyNavbar(Frame):
         self.__back_btn = MyButton(
             self, text="Back", command=lambda: change_page_callback(MAIN_PAGE)
         )
-        self.__back_btn.pack(side=RIGHT, padx=10)
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(fill=X, *args, **kwargs)

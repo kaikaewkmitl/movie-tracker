@@ -1,5 +1,3 @@
-import os
-
 MAIN_PAGE = "main_page"
 MOVIE_INFO_PAGE = "movie_info_page"
 SIGNUP_PAGE = "signup_page"

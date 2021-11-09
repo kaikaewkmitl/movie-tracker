@@ -1,32 +1,23 @@
 from abc import ABC, abstractmethod
-from tkinter import Frame, BOTH, Misc
-from typing import Callable
+from tkinter import Frame, Misc
+from tkinter.constants import BOTH
+from typing import Callable, Optional
 
 
 class Page(ABC):
     def __init__(self, on_display: bool, parent: Misc,
-                 change_page_callback: Callable[[str], None]) -> None:
-        self.__on_display = on_display
-        self.__change_page_cb = change_page_callback
-        self.__page = Frame(parent)
+                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+        self._on_display = on_display
+        self._change_page_cb = change_page_callback
+        self._page = Frame(parent)
 
     @abstractmethod
     def display(self) -> None:
         pass
 
     def set_on_display(self, on_display: bool) -> None:
-        self.__on_display = on_display
-        if self.__on_display:
-            self.__page.pack(fill=BOTH)
-            # self.display()
+        self._on_display = on_display
+        if self._on_display:
+            self._page.pack(fill=BOTH)
         else:
-            self.__page.pack_forget()
-
-    def get_on_display(self) -> bool:
-        return self.__on_display
-
-    def get_page(self) -> Frame:
-        return self.__page
-
-    def get_change_page_cb(self) -> Callable[[str], None]:
-        return self.__change_page_cb
+            self._page.pack_forget()

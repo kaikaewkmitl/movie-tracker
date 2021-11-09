@@ -1,10 +1,10 @@
-from tkinter import Tk, Frame, LEFT, RIGHT, X
+from tkinter import Tk
 import shutil
 import signal
 from typing import Dict, cast
 
 from tmdb_api.api import get_trending
-from utils.my_widgets import MyButton, MyNavbar
+from utils.my_widgets import MyNavbar
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
@@ -15,7 +15,7 @@ class App:
     def __init__(self) -> None:
         print("creating an app...")
         self.__root = Tk()
-        self.__root.title("movie tracker")
+        self.__root.title("Movie Tracker")
         self.__root.geometry("800x700")
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
@@ -24,6 +24,7 @@ class App:
 
         self.__navbar = MyNavbar(self.__root, self.change_page_callback)
         self.__navbar.pack()
+        self.__navbar.remove_back_btn()
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
@@ -35,7 +36,6 @@ class App:
         }
 
         self.__pages[MAIN_PAGE].set_on_display(True)
-
         self.__curpage = MAIN_PAGE
 
         self.__root.mainloop()
@@ -49,22 +49,6 @@ class App:
     def check(self) -> None:
         self.__root.after(50, self.check)
 
-    # def change_page_callback(self, page_name: str, i: int = -1) -> None:
-    #     for k, v in self.__pages.items():
-    #         if k == page_name:
-    #             if k == MOVIE_INFO_PAGE:
-    #                 v = cast(MovieInfoPage, v)
-    #                 v.set_movie_and_display(trending_movies[i])
-    #             else:
-    #                 v.set_on_display(True)
-
-    #             if k == MAIN_PAGE:
-    #                 self.__navbar.remove_back_btn()
-    #             else:
-    #                 self.__navbar.display_back_btn()
-    #         else:
-    #             v.set_on_display(False)
-
     def change_page_callback(self, page_name: str, i: int = -1) -> None:
         self.__pages[self.__curpage].set_on_display(False)
         if page_name == MOVIE_INFO_PAGE:
@@ -72,6 +56,11 @@ class App:
             page.set_movie_and_display(trending_movies[i])
         else:
             self.__pages[page_name].set_on_display(True)
+
+        if page_name != MAIN_PAGE:
+            self.__navbar.display_back_btn()
+        else:
+            self.__navbar.remove_back_btn()
 
         self.__curpage = page_name
 

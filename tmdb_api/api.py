@@ -1,7 +1,7 @@
 import configparser
-from typing import Any, Dict, List
-import requests
 import os
+import requests
+from typing import Any, Dict, List
 
 from utils.const import *
 
