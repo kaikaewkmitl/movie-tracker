@@ -8,9 +8,9 @@ from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent: Misc, trending_movies: List[Dict[str, Any]],
-                 change_page_callback: Callable[[str], None], on_display: bool = False) -> None:
-        super().__init__(on_display, parent, change_page_callback)
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str], None],
+                 trending_movies: List[Dict[str, Any]]) -> None:
+        super().__init__(False, parent, change_page_callback)
         self.__trending_movies = trending_movies
 
     def display(self) -> None:

@@ -3,29 +3,21 @@ import shutil
 import signal
 from typing import Dict, cast
 
-from tmdb_api.api import TheMovieDBAPI
+from tmdb_api.api import get_trending
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
 from utils.const import *
 
-tmdb_api = TheMovieDBAPI()
-
 print("getting treding movies...")
-trending_movies = tmdb_api.get_trending()
+trending_movies = get_trending()
 for movie in trending_movies:
     movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
-
-# test downloading image from internet
-# print("downloading poster...")
-# tmdb_api.get_poster(movies[0]["poster_path"])
 
 
 class App:
     def __init__(self) -> None:
         print("creating an app...")
-
         self.__root = Tk()
         self.__root.title("movie tracker")
         self.__root.geometry("800x800")
@@ -36,7 +28,7 @@ class App:
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
-                self.__root, trending_movies, self.change_page_callback
+                self.__root, self.change_page_callback, trending_movies
             ),
             MOVIE_INFO_PAGE: MovieInfoPage(
                 self.__root, self.change_page_callback
@@ -47,7 +39,7 @@ class App:
 
         self.__root.mainloop()
 
-        shutil.rmtree("posters")
+        shutil.rmtree(POSTERS_DIR)
 
     def interrupt(self) -> None:
         print("terminate by ctrl c")
