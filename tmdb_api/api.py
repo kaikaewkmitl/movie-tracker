@@ -26,7 +26,7 @@ def get_config() -> Dict[str, Any]:
 def get_poster(poster_path: str) -> None:
     poster_config = get_config()
     poster_base_url = poster_config["images"]["base_url"]
-    poster_size = poster_config["images"]["poster_sizes"][1]
+    poster_size = poster_config["images"]["poster_sizes"][2]
     url = f"{poster_base_url}{poster_size}{poster_path}"
     with requests.get(url, stream=True) as response:
         if not os.path.exists(POSTERS_DIR):

@@ -1,5 +1,5 @@
 from tkinter import Label, Misc, Frame, Text
-from tkinter.constants import END, LEFT, RIGHT
+from tkinter.constants import END, LEFT, N, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict
 
@@ -34,13 +34,14 @@ class MovieInfoPage(Page):
                         wrap="word"
                         )
         overview.insert(END, self.__movie[MOVIE_OVERVIEW])
-        overview.pack(padx=10)
+        overview.pack(padx=20)
 
         poster_container = Frame(page)
-        poster_container.pack(side=LEFT)
+        poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)
 
-        poster = Label(poster_container, image=self.__movie[MOVIE_POSTER_IMG])
-        poster.pack(padx=10)
+        poster = Label(poster_container,
+                       image=self.__movie[MOVIE_POSTER_IMG], borderwidth=0)
+        poster.pack(padx=20, pady=20)
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie

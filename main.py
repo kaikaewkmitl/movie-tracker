@@ -1,9 +1,10 @@
-from tkinter import Tk
+from tkinter import Tk, Frame, LEFT, RIGHT, X
 import shutil
 import signal
 from typing import Dict, cast
 
 from tmdb_api.api import get_trending
+from utils.my_widgets import MyButton, MyNavbar
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
@@ -25,6 +26,9 @@ class App:
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
         self.__root.after(50, self.check)
+
+        self.__navbar = MyNavbar(self.__root, self.change_page_callback)
+        self.__navbar.pack()
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
@@ -56,6 +60,11 @@ class App:
                     v.set_movie_and_display(trending_movies[i])
                 else:
                     v.set_on_display(True)
+
+                if k == MAIN_PAGE:
+                    self.__navbar.remove_back_btn()
+                else:
+                    self.__navbar.display_back_btn()
             else:
                 v.set_on_display(False)
 
