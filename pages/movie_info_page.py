@@ -1,21 +1,22 @@
 from tkinter import Misc, Frame
-from typing import Callable
+from typing import Any, Callable, Dict
 
 from .abc_page import Page
 from utils.my_widgets import MyHeading
+from utils.const import *
 
 
 class MovieInfoPage(Page):
-    def __init__(self, parent: Misc, callback: Callable[[str], None],
-                 on_display: bool = False, *args, **kwargs) -> None:
-        page = Frame(parent, *args, **kwargs)
-        super().__init__(on_display, page)
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str], None],
+                 on_display: bool = False) -> None:
+        self.__movie: Dict[str, Any] = {}
+        super().__init__(on_display, parent, change_page_callback)
 
-        test = MyHeading(page, text="TESTING")
-        test.pack()
+    def display(self) -> None:
+        page = self.get_page()
+        movie_title = MyHeading(page, text=f"{self.__movie[MOVIE_TITLE]}")
+        movie_title.pack()
 
-    def set_on_display(self, on_display: bool) -> None:
-        return super().set_on_display(on_display)
-
-    def is_on_display(self) -> bool:
-        return super().is_on_display()
+    def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
+        self.__movie = movie
+        self.set_on_display(True)

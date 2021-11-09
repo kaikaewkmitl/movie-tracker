@@ -6,3 +6,5 @@ USER_LIST_PAGE = "user_list_page"
 
 BASE_URL = "api.themoviedb.org"
 BASE_URL_WITH_HTTPS = f"https://{BASE_URL}/3"
+
+MOVIE_TITLE = "movie_title"

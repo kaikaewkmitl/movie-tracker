@@ -8,10 +8,13 @@ from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent: Misc, trending_movies: List[Dict[str, Any]], callback: Callable[[str], None],
-                 on_display: bool = False, *args, **kwargs) -> None:
-        page = Frame(parent, *args, **kwargs)
-        super().__init__(on_display, page)
+    def __init__(self, parent: Misc, trending_movies: List[Dict[str, Any]],
+                 change_page_callback: Callable[[str], None], on_display: bool = False) -> None:
+        super().__init__(on_display, parent, change_page_callback)
+        self.__trending_movies = trending_movies
+
+    def display(self) -> None:
+        page = self.get_page()
 
         navbar = Frame(page)
         navbar.pack(fill=X)
@@ -67,13 +70,14 @@ class MainPage(Page):
         #     trending_list.curselection()[0])
         # )
         trending_list.bind("<Double-Button-1>",
-                           lambda _: callback(MOVIE_INFO_PAGE)
-                           )
+                           lambda _: self.get_change_page_cb()(
+                               MOVIE_INFO_PAGE, trending_list.curselection()[0]
+                           ))
         trending_list.pack(side=LEFT)
 
-        for movie in trending_movies:
+        for movie in self.__trending_movies:
             trending_list.insert(
-                END, movie["title"] if "title" in movie else movie["name"]
+                END, movie[MOVIE_TITLE]
             )
 
         scrollbar = Scrollbar(trending_list_container)
@@ -81,9 +85,4 @@ class MainPage(Page):
 
         trending_list.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=trending_list.yview)
-
-    def set_on_display(self, on_display: bool) -> None:
-        return super().set_on_display(on_display)
-
-    def is_on_display(self) -> bool:
-        return super().is_on_display()
+        return super().display()

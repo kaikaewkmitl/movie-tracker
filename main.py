@@ -1,7 +1,7 @@
 from tkinter import Tk
 import shutil
 import signal
-from typing import Dict
+from typing import Dict, cast
 
 from tmdb_api.api import TheMovieDBAPI
 from pages.abc_page import Page
@@ -13,6 +13,9 @@ tmdb_api = TheMovieDBAPI()
 
 print("getting treding movies...")
 trending_movies = tmdb_api.get_trending()
+for movie in trending_movies:
+    movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
 
 # test downloading image from internet
 # print("downloading poster...")
@@ -31,7 +34,7 @@ class App:
 
         self.__root.after(50, self.check)
 
-        self.__pages: Dict[str][Page] = {
+        self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
                 self.__root, trending_movies, self.change_page_callback
             ),
@@ -53,10 +56,14 @@ class App:
     def check(self) -> None:
         self.__root.after(50, self.check)
 
-    def change_page_callback(self, page_name: str):
+    def change_page_callback(self, page_name: str, i: int = -1):
         for k, v in self.__pages.items():
             if k == page_name:
-                v.set_on_display(True)
+                if k == MOVIE_INFO_PAGE:
+                    v = cast(MovieInfoPage, v)
+                    v.set_movie_and_display(trending_movies[i])
+                else:
+                    v.set_on_display(True)
             else:
                 v.set_on_display(False)
 
