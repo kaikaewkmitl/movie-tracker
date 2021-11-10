@@ -1,7 +1,7 @@
 from tkinter import Tk
 import shutil
 import signal
-from typing import Dict, cast
+from typing import Any, Dict, cast
 
 from tmdb_api.api import get_trending
 from pages.abc_page import Page
@@ -57,11 +57,11 @@ class App:
     def check(self) -> None:
         self.__root.after(50, self.check)
 
-    def change_page_callback(self, page_name: str, i: int = -1) -> None:
+    def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
         self.__pages[self.__curpage].set_on_display(False)
         if page_name == MOVIE_INFO_PAGE:
             page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
-            page.set_movie_and_display(trending_movies[i])
+            page.set_movie_and_display(movie)
         else:
             self.__pages[page_name].set_on_display(True)
 

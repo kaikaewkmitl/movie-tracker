@@ -12,7 +12,7 @@ class MainPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  trending_movies: List[Dict[str, Any]]) -> None:
         super().__init__(parent, change_page_callback)
-        self.__trending_movies = trending_movies
+        self.__movies = trending_movies
         self.display()
 
     def display(self) -> None:
@@ -35,54 +35,61 @@ class MainPage(Page):
                            0, SEARCH_BAR_DEFAULT)
                        )
         searchbar.bind("<Return>",
-                       lambda _: self.search(searchbar.get())
+                       lambda _: self.search_movie(searchbar.get())
                        )
         searchbar.pack(pady=20)
 
-        trending_list_heading = MyHeading(self._page, text="Trending Movies")
-        trending_list_heading.pack()
+        movie_list_heading = MyHeading(self._page, text="Trending Movies")
+        movie_list_heading.pack()
 
-        trending_list_container = Frame(self._page)
-        trending_list_container.pack(pady=20)
+        movie_list_container = Frame(self._page)
+        movie_list_container.pack(pady=20)
 
-        trending_list = Listbox(trending_list_container,
-                                font=MyMediumFont(),
-                                width=30,
-                                height=15,
-                                bg="white",
-                                fg="blue",
-                                bd=0,
-                                highlightthickness=0,
-                                selectbackground="gray",
-                                selectforeground="orange",
-                                activestyle="dotbox"
-                                )
-        # trending_list.bind("<<ListboxSelect>>", lambda e: print(
-        #     trending_list.curselection()[0])
+        movie_list = Listbox(movie_list_container,
+                             font=MyMediumFont(),
+                             width=30,
+                             height=15,
+                             bg="white",
+                             fg="blue",
+                             bd=0,
+                             highlightthickness=0,
+                             selectbackground="gray",
+                             selectforeground="orange",
+                             activestyle="dotbox"
+                             )
+        # movie_list.bind("<<ListboxSelect>>", lambda e: print(
+        #     movie_list.curselection()[0])
         # )
-        trending_list.bind("<Double-Button-1>",
-                           lambda _: self._change_page_cb(
-                               MOVIE_INFO_PAGE, trending_list.curselection()[0]
-                           ))
-        trending_list.pack(side=LEFT)
+        movie_list.bind("<Double-Button-1>",
+                        lambda _: self._change_page_cb(
+                            MOVIE_INFO_PAGE,
+                            self.__movies[movie_list.curselection()[0]]
+                        ))
+        movie_list.pack(side=LEFT)
 
-        for movie in self.__trending_movies:
-            trending_list.insert(
+        for movie in self.__movies:
+            movie_list.insert(
                 END, movie[MOVIE_TITLE]
             )
 
-        scrollbar = Scrollbar(trending_list_container)
+        scrollbar = Scrollbar(movie_list_container)
         scrollbar.pack(side=RIGHT, fill=BOTH)
 
-        trending_list.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=trending_list.yview)
+        movie_list.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=movie_list.yview)
 
-    def search(self, movie_name: str) -> None:
+    def search_movie(self, movie_name: str) -> None:
         if movie_name == "" or movie_name == SEARCH_BAR_DEFAULT:
             return
 
+        # encode the movie_name
         movie_name = "%20".join(movie_name.split())
         searched_movies = get_movie_by_name(movie_name)
         for movie in searched_movies:
             movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-            print(movie[MOVIE_TITLE])
+
+        self.__movies = searched_movies
+        for widget in self._page.winfo_children():
+            widget.destroy()
+
+        self.display()
