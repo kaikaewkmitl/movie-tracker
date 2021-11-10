@@ -92,4 +92,6 @@ class MainPage(Page):
         for widget in self._page.winfo_children():
             widget.destroy()
 
+        self._change_page_cb(MAIN_PAGE)
         self.display()
+        self._page.update()
