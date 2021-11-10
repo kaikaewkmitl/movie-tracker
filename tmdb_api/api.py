@@ -17,6 +17,12 @@ def get_trending() -> List[Dict[str, Any]]:
         return response.json()["results"]
 
 
+def get_movie_by_name(movie_name: str) -> List[Dict[str, Any]]:
+    url = f"{BASE_URL_WITH_HTTPS}/search/movie?api_key={API_KEY}&query={movie_name}&page=1"
+    with requests.get(url) as response:
+        return response.json()["results"]
+
+
 def get_config() -> Dict[str, Any]:
     url = f"{BASE_URL_WITH_HTTPS}/configuration?api_key={API_KEY}"
     with requests.get(url) as response:

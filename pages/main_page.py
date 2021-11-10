@@ -2,6 +2,7 @@ from tkinter import Misc, Frame, Entry, Listbox, Scrollbar
 from tkinter.constants import BOTH, LEFT, END, RIGHT
 from typing import Callable, List, Dict, Any, Optional
 
+from tmdb_api.api import get_movie_by_name
 from utils.my_widgets import MyHeading, MyMediumFont
 from utils.const import *
 from .abc_page import Page
@@ -25,13 +26,16 @@ class MainPage(Page):
                           font=MyMediumFont(),
                           insertbackground="black",
                           )
-        searchbar.insert(0, "Search for movies")
+        searchbar.insert(0, SEARCH_BAR_DEFAULT)
         searchbar.bind("<FocusIn>",
-                       lambda _: searchbar.get() == "Search for movies" and searchbar.delete(0, END)
+                       lambda _: searchbar.get() == SEARCH_BAR_DEFAULT and searchbar.delete(0, END)
                        )
         searchbar.bind("<FocusOut>",
                        lambda _:  len(searchbar.get()) == 0 and searchbar.insert(
-                           0, "Search for movies")
+                           0, SEARCH_BAR_DEFAULT)
+                       )
+        searchbar.bind("<Return>",
+                       lambda _: self.search(searchbar.get())
                        )
         searchbar.pack(pady=20)
 
@@ -72,3 +76,13 @@ class MainPage(Page):
 
         trending_list.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=trending_list.yview)
+
+    def search(self, movie_name: str) -> None:
+        if movie_name == "" or movie_name == SEARCH_BAR_DEFAULT:
+            return
+
+        movie_name = "%20".join(movie_name.split())
+        searched_movies = get_movie_by_name(movie_name)
+        for movie in searched_movies:
+            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+            print(movie[MOVIE_TITLE])
