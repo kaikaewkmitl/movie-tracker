@@ -65,7 +65,6 @@ def get_poster(poster_path: str) -> None:
     poster_base_url = poster_config["images"]["base_url"]
     poster_size = poster_config["images"]["poster_sizes"][2]
     url = f"{poster_base_url}{poster_size}{poster_path}"
-    print(url)
     response = handle_request(url, stream=True)
     if not os.path.exists(POSTERS_DIR):
         os.makedirs(POSTERS_DIR)

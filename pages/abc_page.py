@@ -6,7 +6,7 @@ from typing import Callable, Optional
 
 class Page(ABC):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, str, Optional[int]], None]) -> None:
         self._on_display = False
         self._change_page_cb = change_page_callback
         self._page = Frame(parent)

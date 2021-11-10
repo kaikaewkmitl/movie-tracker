@@ -9,10 +9,12 @@ from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str, str, Optional[int]], None],
                  trending_movies: List[Dict[str, Any]]) -> None:
         super().__init__(parent, change_page_callback)
-        self.__movies = trending_movies
+        self.set_movies(trending_movies)
+        self.__default_movies = self.__movies
+        self.__searched = ""
         self.display()
 
     def display(self) -> None:
@@ -39,7 +41,10 @@ class MainPage(Page):
                        )
         searchbar.pack(pady=20)
 
-        movie_list_heading = MyHeading(self._page, text="Trending Movies")
+        text = "Trending Movies"
+        if self.__searched != "":
+            text = f"Search Result: {self.__searched}"
+        movie_list_heading = MyHeading(self._page, text=text)
         movie_list_heading.pack()
 
         movie_list_container = Frame(self._page)
@@ -62,6 +67,7 @@ class MainPage(Page):
         # )
         movie_list.bind("<Double-Button-1>",
                         lambda _: self._change_page_cb(
+                            MAIN_MOVIE_LIST,
                             MOVIE_INFO_PAGE,
                             self.__movies[movie_list.curselection()[0]]
                         ))
@@ -82,16 +88,33 @@ class MainPage(Page):
         if movie_name == "" or movie_name == SEARCH_BAR_DEFAULT:
             return
 
+        self.__searched = movie_name
+
         # encode the movie_name
         movie_name = "%20".join(movie_name.split())
         searched_movies = get_movie_by_name(movie_name)
-        for movie in searched_movies:
-            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
-        self.__movies = searched_movies
+        self.set_movies(searched_movies)
         for widget in self._page.winfo_children():
             widget.destroy()
 
-        self._change_page_cb(MAIN_PAGE)
+        self._change_page_cb(SEARCH_BAR, MAIN_PAGE)
         self.display()
         self._page.update()
+
+    def set_movies(self, movies: List[Dict[str, Any]]) -> None:
+        for movie in movies:
+            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
+        self.__movies = movies
+
+    def set_default(self) -> None:
+        self.__movies = self.__default_movies
+        self.__searched = ""
+
+        for widget in self._page.winfo_children():
+            widget.destroy()
+        self.display()
+        self._page.update()
+
+    def get_searched(self) -> str:
+        return self.__searched

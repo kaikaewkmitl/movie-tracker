@@ -11,7 +11,7 @@ from utils.const import *
 
 
 class MovieInfoPage(Page):
-    def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str, str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
         self.__movie: Dict[str, Any] = {}
         self.__movie[MOVIE_POSTER_IMG] = None

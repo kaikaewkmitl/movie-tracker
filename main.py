@@ -57,7 +57,7 @@ class App:
     def check(self) -> None:
         self.__root.after(50, self.check)
 
-    def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
+    def change_page_callback(self, from_widget: str, page_name: str, movie: Dict[str, Any] = None) -> None:
         self.__pages[self.__curpage].set_on_display(False)
         if page_name == MOVIE_INFO_PAGE:
             page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
@@ -68,7 +68,14 @@ class App:
         if page_name != MAIN_PAGE:
             self.__navbar.display_back_btn()
         else:
-            self.__navbar.remove_back_btn()
+            page = cast(MainPage, self.__pages[MAIN_PAGE])
+            if page.get_searched() == "":
+                self.__navbar.remove_back_btn()
+            elif from_widget == BACK_BTN and self.__curpage == MAIN_PAGE:
+                self.__navbar.remove_back_btn()
+                page.set_default()
+            else:
+                self.__navbar.display_back_btn()
 
         self.__curpage = page_name
 
@@ -76,7 +83,5 @@ class App:
 if __name__ == "__main__":
     print("getting treding movies...")
     trending_movies = get_trending()
-    for movie in trending_movies:
-        movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
 
     App()
