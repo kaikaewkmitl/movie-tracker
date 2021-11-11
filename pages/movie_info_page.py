@@ -63,7 +63,6 @@ class MovieInfoPage(Page):
 
         self.__movie = movie
         if MOVIE_POSTER_PATH in self.__movie and self.__movie[MOVIE_POSTER_PATH] != None:
-            print(self.__movie[MOVIE_POSTER_PATH])
             get_poster(movie[MOVIE_POSTER_PATH])
             path = os.path.join(
                 POSTERS_DIR, self.__movie[MOVIE_POSTER_PATH][1:]

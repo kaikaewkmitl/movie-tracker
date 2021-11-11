@@ -86,11 +86,11 @@ class MyNavbar(Frame):
         self.focus_btn(btn_name)
         self.__change_page_cb(from_widget, page_name)
 
-    def display_back_btn(self) -> None:
-        self.__btns[BACK_BTN].pack(side=RIGHT, padx=10)
+    def display_btn(self, btn_name: str) -> None:
+        self.__btns[btn_name].pack(side=RIGHT, padx=10)
 
-    def remove_back_btn(self) -> None:
-        self.__btns[BACK_BTN].pack_forget()
+    def remove_btn(self, btn_name: str) -> None:
+        self.__btns[btn_name].pack_forget()
 
     def focus_btn(self, btn_name: str) -> None:
         for k, v in self.__btns.items():

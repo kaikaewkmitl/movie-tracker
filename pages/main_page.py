@@ -1,4 +1,4 @@
-from tkinter import Misc, Frame, Entry, Listbox, Scrollbar
+from tkinter import Label, Misc, Frame, Entry, Listbox, Scrollbar
 from tkinter.constants import BOTH, LEFT, END, RIGHT
 from typing import Callable, List, Dict, Any, Optional
 
@@ -50,39 +50,48 @@ class MainPage(Page):
         movie_list_container = Frame(self._page)
         movie_list_container.pack(pady=20)
 
-        movie_list = Listbox(movie_list_container,
-                             font=MyMediumFont(),
-                             width=30,
-                             height=15,
-                             bg="white",
-                             fg="blue",
-                             bd=0,
-                             highlightthickness=0,
-                             selectbackground="gray",
-                             selectforeground="orange",
-                             activestyle="dotbox"
-                             )
-        # movie_list.bind("<<ListboxSelect>>", lambda e: print(
-        #     movie_list.curselection()[0])
-        # )
-        movie_list.bind("<Double-Button-1>",
-                        lambda _: self._change_page_cb(
-                            MAIN_MOVIE_LIST,
-                            MOVIE_INFO_PAGE,
-                            self.__movies[movie_list.curselection()[0]]
-                        ))
-        movie_list.pack(side=LEFT)
+        if len(self.__movies) == 0:
+            no_result = Label(movie_list_container,
+                              text="No Movie Found...\nPlease try some other keywords",
+                              font=MyMediumFont()
+                              )
+            no_result.pack()
+        else:
+            movie_list = Listbox(movie_list_container,
+                                 font=MyMediumFont(),
+                                 width=30,
+                                 height=15,
+                                 bg="white",
+                                 fg="blue",
+                                 bd=0,
+                                 highlightthickness=0,
+                                 selectbackground="gray",
+                                 selectforeground="orange",
+                                 activestyle="dotbox"
+                                 )
+            # movie_list.bind("<<ListboxSelect>>", lambda e: print(
+            #     movie_list.curselection()[0])
+            # )
+            movie_list.bind("<Double-Button-1>",
+                            lambda _: self._change_page_cb(
+                                MAIN_MOVIE_LIST,
+                                MOVIE_INFO_PAGE,
+                                self.__movies[movie_list.curselection()[0]]
+                            ))
+            movie_list.pack(side=LEFT)
 
-        for movie in self.__movies:
-            movie_list.insert(
-                END, movie[MOVIE_TITLE]
-            )
+            for movie in self.__movies:
+                movie_list.insert(
+                    END, movie[MOVIE_TITLE]
+                )
 
-        scrollbar = Scrollbar(movie_list_container)
-        scrollbar.pack(side=RIGHT, fill=BOTH)
+            scrollbar = Scrollbar(movie_list_container)
+            scrollbar.pack(side=RIGHT, fill=BOTH)
 
-        movie_list.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=movie_list.yview)
+            movie_list.config(yscrollcommand=scrollbar.set)
+            scrollbar.config(command=movie_list.yview)
+
+    # def change_page(self, page_name: str, **kwargs) -> None:
 
     def search_movie(self, movie_name: str) -> None:
         if movie_name == "" or movie_name == SEARCH_BAR_DEFAULT:

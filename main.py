@@ -26,7 +26,7 @@ class App:
 
         self.__navbar = MyNavbar(self.__root, self.change_page_callback)
         self.__navbar.pack()
-        self.__navbar.remove_back_btn()
+        self.__navbar.remove_btn(BACK_BTN)
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
@@ -66,22 +66,21 @@ class App:
             self.__pages[page_name].set_on_display(True)
 
         if page_name != MAIN_PAGE:
-            self.__navbar.display_back_btn()
+            self.__navbar.display_btn(BACK_BTN)
         else:
             page = cast(MainPage, self.__pages[MAIN_PAGE])
             if page.get_searched() == "":
-                self.__navbar.remove_back_btn()
+                self.__navbar.remove_btn(BACK_BTN)
             elif from_widget == BACK_BTN and self.__curpage == MAIN_PAGE:
-                self.__navbar.remove_back_btn()
+                self.__navbar.remove_btn(BACK_BTN)
                 page.set_default()
             else:
-                self.__navbar.display_back_btn()
+                self.__navbar.display_btn(BACK_BTN)
 
         self.__curpage = page_name
 
 
 if __name__ == "__main__":
-    print("getting treding movies...")
+    print("getting trending movies")
     trending_movies = get_trending()
-
     App()
