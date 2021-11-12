@@ -9,12 +9,9 @@ from .abc_page import Page
 
 
 class MainPage(Page):
-    def __init__(self, parent: Misc, change_page_callback: Callable[[str, str, Optional[int]], None],
-                 trending_movies: List[Dict[str, Any]]) -> None:
+    def __init__(self, parent: Misc,
+                 change_page_callback: Callable[[str, str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
-        self.set_movies(trending_movies)
-        self.__default_movies = self.__movies
-        self.__searched = ""
         self.display()
 
     def display(self) -> None:
@@ -42,15 +39,15 @@ class MainPage(Page):
         searchbar.pack(pady=20)
 
         text = "Trending Movies"
-        if self.__searched != "":
-            text = f"Search Result: {self.__searched}"
+        if STORE[SEARCH_HISTORY][-1][0] != "":
+            text = f"Search Result: {STORE[SEARCH_HISTORY][-1][0]}"
         movie_list_heading = MyHeading(self._page, text=text)
         movie_list_heading.pack()
 
         movie_list_container = Frame(self._page)
         movie_list_container.pack(pady=20)
 
-        if len(self.__movies) == 0:
+        if len(STORE[SEARCH_HISTORY][-1][1]) == 0:
             no_result = Label(movie_list_container,
                               text="No Movie Found...\nPlease try some other keywords",
                               font=MyMediumFont()
@@ -76,11 +73,12 @@ class MainPage(Page):
                             lambda _: self._change_page_cb(
                                 MAIN_MOVIE_LIST,
                                 MOVIE_INFO_PAGE,
-                                self.__movies[movie_list.curselection()[0]]
+                                STORE[SEARCH_HISTORY][-1][1]
+                                [movie_list.curselection()[0]]
                             ))
             movie_list.pack(side=LEFT)
 
-            for movie in self.__movies:
+            for movie in STORE[SEARCH_HISTORY][-1][1]:
                 movie_list.insert(
                     END, movie[MOVIE_TITLE]
                 )
@@ -91,39 +89,18 @@ class MainPage(Page):
             movie_list.config(yscrollcommand=scrollbar.set)
             scrollbar.config(command=movie_list.yview)
 
-    # def change_page(self, page_name: str, **kwargs) -> None:
-
     def search_movie(self, movie_name: str) -> None:
         if movie_name == "" or movie_name == SEARCH_BAR_DEFAULT:
             return
 
-        self.__searched = movie_name
-
         # encode the movie_name
         movie_name = "%20".join(movie_name.split())
         searched_movies = get_movie_by_name(movie_name)
-        self.set_movies(searched_movies)
+        for movie in searched_movies:
+            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
+        STORE[SEARCH_HISTORY].append((movie_name, searched_movies))
         for widget in self._page.winfo_children():
             widget.destroy()
 
         self._change_page_cb(SEARCH_BAR, MAIN_PAGE)
-        self.display()
-        self._page.update()
-
-    def set_movies(self, movies: List[Dict[str, Any]]) -> None:
-        for movie in movies:
-            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
-        self.__movies = movies
-
-    def set_default(self) -> None:
-        self.__movies = self.__default_movies
-        self.__searched = ""
-
-        for widget in self._page.winfo_children():
-            widget.destroy()
-        self.display()
-        self._page.update()
-
-    def get_searched(self) -> str:
-        return self.__searched

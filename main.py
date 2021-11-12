@@ -1,4 +1,5 @@
 from tkinter import Tk
+import os
 import shutil
 import signal
 from typing import Any, Dict, cast
@@ -30,7 +31,7 @@ class App:
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
-                self.__root, self.change_page_callback, trending_movies
+                self.__root, self.change_page_callback, STORE[TRENDING_MOVIES]
             ),
             MOVIE_INFO_PAGE: MovieInfoPage(
                 self.__root, self.change_page_callback
@@ -48,7 +49,8 @@ class App:
 
         self.__root.mainloop()
 
-        shutil.rmtree(POSTERS_DIR)
+        if os.path.exists(POSTERS_DIR):
+            shutil.rmtree(POSTERS_DIR)
 
     def interrupt(self) -> None:
         print("terminate by ctrl c")
@@ -58,29 +60,31 @@ class App:
         self.__root.after(50, self.check)
 
     def change_page_callback(self, from_widget: str, page_name: str, movie: Dict[str, Any] = None) -> None:
-        self.__pages[self.__curpage].set_on_display(False)
+        self.__pages[STORE[CURPAGE]].set_on_display(False)
+
         if page_name == MOVIE_INFO_PAGE:
             page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
             page.set_movie_and_display(movie)
         else:
             self.__pages[page_name].set_on_display(True)
 
-        if page_name != MAIN_PAGE:
-            self.__navbar.display_btn(BACK_BTN)
-        else:
-            page = cast(MainPage, self.__pages[MAIN_PAGE])
-            if page.get_searched() == "":
-                self.__navbar.remove_btn(BACK_BTN)
-            elif from_widget == BACK_BTN and self.__curpage == MAIN_PAGE:
-                self.__navbar.remove_btn(BACK_BTN)
-                page.set_default()
-            else:
-                self.__navbar.display_btn(BACK_BTN)
+        STORE[CURPAGE] = page_name
 
-        self.__curpage = page_name
+        for widget in self.__pages[page_name].get_page().winfo_children():
+            widget.destroy()
+
+        self.__pages[page_name].display()
+        self.__navbar.display()
+        self.__root.update()
 
 
 if __name__ == "__main__":
     print("getting trending movies")
     trending_movies = get_trending()
+    for movie in trending_movies:
+        movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
+    STORE[TRENDING_MOVIES] = trending_movies
+    STORE[CURPAGE] = MAIN_PAGE
+    STORE[SEARCH_HISTORY].append(("", STORE[TRENDING_MOVIES]))
     App()

@@ -75,14 +75,26 @@ class MyNavbar(Frame):
             )
         }
 
+        self.display()
+
+    def display(self):
         self.__btns[MY_LIST_BTN].pack(side=LEFT, padx=10)
         self.__btns[SIGNUP_BTN].pack(side=RIGHT, padx=10)
         self.__btns[LOGIN_BTN].pack(side=RIGHT, padx=10)
+
+        if STORE[CURPAGE] == MAIN_PAGE and len(STORE[SEARCH_HISTORY]) == 1:
+            self.remove_btn(BACK_BTN)
+        else:
+            self.display_btn(BACK_BTN)
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(fill=X, *args, **kwargs)
 
     def focus_and_change_page(self, btn_name: str, from_widget: str, page_name: str) -> None:
+        if from_widget == BACK_BTN and STORE[CURPAGE] == MAIN_PAGE:
+            if len(STORE[SEARCH_HISTORY]) > 1:
+                STORE[SEARCH_HISTORY].pop()
+
         self.focus_btn(btn_name)
         self.__change_page_cb(from_widget, page_name)
 

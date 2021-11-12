@@ -1,3 +1,5 @@
+from typing import Any, Dict, List
+
 # pages
 MAIN_PAGE = "main_page"
 MOVIE_INFO_PAGE = "movie_info_page"
@@ -26,3 +28,14 @@ MAIN_MOVIE_LIST = "main_movie_list"
 SEARCH_BAR = "search_bar"
 
 SEARCH_BAR_DEFAULT = "Search for movies"
+
+USER = "user"
+CURPAGE = "curpage"
+TRENDING_MOVIES = "trending_movies"
+SEARCH_HISTORY = "search_history"
+STORE = {
+    USER: {},
+    CURPAGE: "",
+    TRENDING_MOVIES: [],
+    SEARCH_HISTORY: []
+}

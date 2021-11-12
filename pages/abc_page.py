@@ -15,13 +15,12 @@ class Page(ABC):
     def display(self) -> None:
         pass
 
-    # @abstractmethod
-    # def change_page(self, page_name: str, **kwargs) -> None:
-    #     pass
-
     def set_on_display(self, on_display: bool) -> None:
         self._on_display = on_display
         if self._on_display:
             self._page.pack(fill=BOTH)
         else:
             self._page.pack_forget()
+
+    def get_page(self) -> Frame:
+        return self._page
