@@ -5,7 +5,7 @@ from requests.models import Response
 from requests.adapters import HTTPAdapter, Retry
 from typing import Any, Dict, List
 
-from utils.const import *
+from utils.globals import *
 
 config = configparser.ConfigParser()
 config.read("./tmdb_api/config.ini")

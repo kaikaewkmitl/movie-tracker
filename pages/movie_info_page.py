@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict, Optional
 from tmdb_api.api import get_poster
 from .abc_page import Page
 from utils.my_widgets import MyBigFont, MyHeading, MyMediumFont, MySmallFont
-from utils.const import *
+from utils.globals import *
 
 
 class MovieInfoPage(Page):

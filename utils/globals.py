@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 # pages
 MAIN_PAGE = "main_page"
@@ -29,13 +29,13 @@ SEARCH_BAR = "search_bar"
 
 SEARCH_BAR_DEFAULT = "Search for movies"
 
-USER = "user"
-CURPAGE = "curpage"
-TRENDING_MOVIES = "trending_movies"
-SEARCH_HISTORY = "search_history"
-STORE = {
-    USER: {},
-    CURPAGE: "",
-    TRENDING_MOVIES: [],
-    SEARCH_HISTORY: []
-}
+
+class Store:
+    def __init__(self) -> None:
+        self.user: Dict[str, Any] = {}
+        self.curpage: str = ""
+        self.trending_movies: List[Dict[str, Any]] = []
+        self.search_history: List[Tuple[List[Dict[str, Any]]]] = []
+
+
+store = Store()

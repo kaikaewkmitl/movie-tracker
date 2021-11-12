@@ -3,9 +3,9 @@ from tkinter.constants import BOTH, LEFT, END, RIGHT
 from typing import Callable, List, Dict, Any, Optional
 
 from tmdb_api.api import get_movie_by_name
-from utils.my_widgets import MyHeading, MyMediumFont
-from utils.const import *
 from .abc_page import Page
+from utils.my_widgets import MyHeading, MyMediumFont
+from utils.globals import *
 
 
 class MainPage(Page):
@@ -38,7 +38,7 @@ class MainPage(Page):
                        )
         searchbar.pack(pady=20)
 
-        search_result = STORE[SEARCH_HISTORY][-1][0]
+        search_result = store.search_history[-1][0]
         text = "Trending Movies"
         if search_result != "":
             text = f"Search Result: {search_result}"
@@ -48,7 +48,7 @@ class MainPage(Page):
         movie_list_container = Frame(self._page)
         movie_list_container.pack(pady=20)
 
-        movies = STORE[SEARCH_HISTORY][-1][1]
+        movies = store.search_history[-1][1]
         if len(movies) == 0:
             no_result = Label(movie_list_container,
                               text="No Movie Found...\nPlease try some other keywords",
@@ -94,13 +94,10 @@ class MainPage(Page):
             return
 
         # encode the movie_name
-        movie_name = "%20".join(movie_name.split())
-        searched_movies = get_movie_by_name(movie_name)
+        movie_name_encoded = "%20".join(movie_name.split())
+        searched_movies = get_movie_by_name(movie_name_encoded)
         for movie in searched_movies:
             movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
 
-        STORE[SEARCH_HISTORY].append((movie_name, searched_movies))
-        for widget in self._page.winfo_children():
-            widget.destroy()
-
+        store.search_history.append((movie_name, searched_movies))
         self._change_page_cb(MAIN_PAGE)

@@ -3,7 +3,6 @@ from tkinter.constants import W
 from typing import Callable, Optional
 
 from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
-
 from .abc_page import Page
 
 

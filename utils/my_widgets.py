@@ -3,7 +3,7 @@ from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
 from typing import Callable, Optional, Dict
 
-from utils.const import *
+from utils.globals import *
 
 
 class MyBigFont(Font):
@@ -82,7 +82,7 @@ class MyNavbar(Frame):
         self.__btns[SIGNUP_BTN].pack(side=RIGHT, padx=10)
         self.__btns[LOGIN_BTN].pack(side=RIGHT, padx=10)
 
-        if STORE[CURPAGE] == MAIN_PAGE and len(STORE[SEARCH_HISTORY]) == 1:
+        if store.curpage == MAIN_PAGE and len(store.search_history) == 1:
             self.remove_btn(BACK_BTN)
         else:
             self.display_btn(BACK_BTN)
@@ -92,8 +92,8 @@ class MyNavbar(Frame):
 
     def focus_and_change_page(self, btn_name: str, page_name: str) -> None:
         if btn_name == BACK_BTN:
-            if len(STORE[SEARCH_HISTORY]) > 1 and STORE[CURPAGE] == MAIN_PAGE:
-                STORE[SEARCH_HISTORY].pop()
+            if len(store.search_history) > 1 and store.curpage == MAIN_PAGE:
+                store.search_history.pop()
         else:
             self.focus_btn(btn_name)
 

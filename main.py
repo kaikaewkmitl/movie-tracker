@@ -11,7 +11,7 @@ from pages.movie_info_page import MovieInfoPage
 from pages.signup_page import SignupPage
 from pages.login_page import LoginPage
 from utils.my_widgets import MyNavbar
-from utils.const import *
+from utils.globals import *
 
 
 class App:
@@ -59,7 +59,7 @@ class App:
         self.__root.after(50, self.check)
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
-        self.__pages[STORE[CURPAGE]].set_on_display(False)
+        self.__pages[store.curpage].set_on_display(False)
 
         if page_name == MOVIE_INFO_PAGE:
             page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
@@ -67,14 +67,13 @@ class App:
         else:
             self.__pages[page_name].set_on_display(True)
 
-        STORE[CURPAGE] = page_name
+        store.curpage = page_name
 
         for widget in self.__pages[page_name].get_page().winfo_children():
             widget.destroy()
 
         self.__pages[page_name].display()
         self.__navbar.display()
-        self.__root.update()
 
 
 if __name__ == "__main__":
@@ -83,7 +82,8 @@ if __name__ == "__main__":
     for movie in trending_movies:
         movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
 
-    STORE[TRENDING_MOVIES] = trending_movies
-    STORE[CURPAGE] = MAIN_PAGE
-    STORE[SEARCH_HISTORY].append(("", STORE[TRENDING_MOVIES]))
+    store.trending_movies = trending_movies
+    store.curpage = MAIN_PAGE
+    store.search_history.append(("", trending_movies))
+
     App()
