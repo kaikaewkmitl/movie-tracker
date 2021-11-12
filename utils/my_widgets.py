@@ -46,7 +46,7 @@ class MyButton(Button):
 
 
 class MyNavbar(Frame):
-    def __init__(self, parent: Misc, change_page_callback: Callable[[str, str, Optional[int]], None],
+    def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
         self.__change_page_cb = change_page_callback
@@ -58,19 +58,19 @@ class MyNavbar(Frame):
             SIGNUP_BTN: MyButton(
                 self, text="Signup",
                 command=lambda: self.focus_and_change_page(
-                    SIGNUP_BTN, SIGNUP_BTN, SIGNUP_PAGE
+                    SIGNUP_BTN, SIGNUP_PAGE
                 )
             ),
             LOGIN_BTN: MyButton(
                 self, text="Login",
                 command=lambda: self.focus_and_change_page(
-                    LOGIN_BTN, LOGIN_BTN, LOGIN_PAGE
+                    LOGIN_BTN, LOGIN_PAGE
                 )
             ),
             BACK_BTN: MyButton(
                 self, text="Back",
                 command=lambda: self.focus_and_change_page(
-                    "", BACK_BTN, MAIN_PAGE
+                    BACK_BTN, MAIN_PAGE
                 )
             )
         }
@@ -90,13 +90,14 @@ class MyNavbar(Frame):
     def pack(self, *args, **kwargs) -> None:
         super().pack(fill=X, *args, **kwargs)
 
-    def focus_and_change_page(self, btn_name: str, from_widget: str, page_name: str) -> None:
-        if from_widget == BACK_BTN and STORE[CURPAGE] == MAIN_PAGE:
-            if len(STORE[SEARCH_HISTORY]) > 1:
+    def focus_and_change_page(self, btn_name: str, page_name: str) -> None:
+        if btn_name == BACK_BTN:
+            if len(STORE[SEARCH_HISTORY]) > 1 and STORE[CURPAGE] == MAIN_PAGE:
                 STORE[SEARCH_HISTORY].pop()
+        else:
+            self.focus_btn(btn_name)
 
-        self.focus_btn(btn_name)
-        self.__change_page_cb(from_widget, page_name)
+        self.__change_page_cb(page_name)
 
     def display_btn(self, btn_name: str) -> None:
         self.__btns[btn_name].pack(side=RIGHT, padx=10)

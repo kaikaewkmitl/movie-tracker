@@ -31,7 +31,7 @@ class App:
 
         self.__pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
-                self.__root, self.change_page_callback, STORE[TRENDING_MOVIES]
+                self.__root, self.change_page_callback
             ),
             MOVIE_INFO_PAGE: MovieInfoPage(
                 self.__root, self.change_page_callback
@@ -45,7 +45,6 @@ class App:
         }
 
         self.__pages[MAIN_PAGE].set_on_display(True)
-        self.__curpage = MAIN_PAGE
 
         self.__root.mainloop()
 
@@ -59,7 +58,7 @@ class App:
     def check(self) -> None:
         self.__root.after(50, self.check)
 
-    def change_page_callback(self, from_widget: str, page_name: str, movie: Dict[str, Any] = None) -> None:
+    def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
         self.__pages[STORE[CURPAGE]].set_on_display(False)
 
         if page_name == MOVIE_INFO_PAGE:

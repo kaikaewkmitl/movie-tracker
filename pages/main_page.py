@@ -10,7 +10,7 @@ from .abc_page import Page
 
 class MainPage(Page):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
         self.display()
 
@@ -38,16 +38,18 @@ class MainPage(Page):
                        )
         searchbar.pack(pady=20)
 
+        search_result = STORE[SEARCH_HISTORY][-1][0]
         text = "Trending Movies"
-        if STORE[SEARCH_HISTORY][-1][0] != "":
-            text = f"Search Result: {STORE[SEARCH_HISTORY][-1][0]}"
+        if search_result != "":
+            text = f"Search Result: {search_result}"
         movie_list_heading = MyHeading(self._page, text=text)
         movie_list_heading.pack()
 
         movie_list_container = Frame(self._page)
         movie_list_container.pack(pady=20)
 
-        if len(STORE[SEARCH_HISTORY][-1][1]) == 0:
+        movies = STORE[SEARCH_HISTORY][-1][1]
+        if len(movies) == 0:
             no_result = Label(movie_list_container,
                               text="No Movie Found...\nPlease try some other keywords",
                               font=MyMediumFont()
@@ -71,14 +73,12 @@ class MainPage(Page):
             # )
             movie_list.bind("<Double-Button-1>",
                             lambda _: self._change_page_cb(
-                                MAIN_MOVIE_LIST,
                                 MOVIE_INFO_PAGE,
-                                STORE[SEARCH_HISTORY][-1][1]
-                                [movie_list.curselection()[0]]
+                                movies[movie_list.curselection()[0]]
                             ))
             movie_list.pack(side=LEFT)
 
-            for movie in STORE[SEARCH_HISTORY][-1][1]:
+            for movie in movies:
                 movie_list.insert(
                     END, movie[MOVIE_TITLE]
                 )
@@ -103,4 +103,4 @@ class MainPage(Page):
         for widget in self._page.winfo_children():
             widget.destroy()
 
-        self._change_page_cb(SEARCH_BAR, MAIN_PAGE)
+        self._change_page_cb(MAIN_PAGE)
