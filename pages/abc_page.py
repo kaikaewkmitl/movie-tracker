@@ -13,6 +13,7 @@ class Page(ABC):
 
     @abstractmethod
     def display(self) -> None:
+        self._page.update()
         pass
 
     def set_on_display(self, on_display: bool) -> None:

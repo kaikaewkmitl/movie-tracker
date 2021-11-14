@@ -13,6 +13,8 @@ class LoginPage(Page):
         self.display()
 
     def display(self) -> None:
+        super().display()
+
         form_container = Frame(self._page)
         form_container.pack(padx=250, pady=100, anchor=W)
         form_heading = MyHeading(form_container, text="Login")

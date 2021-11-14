@@ -15,6 +15,8 @@ class MainPage(Page):
         self.display()
 
     def display(self) -> None:
+        super().display()
+
         appName = MyHeading(self._page, text="Movie Tracker")
         appName.pack()
 

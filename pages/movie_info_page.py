@@ -21,6 +21,8 @@ class MovieInfoPage(Page):
         self.display()
 
     def display(self) -> None:
+        super().display()
+
         movie_title = MyHeading(
             self._page, text=f"{self.__movie[MOVIE_TITLE]}"
         )

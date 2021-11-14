@@ -73,6 +73,7 @@ class App:
             widget.destroy()
 
         self.__pages[page_name].display()
+
         self.__navbar.display()
 
 

@@ -78,6 +78,8 @@ class MyNavbar(Frame):
         self.display()
 
     def display(self):
+        self.update()
+
         self.__btns[MY_LIST_BTN].pack(side=LEFT, padx=10)
         self.__btns[SIGNUP_BTN].pack(side=RIGHT, padx=10)
         self.__btns[LOGIN_BTN].pack(side=RIGHT, padx=10)
