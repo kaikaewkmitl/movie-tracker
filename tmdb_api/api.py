@@ -10,6 +10,8 @@ from utils.globals import *
 config = configparser.ConfigParser()
 config.read("./tmdb_api/config.ini")
 
+BASE_URL = "api.themoviedb.org"
+BASE_URL_WITH_HTTPS = f"https://{BASE_URL}/3"
 API_KEY = config[BASE_URL]["API_KEY"]
 
 session = requests.session()

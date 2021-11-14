@@ -51,7 +51,7 @@ class MyNavbar(Frame):
         super().__init__(parent, *args, **kwargs)
         self.__change_page_cb = change_page_callback
 
-        self.__btns: Dict[str, MyButton] = {
+        self.__widgets: Dict[str, MyButton] = {
             MY_LIST_BTN: MyButton(
                 self, text="My List"
             ),
@@ -72,6 +72,10 @@ class MyNavbar(Frame):
                 command=lambda: self.focus_and_change_page(
                     BACK_BTN, MAIN_PAGE
                 )
+            ),
+            WELCOME_USER: Label(
+                self, font=MySmallFont(),
+                text=""
             )
         }
 
@@ -80,9 +84,20 @@ class MyNavbar(Frame):
     def display(self):
         self.update()
 
-        self.__btns[MY_LIST_BTN].pack(side=LEFT, padx=10)
-        self.__btns[SIGNUP_BTN].pack(side=RIGHT, padx=10)
-        self.__btns[LOGIN_BTN].pack(side=RIGHT, padx=10)
+        self.__widgets[MY_LIST_BTN].pack(side=LEFT, padx=10)
+
+        if len(store.user) == 0:
+            self.display_btn(SIGNUP_BTN)
+            self.display_btn(LOGIN_BTN)
+            self.remove_btn(WELCOME_USER)
+        else:
+            self.remove_btn(SIGNUP_BTN)
+            self.remove_btn(LOGIN_BTN)
+            self.display_btn(WELCOME_USER)
+            self.__widgets[WELCOME_USER].config(
+                text=f"Welcome, {store.user['username']}",
+                fg="orange"
+            )
 
         if store.curpage == MAIN_PAGE and len(store.search_history) == 1:
             self.remove_btn(BACK_BTN)
@@ -96,17 +111,19 @@ class MyNavbar(Frame):
         if btn_name == BACK_BTN:
             if len(store.search_history) > 1 and store.curpage == MAIN_PAGE:
                 store.search_history.pop()
-        else:
-            self.focus_btn(btn_name)
+
+        self.focus_btn(btn_name)
 
         self.__change_page_cb(page_name)
 
     def display_btn(self, btn_name: str) -> None:
-        self.__btns[btn_name].pack(side=RIGHT, padx=10)
+        self.__widgets[btn_name].pack(side=RIGHT, padx=10)
 
     def remove_btn(self, btn_name: str) -> None:
-        self.__btns[btn_name].pack_forget()
+        self.__widgets[btn_name].pack_forget()
 
     def focus_btn(self, btn_name: str) -> None:
-        for k, v in self.__btns.items():
+        for k, v in self.__widgets.items():
             v.config(fg="orange" if k == btn_name else "black")
+            if btn_name == BACK_BTN:
+                v.config(fg="black")

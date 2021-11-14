@@ -7,10 +7,6 @@ SIGNUP_PAGE = "signup_page"
 LOGIN_PAGE = "login_page"
 USER_LIST_PAGE = "user_list_page"
 
-# tmdb api urls
-BASE_URL = "api.themoviedb.org"
-BASE_URL_WITH_HTTPS = f"https://{BASE_URL}/3"
-
 # movie keys
 MOVIE_TITLE = "movie_title"
 MOVIE_OVERVIEW = "overview"
@@ -24,10 +20,14 @@ MY_LIST_BTN = "my_list_btn"
 SIGNUP_BTN = "signup_btn"
 LOGIN_BTN = "login_btn"
 BACK_BTN = "back_btn"
-MAIN_MOVIE_LIST = "main_movie_list"
-SEARCH_BAR = "search_bar"
+WELCOME_USER = "welcome_user"
 
-SEARCH_BAR_DEFAULT = "Search for movies"
+# validations
+WITHIN_MIN_LEN = "min_len"
+WITHIN_MAX_LEN = "max_len"
+IS_ALNUM = "is_alnum"
+IS_FOUND = "is_found"
+IS_MATCH = "is_match"
 
 
 class Store:
@@ -39,3 +39,5 @@ class Store:
 
 
 store = Store()
+
+tmp = {}

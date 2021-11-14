@@ -7,6 +7,8 @@ from .abc_page import Page
 from utils.my_widgets import MyHeading, MyMediumFont
 from utils.globals import *
 
+SEARCH_BAR_DEFAULT = "Search for movies"
+
 
 class MainPage(Page):
     def __init__(self, parent: Misc,

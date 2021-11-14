@@ -1,15 +1,23 @@
-from tkinter import Entry, Frame, Label, Misc
+from tkinter import Entry, Frame, Label, Misc, messagebox
 from tkinter.constants import W
 from typing import Callable, Optional
 
 from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 from .abc_page import Page
+from utils.globals import *
 
 
 class LoginPage(Page):
     def __init__(self, parent: Misc,
                  change_page_callback: Callable[[str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
+
+        self.__retreived_user = {}
+        self.__validations: Dict[str, Callable[[str], bool]] = {
+            # access db/file and store user data in self.__retreived_user
+            IS_FOUND: lambda username: tmp["username"] == username,
+            IS_MATCH: lambda password: tmp["password"] == password
+        }
         self.display()
 
     def display(self) -> None:
@@ -45,8 +53,24 @@ class LoginPage(Page):
                                )
         password_entry.grid(row=2, column=1, pady=10)
 
-        login_btn = MyButton(
-            form_container, font=MyMediumFont(), text="Login",
-            width=15
-        )
+        login_btn = MyButton(form_container,
+                             font=MyMediumFont(),
+                             text="Login",
+                             width=15,
+                             command=lambda: self.login(username_entry.get(),
+                                                        password_entry.get()
+                                                        )
+                             )
+
         login_btn.grid(row=3, column=0, pady=20, columnspan=2)
+
+    def login(self, username: str, password: str) -> None:
+        if not self.__validations[IS_FOUND](username) or not self.__validations[IS_MATCH](password):
+            print(
+                "Invalid: the username or password is incorrect"
+            )
+            return
+
+        store.user["username"] = username
+        messagebox.showinfo("Logged in", "You have logged in")
+        self._change_page_cb(MAIN_PAGE)
