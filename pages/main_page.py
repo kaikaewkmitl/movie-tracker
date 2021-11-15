@@ -14,7 +14,7 @@ class MainPage(Page):
     def __init__(self, parent: Misc,
                  change_page_callback: Callable[[str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
-        self.display()
+        # self.display()
 
     def display(self) -> None:
         super().display()

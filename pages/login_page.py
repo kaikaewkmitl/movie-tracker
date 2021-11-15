@@ -18,7 +18,7 @@ class LoginPage(Page):
             IS_FOUND: lambda username: tmp["username"] == username,
             IS_MATCH: lambda password: tmp["password"] == password
         }
-        self.display()
+        # self.display()
 
     def display(self) -> None:
         super().display()
@@ -66,8 +66,8 @@ class LoginPage(Page):
 
     def login(self, username: str, password: str) -> None:
         if not self.__validations[IS_FOUND](username) or not self.__validations[IS_MATCH](password):
-            print(
-                "Invalid: the username or password is incorrect"
+            messagebox.showerror(
+                "Invalid", "the username or password is incorrect"
             )
             return
 

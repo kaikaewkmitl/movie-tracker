@@ -51,9 +51,12 @@ class MyNavbar(Frame):
         super().__init__(parent, *args, **kwargs)
         self.__change_page_cb = change_page_callback
 
-        self.__widgets: Dict[str, MyButton] = {
-            MY_LIST_BTN: MyButton(
-                self, text="My List"
+        self.__btns: Dict[str, MyButton] = {
+            USER_LIST_BTN: MyButton(
+                self, text="My List",
+                command=lambda: self.focus_and_change_page(
+                    USER_LIST_BTN, USER_LIST_PAGE
+                )
             ),
             SIGNUP_BTN: MyButton(
                 self, text="Signup",
@@ -84,7 +87,7 @@ class MyNavbar(Frame):
     def display(self):
         self.update()
 
-        self.__widgets[MY_LIST_BTN].pack(side=LEFT, padx=10)
+        self.display_btn(USER_LIST_BTN, LEFT)
 
         if len(store.user) == 0:
             self.display_btn(SIGNUP_BTN)
@@ -93,9 +96,11 @@ class MyNavbar(Frame):
         else:
             self.remove_btn(SIGNUP_BTN)
             self.remove_btn(LOGIN_BTN)
+
+            username = store.user["username"]
             self.display_btn(WELCOME_USER)
-            self.__widgets[WELCOME_USER].config(
-                text=f"Welcome, {store.user['username']}",
+            self.__btns[WELCOME_USER].config(
+                text=f"Welcome, {username}",
                 fg="orange"
             )
 
@@ -116,14 +121,14 @@ class MyNavbar(Frame):
 
         self.__change_page_cb(page_name)
 
-    def display_btn(self, btn_name: str) -> None:
-        self.__widgets[btn_name].pack(side=RIGHT, padx=10)
+    def display_btn(self, btn_name: str, side: str = RIGHT) -> None:
+        self.__btns[btn_name].pack(side=side, padx=10)
 
     def remove_btn(self, btn_name: str) -> None:
-        self.__widgets[btn_name].pack_forget()
+        self.__btns[btn_name].pack_forget()
 
     def focus_btn(self, btn_name: str) -> None:
-        for k, v in self.__widgets.items():
+        for k, v in self.__btns.items():
             v.config(fg="orange" if k == btn_name else "black")
             if btn_name == BACK_BTN:
                 v.config(fg="black")

@@ -1,6 +1,5 @@
-from tkinter import Entry, Frame, Label, Misc
+from tkinter import Entry, Frame, Label, Misc, messagebox
 from tkinter.constants import W
-from tkinter import messagebox
 from typing import Any, Callable, Dict, Optional
 from utils.globals import *
 
@@ -19,7 +18,7 @@ class SignupPage(Page):
             WITHIN_MAX_LEN: lambda s: len(s) <= self.__max_len,
             IS_ALNUM: lambda s: s.isalnum()
         }
-        self.display()
+        # self.display()
 
     def display(self) -> None:
         super().display()
@@ -66,18 +65,20 @@ class SignupPage(Page):
 
     def signup(self, username: str, password: str) -> None:
         if not self.__validations[WITHIN_MIN_LEN](username) or not self.__validations[WITHIN_MAX_LEN](username):
-            print(
-                f"Invalid username: must be between {self.__min_len} - {self.__max_len} characters long"
+            messagebox.showerror(
+                "Invalid username", f"username must be between {self.__min_len} - {self.__max_len} characters long"
             )
             return
 
         if not self.__validations[IS_ALNUM](username):
-            print("Invalid username: must contains only letters or digits")
+            messagebox.showerror(
+                "Invalid username", "username contains only letters or digits"
+            )
             return
 
         if not self.__validations[WITHIN_MIN_LEN](password) or not self.__validations[WITHIN_MAX_LEN](password):
-            print(
-                f"Invalid password: must be between {self.__min_len} - {self.__max_len} characters long"
+            messagebox.showerror(
+                "Invalid password", f"password must be between {self.__min_len} - {self.__max_len} characters long"
             )
             return
 

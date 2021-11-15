@@ -18,7 +18,7 @@ class MovieInfoPage(Page):
         self.__movie[MOVIE_POSTER_IMG] = None
         self.__movie[MOVIE_TITLE] = ""
         self.__movie[MOVIE_OVERVIEW] = ""
-        self.display()
+        # self.display()
 
     def display(self) -> None:
         super().display()

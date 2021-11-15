@@ -16,7 +16,7 @@ MOVIE_POSTER_IMG = "poster_img"
 POSTERS_DIR = "posters"
 
 # widget names
-MY_LIST_BTN = "my_list_btn"
+USER_LIST_BTN = "user_list_btn"
 SIGNUP_BTN = "signup_btn"
 LOGIN_BTN = "login_btn"
 BACK_BTN = "back_btn"

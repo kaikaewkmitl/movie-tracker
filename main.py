@@ -10,6 +10,7 @@ from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
 from pages.signup_page import SignupPage
 from pages.login_page import LoginPage
+from pages.user_list_page import UserListPage
 from utils.my_widgets import MyNavbar
 from utils.globals import *
 
@@ -41,9 +42,13 @@ class App:
             ),
             LOGIN_PAGE: LoginPage(
                 self.__root, self.change_page_callback
+            ),
+            USER_LIST_PAGE: UserListPage(
+                self.__root, self.change_page_callback
             )
         }
 
+        self.__pages[MAIN_PAGE].display()
         self.__pages[MAIN_PAGE].set_on_display(True)
 
         self.__root.mainloop()
