@@ -10,7 +10,6 @@ from utils.globals import *
 class UserListPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
-        # self.display()
 
     def display(self) -> None:
         super().display()

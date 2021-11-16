@@ -29,27 +29,28 @@ def open_db_connection() -> connection:
         print("DB Error:", err)
 
 
-def create_user_table():
+def create_user_table() -> None:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = """CREATE TABLE IF NOT EXISTS tmp
-        (
-            username TEXT,
-            password TEXT
-        );
-        """
+    query = """CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
+        username VARCHAR NOT NULL,
+        password VARCHAR NOT NULL,
+        movie_list INTEGER[] DEFAULT '{}'
+    );"""
+
     cur.execute(query)
 
     conn.commit()
     conn.close()
 
 
-def insert_new_user(username: str, password: str):
+def insert_new_user(username: str, password: str) -> None:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = "INSERT INTO tmp (username, password) VALUES (%s, %s);"
+    query = "INSERT INTO users (username, password) VALUES (%s, %s);"
     cur.execute(query, (username, password))
 
     conn.commit()
@@ -60,7 +61,7 @@ def find_one_user(username: str) -> Union[Tuple, None]:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = "SELECT * FROM tmp WHERE username=%s LIMIT 1;"
+    query = "SELECT * FROM users WHERE username=%s LIMIT 1;"
     cur.execute(query, (username,))
     user = cur.fetchone()
 

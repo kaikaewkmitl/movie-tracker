@@ -51,24 +51,25 @@ class MyNavbar(Frame):
         super().__init__(parent, *args, **kwargs)
         self.__change_page_cb = change_page_callback
 
+        self.__page_to_btn_dict: Dict[str, str] = {
+            USER_LIST_PAGE: USER_LIST_BTN,
+            SIGNUP_PAGE: SIGNUP_BTN,
+            LOGIN_PAGE: LOGIN_BTN,
+            MAIN_PAGE: BACK_BTN
+        }
+
         self.__btns: Dict[str, MyButton] = {
             USER_LIST_BTN: MyButton(
                 self, text="My List",
-                command=lambda: self.focus_and_change_page(
-                    USER_LIST_BTN, USER_LIST_PAGE
-                )
+                command=lambda: self.__change_page_cb(USER_LIST_PAGE)
             ),
             SIGNUP_BTN: MyButton(
                 self, text="Signup",
-                command=lambda: self.focus_and_change_page(
-                    SIGNUP_BTN, SIGNUP_PAGE
-                )
+                command=lambda: self.__change_page_cb(SIGNUP_PAGE)
             ),
             LOGIN_BTN: MyButton(
                 self, text="Login",
-                command=lambda: self.focus_and_change_page(
-                    LOGIN_BTN, LOGIN_PAGE
-                )
+                command=lambda: self.__change_page_cb(LOGIN_PAGE)
             ),
             BACK_BTN: MyButton(
                 self, text="Back",
@@ -86,6 +87,7 @@ class MyNavbar(Frame):
 
     def display(self):
         self.update()
+        self.focus_btn()
 
         self.display_btn(USER_LIST_BTN, LEFT)
 
@@ -117,8 +119,6 @@ class MyNavbar(Frame):
             if len(store.search_history) > 1 and store.curpage == MAIN_PAGE:
                 store.search_history.pop()
 
-        self.focus_btn(btn_name)
-
         self.__change_page_cb(page_name)
 
     def display_btn(self, btn_name: str, side: str = RIGHT) -> None:
@@ -127,8 +127,9 @@ class MyNavbar(Frame):
     def remove_btn(self, btn_name: str) -> None:
         self.__btns[btn_name].pack_forget()
 
-    def focus_btn(self, btn_name: str) -> None:
+    def focus_btn(self) -> None:
         for k, v in self.__btns.items():
-            v.config(fg="orange" if k == btn_name else "black")
-            if btn_name == BACK_BTN:
+            if store.curpage in self.__page_to_btn_dict and k == self.__page_to_btn_dict[store.curpage] and k != BACK_BTN:
+                v.config(fg="orange")
+            else:
                 v.config(fg="black")

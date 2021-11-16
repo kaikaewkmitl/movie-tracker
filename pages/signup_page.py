@@ -19,7 +19,6 @@ class SignupPage(Page):
             WITHIN_MAX_LEN: lambda s: len(s) <= self.__max_len,
             IS_ALNUM: lambda s: s.isalnum()
         }
-        # self.display()
 
     def display(self) -> None:
         super().display()
@@ -84,8 +83,6 @@ class SignupPage(Page):
             return
 
         # save to db/file
-        tmp["username"] = username
-        tmp["password"] = password
         insert_new_user(username, password)
 
         messagebox.showinfo(

@@ -5,6 +5,7 @@ import signal
 from typing import Any, Dict, cast
 
 from tmdb_api.api import get_trending
+from db.db import create_user_table
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
@@ -13,7 +14,6 @@ from pages.login_page import LoginPage
 from pages.user_list_page import UserListPage
 from utils.my_widgets import MyNavbar
 from utils.globals import *
-from db.db import find_one_user
 
 
 class App:
@@ -65,14 +65,13 @@ class App:
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
         self.__pages[store.curpage].set_on_display(False)
+        store.curpage = page_name
 
         if page_name == MOVIE_INFO_PAGE:
             page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
             page.set_movie_and_display(movie)
         else:
             self.__pages[page_name].set_on_display(True)
-
-        store.curpage = page_name
 
         self.__navbar.display()
 
@@ -86,4 +85,6 @@ if __name__ == "__main__":
     store.trending_movies = trending_movies
     store.curpage = MAIN_PAGE
     store.search_history.append(("", trending_movies))
+
+    create_user_table()
     App()

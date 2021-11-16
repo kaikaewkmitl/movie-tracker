@@ -39,5 +39,3 @@ class Store:
 
 
 store = Store()
-
-tmp = {}

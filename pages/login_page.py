@@ -20,7 +20,6 @@ class LoginPage(Page):
             IS_FOUND: lambda username: self.__retreived_user["username"] == username,
             IS_MATCH: lambda password: self.__retreived_user["password"] == password
         }
-        # self.display()
 
     def display(self) -> None:
         super().display()
@@ -79,8 +78,8 @@ class LoginPage(Page):
                 "Invalid", "the username or password is incorrect"
             )
 
-        self.__retreived_user["username"] = user[0]
-        self.__retreived_user["password"] = user[1]
+        self.__retreived_user["username"] = user[1]
+        self.__retreived_user["password"] = user[2]
 
         if not self.__validations[IS_FOUND](username) or not self.__validations[IS_MATCH](password):
             messagebox.showerror(
@@ -88,6 +87,6 @@ class LoginPage(Page):
             )
             return
 
-        store.user["username"] = user[0]
+        store.user["username"] = user[1]
         messagebox.showinfo("Logged in", "You have logged in")
         self._change_page_cb(MAIN_PAGE)
