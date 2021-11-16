@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 from utils.globals import *
 
 config = configparser.ConfigParser()
-config.read("./tmdb_api/config.ini")
+config.read("config.ini")
 
 BASE_URL = "api.themoviedb.org"
 BASE_URL_WITH_HTTPS = f"https://{BASE_URL}/3"

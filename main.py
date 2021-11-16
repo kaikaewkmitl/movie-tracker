@@ -13,6 +13,7 @@ from pages.login_page import LoginPage
 from pages.user_list_page import UserListPage
 from utils.my_widgets import MyNavbar
 from utils.globals import *
+from db.db import find_one_user
 
 
 class App:
@@ -48,7 +49,6 @@ class App:
             )
         }
 
-        self.__pages[MAIN_PAGE].display()
         self.__pages[MAIN_PAGE].set_on_display(True)
 
         self.__root.mainloop()
@@ -74,16 +74,11 @@ class App:
 
         store.curpage = page_name
 
-        for widget in self.__pages[page_name].get_page().winfo_children():
-            widget.destroy()
-
-        self.__pages[page_name].display()
-
         self.__navbar.display()
 
 
 if __name__ == "__main__":
-    print("getting trending movies")
+    print("getting trending movies...")
     trending_movies = get_trending()
     for movie in trending_movies:
         movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
@@ -91,5 +86,4 @@ if __name__ == "__main__":
     store.trending_movies = trending_movies
     store.curpage = MAIN_PAGE
     store.search_history.append(("", trending_movies))
-
     App()

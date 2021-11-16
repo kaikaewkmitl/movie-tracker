@@ -61,9 +61,6 @@ class MovieInfoPage(Page):
         poster.pack(padx=20, pady=20)
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
-        for widget in self._page.winfo_children():
-            widget.destroy()
-
         self.__movie = movie
         if MOVIE_POSTER_PATH in self.__movie and self.__movie[MOVIE_POSTER_PATH] != None:
             get_poster(movie[MOVIE_POSTER_PATH])
@@ -76,5 +73,4 @@ class MovieInfoPage(Page):
         else:
             self.__movie[MOVIE_POSTER_IMG] = None
 
-        self.display()
         self.set_on_display(True)

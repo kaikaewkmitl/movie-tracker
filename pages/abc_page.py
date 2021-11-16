@@ -18,6 +18,10 @@ class Page(ABC):
     def set_on_display(self, on_display: bool) -> None:
         self._on_display = on_display
         if self._on_display:
+            for widget in self._page.winfo_children():
+                widget.destroy()
+
+            self.display()
             self._page.pack(fill=BOTH)
         else:
             self._page.pack_forget()

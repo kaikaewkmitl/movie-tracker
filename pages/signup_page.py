@@ -1,10 +1,11 @@
 from tkinter import Entry, Frame, Label, Misc, messagebox
 from tkinter.constants import W
 from typing import Any, Callable, Dict, Optional
-from utils.globals import *
 
-from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 from .abc_page import Page
+from db.db import insert_new_user
+from utils.globals import *
+from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 
 
 class SignupPage(Page):
@@ -72,7 +73,7 @@ class SignupPage(Page):
 
         if not self.__validations[IS_ALNUM](username):
             messagebox.showerror(
-                "Invalid username", "username contains only letters or digits"
+                "Invalid username", "username must contains only letters or digits"
             )
             return
 
@@ -85,6 +86,7 @@ class SignupPage(Page):
         # save to db/file
         tmp["username"] = username
         tmp["password"] = password
+        insert_new_user(username, password)
 
         messagebox.showinfo(
             "Signed up", "You have successfully signed up, proceed to login"
