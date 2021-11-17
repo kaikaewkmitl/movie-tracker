@@ -5,7 +5,7 @@ import signal
 from typing import Any, Dict, cast
 
 from tmdb_api.api import get_trending
-from db.db import create_user_table
+from db.db import init_db
 from pages.abc_page import Page
 from pages.main_page import MainPage
 from pages.movie_info_page import MovieInfoPage
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     store.curpage = MAIN_PAGE
     store.search_history.append(("", trending_movies))
 
-    create_user_table()
+    init_db()
     App()

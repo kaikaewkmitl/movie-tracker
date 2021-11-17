@@ -21,7 +21,7 @@ class UserListPage(Page):
             )
             user_heading.pack()
 
-            movies = []
+            movies = store.user[USER_MOVIE_LIST]
 
             movie_list_container = Frame(self._page)
             movie_list_container.pack(pady=20)

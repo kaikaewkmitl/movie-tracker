@@ -8,6 +8,7 @@ LOGIN_PAGE = "login_page"
 USER_LIST_PAGE = "user_list_page"
 
 # movie keys
+MOVIE_ID = "movie_id"
 MOVIE_TITLE = "movie_title"
 MOVIE_OVERVIEW = "overview"
 MOVIE_POSTER_PATH = "poster_path"
