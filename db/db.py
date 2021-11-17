@@ -1,7 +1,10 @@
 import configparser
 from psycopg2 import Error, connect
 from psycopg2._psycopg import connection
-from typing import Tuple, Union
+from typing import Dict
+import bcrypt
+
+from utils.globals import *
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -33,12 +36,11 @@ def create_user_table() -> None:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = """CREATE TABLE IF NOT EXISTS users(
-        id SERIAL PRIMARY KEY,
-        username VARCHAR NOT NULL,
+    query = f"""CREATE TABLE IF NOT EXISTS users(
+        {USER_ID} SERIAL PRIMARY KEY,
+        {USER_USERNAME} VARCHAR NOT NULL,
         password VARCHAR NOT NULL,
-        movie_list INTEGER[] DEFAULT '{}'
-    );"""
+        {USER_MOVIE_LIST} INTEGER[] DEFAULT """ + "'{}');"
 
     cur.execute(query)
 
@@ -47,24 +49,37 @@ def create_user_table() -> None:
 
 
 def insert_new_user(username: str, password: str) -> None:
+    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
     conn = open_db_connection()
     cur = conn.cursor()
 
     query = "INSERT INTO users (username, password) VALUES (%s, %s);"
-    cur.execute(query, (username, password))
+    cur.execute(query, (username, hashed_password.decode("utf-8")))
 
     conn.commit()
     conn.close()
 
 
-def find_one_user(username: str) -> Union[Tuple, None]:
+def find_one_user(username: str, password: str) -> Dict[str, None]:
     conn = open_db_connection()
     cur = conn.cursor()
 
     query = "SELECT * FROM users WHERE username=%s LIMIT 1;"
     cur.execute(query, (username,))
-    user = cur.fetchone()
+    result = cur.fetchone()
+    if result == None:
+        return {}
 
     conn.commit()
     conn.close()
+
+    if not bcrypt.checkpw(password.encode("utf-8"), result[2].encode("utf-8")):
+        return {}
+
+    user = {
+        USER_ID: result[0],
+        USER_USERNAME: result[1],
+        USER_MOVIE_LIST: result[3]
+    }
     return user

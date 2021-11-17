@@ -13,12 +13,8 @@ class LoginPage(Page):
                  change_page_callback: Callable[[str, Optional[int]], None]) -> None:
         super().__init__(parent, change_page_callback)
 
-        self.__retreived_user = {}
         self.__validations: Dict[str, Callable[[str], bool]] = {
-            # access db/file and store user data in self.__retreived_user
-            IS_ALNUM: lambda s: s.isalnum(),
-            IS_FOUND: lambda username: self.__retreived_user["username"] == username,
-            IS_MATCH: lambda password: self.__retreived_user["password"] == password
+            IS_ALNUM: lambda s: s.isalnum()
         }
 
     def display(self) -> None:
@@ -72,21 +68,16 @@ class LoginPage(Page):
             )
             return
 
-        user = find_one_user(username)
-        if user == None:
-            messagebox.showerror(
-                "Invalid", "the username or password is incorrect"
-            )
-
-        self.__retreived_user["username"] = user[1]
-        self.__retreived_user["password"] = user[2]
-
-        if not self.__validations[IS_FOUND](username) or not self.__validations[IS_MATCH](password):
+        user = find_one_user(username, password)
+        if len(user) == 0:
             messagebox.showerror(
                 "Invalid", "the username or password is incorrect"
             )
             return
 
-        store.user["username"] = user[1]
+        store.user[USER_ID] = user[USER_ID]
+        store.user[USER_USERNAME] = user[USER_USERNAME]
+        store.user[USER_MOVIE_LIST] = user[USER_MOVIE_LIST]
+
         messagebox.showinfo("Logged in", "You have logged in")
         self._change_page_cb(MAIN_PAGE)
