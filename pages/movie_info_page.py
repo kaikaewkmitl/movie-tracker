@@ -1,12 +1,13 @@
 import os
-from tkinter import Label, Misc, Frame, Text
-from tkinter.constants import DISABLED, END, LEFT, N, W, RIGHT
+from tkinter import Label, Misc, Frame, Text, messagebox
+from tkinter.constants import BOTTOM, DISABLED, END, LEFT, N, W, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict, Optional
+from db.db import add_movie_to_user_list
 
 from tmdb_api.api import get_poster
 from .abc_page import Page
-from utils.my_widgets import MyBigFont, MyHeading, MyMediumFont, MySmallFont
+from utils.my_widgets import MyBigFont, MyButton, MyHeading, MyMediumFont, MySmallFont
 from utils.globals import *
 
 
@@ -55,9 +56,20 @@ class MovieInfoPage(Page):
                            )
         else:
             poster = Label(poster_container,
-                           text="No Poster", font=MyBigFont(), fg="orange"
+                           text="No Poster",
+                           font=MyBigFont(),
+                           fg="orange",
+                           height=6
                            )
         poster.pack(padx=20, pady=20)
+
+        add_to_list_btn = MyButton(
+            poster_container,
+            text="Add To My List",
+            font=MyMediumFont(),
+            command=self.add_to_list
+        )
+        add_to_list_btn.pack()
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie
@@ -73,3 +85,15 @@ class MovieInfoPage(Page):
             self.__movie[MOVIE_POSTER_IMG] = None
 
         self.set_on_display(True)
+
+    def add_to_list(self) -> None:
+        if len(store.user) > 0:
+            add_movie_to_user_list(store.user[USER_ID], self.__movie)
+            messagebox.showinfo(
+                "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
+            )
+        else:
+            messagebox.showerror(
+                "Unauthenticated", "You are unauthenticated, please log in first"
+            )
+            self._change_page_cb(LOGIN_PAGE)

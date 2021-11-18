@@ -48,7 +48,6 @@ class App:
                 self.__root, self.change_page_callback
             )
         }
-
         self.__pages[MAIN_PAGE].set_on_display(True)
 
         self.__root.mainloop()

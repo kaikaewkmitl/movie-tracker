@@ -96,14 +96,16 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     if not bcrypt.checkpw(password.encode("utf-8"), result[2].encode("utf-8")):
         return {}
 
-    movie_list_tmp = result[3][2:-2].split("\",\"")
-    movie_list = []
-    for movie in movie_list_tmp:
-        m = movie[1:-1].split(",")
-        movie_list.append({
-            MOVIE_ID: int(m[0]),
-            MOVIE_TITLE: m[1]
-        })
+    movie_list: List[Dict[str, Any]] = []
+    if result[3] != "{}":
+        movie_list_tmp = result[3][2:-2].split("\",\"")
+        # print(movie_list_tmp)
+        for movie in movie_list_tmp:
+            m = movie[1:-1].split(",")
+            movie_list.append({
+                MOVIE_ID: int(m[0]),
+                MOVIE_TITLE: m[1].replace("\\\"", ""),
+            })
 
     user = {
         USER_ID: result[0],
@@ -113,12 +115,19 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     return user
 
 
-def update_movie_list(user_id: int, movie_id: int, movie_title: str):
+def add_movie_to_user_list(user_id: int, movie: Dict[str, Any]):
     conn = open_db_connection()
     cur = conn.cursor()
 
     query = "UPDATE users SET movie_list = movie_list || %s::movie WHERE id = %s"
 
-    cur.execute(cur.mogrify(query, ((movie_id, movie_title), user_id)))
+    movie_title: str = movie[MOVIE_TITLE]
+    movie_id: int = movie[MOVIE_ID]
+    cur.execute(
+        cur.mogrify(
+            query, ((movie[MOVIE_ID], movie[MOVIE_TITLE]),
+                    user_id)
+        )
+    )
     conn.commit()
     conn.close()
