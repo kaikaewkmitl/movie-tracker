@@ -77,15 +77,13 @@ class App:
 
 
 if __name__ == "__main__":
-    print("getting trending movies...")
-    trending_movies = get_trending()
-    for movie in trending_movies:
-        movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
-    store.trending_movies = trending_movies
-    store.curpage = MAIN_PAGE
-    store.search_history.append(("", trending_movies))
+    store.init_store(get_trending())
+    print("fetched trending movies")
 
     init_api()
+    print("initialised API")
+
     init_db()
+    print("initialised DB")
+
     App()

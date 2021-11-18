@@ -43,5 +43,13 @@ class Store:
         self.trending_movies: List[Dict[str, Any]] = []
         self.search_history: List[Tuple[List[Dict[str, Any]]]] = []
 
+    def init_store(self, trending_movies: List[Dict[str, Any]]) -> None:
+        for movie in trending_movies:
+            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
+        self.curpage = MAIN_PAGE
+        self.trending_movies = trending_movies
+        self.search_history.append(("", trending_movies))
+
 
 store = Store()
