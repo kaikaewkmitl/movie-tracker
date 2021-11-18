@@ -84,7 +84,7 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = "SELECT * FROM users WHERE username= %s LIMIT 1;"
+    query = "SELECT * FROM users WHERE username = %s LIMIT 1;"
     cur.execute(query, (username,))
     result = cur.fetchone()
     if result == None:
@@ -96,10 +96,19 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     if not bcrypt.checkpw(password.encode("utf-8"), result[2].encode("utf-8")):
         return {}
 
+    movie_list_tmp = result[3][2:-2].split("\",\"")
+    movie_list = []
+    for movie in movie_list_tmp:
+        m = movie[1:-1].split(",")
+        movie_list.append({
+            MOVIE_ID: int(m[0]),
+            MOVIE_TITLE: m[1]
+        })
+
     user = {
         USER_ID: result[0],
         USER_USERNAME: result[1],
-        USER_MOVIE_LIST: result[3]
+        USER_MOVIE_LIST: movie_list
     }
     return user
 

@@ -5,6 +5,8 @@ from requests.models import Response
 from requests.adapters import HTTPAdapter, Retry
 from typing import Any, Dict, List
 
+from requests.sessions import Session
+
 from utils.globals import *
 
 config = configparser.ConfigParser()
@@ -14,18 +16,21 @@ BASE_URL = "api.themoviedb.org"
 BASE_URL_WITH_HTTPS = f"https://{BASE_URL}/3"
 API_KEY = config[BASE_URL]["API_KEY"]
 
-session = requests.session()
-retry = Retry(
-    total=3,
-    read=3,
-    connect=3,
-    backoff_factor=0.3,
-    status_forcelist=[429, 500, 502, 503, 504]
-)
+session = requests.Session()
 
-adapter = HTTPAdapter(max_retries=retry)
-session.mount('http://', adapter)
-session.mount('https://', adapter)
+
+def init_api() -> None:
+    retry = Retry(
+        total=3,
+        read=3,
+        connect=3,
+        backoff_factor=0.3,
+        status_forcelist=[429, 500, 502, 503, 504]
+    )
+
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
 
 
 def handle_request(url: str, stream: bool = False) -> Response:

@@ -21,6 +21,7 @@ class UserListPage(Page):
             )
             user_heading.pack()
 
+            print(store.user[USER_MOVIE_LIST])
             movies = store.user[USER_MOVIE_LIST]
 
             movie_list_container = Frame(self._page)
