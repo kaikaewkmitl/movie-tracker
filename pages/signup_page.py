@@ -10,7 +10,7 @@ from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 
 class SignupPage(Page):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
         self.__min_len = 5
         self.__max_len = 25

@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from tkinter import Frame, Misc
 from tkinter.constants import BOTH
-from typing import Callable, Optional
+from typing import Any, Callable, Dict, Optional
 
 
 class Page(ABC):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         self._on_display = False
         self._change_page_cb = change_page_callback
         self._page = Frame(parent)

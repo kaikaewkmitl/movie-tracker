@@ -99,7 +99,6 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     movie_list: List[Dict[str, Any]] = []
     if result[3] != "{}":
         movie_list_tmp = result[3][2:-2].split("\",\"")
-        # print(movie_list_tmp)
         for movie in movie_list_tmp:
             m = movie[1:-1].split(",")
             movie_list.append({

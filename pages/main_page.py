@@ -1,6 +1,6 @@
 from tkinter import Label, Misc, Frame, Entry, Listbox, Scrollbar
 from tkinter.constants import BOTH, LEFT, END, RIGHT
-from typing import Callable, List, Dict, Any, Optional
+from typing import Callable, Dict, Any, Optional
 
 from tmdb_api.api import get_movie_by_name
 from .abc_page import Page
@@ -12,7 +12,7 @@ SEARCH_BAR_DEFAULT = "Search for movies"
 
 class MainPage(Page):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
 
     def display(self) -> None:

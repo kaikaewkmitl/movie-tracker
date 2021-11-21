@@ -49,16 +49,28 @@ def handle_request(url: str, stream: bool = False) -> Response:
         print("Oops: Something Else", err)
 
 
+def add_movie_title(movie: Dict[str, Any]) -> None:
+    movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
+
+
 def get_trending() -> List[Dict[str, Any]]:
     url = f"{BASE_URL_WITH_HTTPS}/trending/all/day?api_key={API_KEY}"
     response = handle_request(url)
-    return response.json()["results"]
+    movies = response.json()["results"]
+    for movie in movies:
+        add_movie_title(movie)
+
+    return movies
 
 
 def get_movie_by_name(movie_name: str) -> List[Dict[str, Any]]:
     url = f"{BASE_URL_WITH_HTTPS}/search/movie?api_key={API_KEY}&query={movie_name}&page=1"
     response = handle_request(url)
-    return response.json()["results"]
+    movies = response.json()["results"]
+    for movie in movies:
+        add_movie_title(movie)
+
+    return movies
 
 
 def get_config() -> Dict[str, Any]:
@@ -79,3 +91,11 @@ def get_poster(poster_path: str) -> None:
     with open(os.path.join(POSTERS_DIR, poster_path[1:]), "wb") as f:
         for chunk in response:
             f.write(chunk)
+
+
+def get_movie_by_id(movie_id: int) -> Dict[str, Any]:
+    url = f"{BASE_URL_WITH_HTTPS}/movie/{movie_id}?api_key={API_KEY}&language=en-US"
+    response = handle_request(url)
+    movie = response.json()
+    add_movie_title(movie)
+    return movie

@@ -1,6 +1,6 @@
 import os
 from tkinter import Label, Misc, Frame, Text, messagebox
-from tkinter.constants import BOTTOM, DISABLED, END, LEFT, N, W, RIGHT
+from tkinter.constants import DISABLED, END, LEFT, N, W, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict, Optional
 from db.db import add_movie_to_user_list
@@ -13,7 +13,7 @@ from utils.globals import *
 
 class MovieInfoPage(Page):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
         self.__movie: Dict[str, Any] = {}
         self.__movie[MOVIE_POSTER_IMG] = None

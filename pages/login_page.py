@@ -10,7 +10,7 @@ from utils.globals import *
 
 class LoginPage(Page):
     def __init__(self, parent: Misc,
-                 change_page_callback: Callable[[str, Optional[int]], None]) -> None:
+                 change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
 
         self.__validations: Dict[str, Callable[[str], bool]] = {
