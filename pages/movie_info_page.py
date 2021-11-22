@@ -63,13 +63,14 @@ class MovieInfoPage(Page):
                            )
         poster.pack(padx=20, pady=20)
 
-        add_to_list_btn = MyButton(
-            poster_container,
-            text="Add To My List",
-            font=MyMediumFont(),
-            command=self.add_to_list
-        )
-        add_to_list_btn.pack()
+        if not self.is_in_user_list():
+            add_to_list_btn = MyButton(
+                poster_container,
+                text="Add To My List",
+                font=MyMediumFont(),
+                command=self.add_to_list
+            )
+            add_to_list_btn.pack()
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie
@@ -96,9 +97,20 @@ class MovieInfoPage(Page):
                 "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
             )
             self._page.focus()
+            self._change_page_cb(MOVIE_INFO_PAGE, self.__movie)
         else:
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
             )
-            self._change_page_cb(LOGIN_PAGE)
             self._page.focus()
+            self._change_page_cb(LOGIN_PAGE)
+
+    def is_in_user_list(self):
+        if len(store.user) == 0:
+            return False
+
+        for m in store.user[USER_MOVIE_LIST]:
+            if self.__movie[MOVIE_ID] == m[MOVIE_ID]:
+                return True
+
+        return False

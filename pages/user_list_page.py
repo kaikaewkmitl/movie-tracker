@@ -71,16 +71,12 @@ class UserListPage(Page):
         for search in store.search_history:
             for m in search[1]:
                 if movie[MOVIE_ID] == m[MOVIE_ID]:
-                    print("Found")
                     self._change_page_cb(
-                        MOVIE_INFO_PAGE,
-                        m
+                        MOVIE_INFO_PAGE, m
                     )
                     return
 
-        print("not found")
         retrieved_movie = get_movie_by_id(movie[MOVIE_ID])
         self._change_page_cb(
-            MOVIE_INFO_PAGE,
-            retrieved_movie
+            MOVIE_INFO_PAGE, retrieved_movie
         )
