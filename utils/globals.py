@@ -41,7 +41,7 @@ class Store:
         self.user: Dict[str, Any] = {}
         self.curpage: str = ""
         self.trending_movies: List[Dict[str, Any]] = []
-        self.search_history: List[Tuple[List[Dict[str, Any]]]] = []
+        self.search_history: List[Tuple[str, List[Dict[str, Any]]]] = []
 
     def init_store(self, trending_movies: List[Dict[str, Any]]) -> None:
         for movie in trending_movies:

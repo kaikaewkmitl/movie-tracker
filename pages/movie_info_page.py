@@ -21,7 +21,6 @@ class MovieInfoPage(Page):
         self.__movie[MOVIE_OVERVIEW] = ""
 
     def display(self) -> None:
-        print("displayed")
         super().display()
 
         movie_title = MyHeading(
@@ -75,10 +74,12 @@ class MovieInfoPage(Page):
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie
         if MOVIE_POSTER_PATH in self.__movie and self.__movie[MOVIE_POSTER_PATH] != None:
-            get_poster(movie[MOVIE_POSTER_PATH])
             path = os.path.join(
                 POSTERS_DIR, self.__movie[MOVIE_POSTER_PATH][1:]
             )
+            if not os.path.exists(path):
+                get_poster(movie[MOVIE_POSTER_PATH])
+
             self.__movie[MOVIE_POSTER_IMG] = ImageTk.PhotoImage(
                 Image.open(path)
             )

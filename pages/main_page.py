@@ -99,8 +99,5 @@ class MainPage(Page):
         # encode the movie_name
         movie_name_encoded = "%20".join(movie_name.split())
         searched_movies = get_movie_by_name(movie_name_encoded)
-        for movie in searched_movies:
-            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
         store.search_history.append((movie_name, searched_movies))
         self._change_page_cb(MAIN_PAGE)

@@ -64,7 +64,6 @@ class App:
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
         self.__pages[store.curpage].set_on_display(False)
-        print(store.curpage, page_name)
         store.curpage = page_name
 
         if page_name == MOVIE_INFO_PAGE:
