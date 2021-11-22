@@ -64,7 +64,7 @@ class UserListPage(Page):
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
             )
-
+            self._page.focus()
             self._change_page_cb(LOGIN_PAGE)
 
     def listbox_handler(self, movie: Dict[str, Any]) -> None:

@@ -21,6 +21,7 @@ class MovieInfoPage(Page):
         self.__movie[MOVIE_OVERVIEW] = ""
 
     def display(self) -> None:
+        print("displayed")
         super().display()
 
         movie_title = MyHeading(
@@ -92,8 +93,10 @@ class MovieInfoPage(Page):
             messagebox.showinfo(
                 "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
             )
+            self._page.focus()
         else:
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
             )
             self._change_page_cb(LOGIN_PAGE)
+            self._page.focus()

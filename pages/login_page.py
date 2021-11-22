@@ -66,6 +66,7 @@ class LoginPage(Page):
             messagebox.showerror(
                 "Invalid username", "username must contains only letters or digits"
             )
+            self._page.focus()
             return
 
         user = find_one_user(username, password)
@@ -73,6 +74,7 @@ class LoginPage(Page):
             messagebox.showerror(
                 "Invalid", "the username or password is incorrect"
             )
+            self._page.focus()
             return
 
         store.user[USER_ID] = user[USER_ID]
@@ -80,4 +82,5 @@ class LoginPage(Page):
         store.user[USER_MOVIE_LIST] = user[USER_MOVIE_LIST]
 
         messagebox.showinfo("Logged in", "You have logged in")
+        self._page.focus()
         self._change_page_cb(MAIN_PAGE)

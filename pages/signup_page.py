@@ -68,18 +68,21 @@ class SignupPage(Page):
             messagebox.showerror(
                 "Invalid username", f"username must be between {self.__min_len} - {self.__max_len} characters long"
             )
+            self._page.focus()
             return
 
         if not self.__validations[IS_ALNUM](username):
             messagebox.showerror(
                 "Invalid username", "username must contains only letters or digits"
             )
+            self._page.focus()
             return
 
         if not self.__validations[WITHIN_MIN_LEN](password) or not self.__validations[WITHIN_MAX_LEN](password):
             messagebox.showerror(
                 "Invalid password", f"password must be between {self.__min_len} - {self.__max_len} characters long"
             )
+            self._page.focus()
             return
 
         # save to db/file
@@ -88,4 +91,5 @@ class SignupPage(Page):
         messagebox.showinfo(
             "Signed up", "You have successfully signed up, proceed to login"
         )
+        self._page.focus()
         self._change_page_cb(LOGIN_PAGE)
