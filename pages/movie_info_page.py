@@ -90,7 +90,8 @@ class MovieInfoPage(Page):
 
     def add_to_list(self) -> None:
         if len(store.user) > 0:
-            add_movie_to_user_list(store.user[USER_ID], self.__movie)
+            user = add_movie_to_user_list(self.__movie)
+            store.user = user
             messagebox.showinfo(
                 "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
             )

@@ -3,7 +3,7 @@ from tkinter.constants import W
 from typing import Callable, Optional
 
 from .abc_page import Page
-from db.db import find_one_user
+from db.db import authenticate_user
 from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 from utils.globals import *
 
@@ -69,7 +69,7 @@ class LoginPage(Page):
             self._page.focus()
             return
 
-        user = find_one_user(username, password)
+        user = authenticate_user(username, password)
         if len(user) == 0:
             messagebox.showerror(
                 "Invalid", "the username or password is incorrect"

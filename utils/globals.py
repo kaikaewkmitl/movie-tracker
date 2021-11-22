@@ -33,6 +33,7 @@ IS_MATCH = "is_match"
 # store.user keys
 USER_ID = "id"
 USER_USERNAME = "username"
+USER_PASSWORD = "password"
 USER_MOVIE_LIST = "movie_list"
 
 

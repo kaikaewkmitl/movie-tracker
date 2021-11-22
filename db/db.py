@@ -56,7 +56,7 @@ def create_user_table() -> None:
     query = f"""CREATE TABLE IF NOT EXISTS users(
         {USER_ID} SERIAL PRIMARY KEY,
         {USER_USERNAME} VARCHAR NOT NULL,
-        password VARCHAR NOT NULL,
+        {USER_PASSWORD} VARCHAR NOT NULL,
         {USER_MOVIE_LIST} movie[] DEFAULT """ + "'{}');"
     cur.execute(query)
     conn.commit()
@@ -68,23 +68,11 @@ def init_db() -> None:
     create_user_table()
 
 
-def insert_new_user(username: str, password: str) -> None:
-    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-
+def get_user(username: str) -> Dict[str, Any]:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = "INSERT INTO users (username, password) VALUES (%s, %s);"
-    cur.execute(query, (username, hashed_password.decode("utf-8")))
-    conn.commit()
-    conn.close()
-
-
-def find_one_user(username: str, password: str) -> Dict[str, None]:
-    conn = open_db_connection()
-    cur = conn.cursor()
-
-    query = "SELECT * FROM users WHERE username = %s LIMIT 1;"
+    query = f"SELECT * FROM users WHERE {USER_USERNAME} = %s LIMIT 1;"
     cur.execute(query, (username,))
     result = cur.fetchone()
     if result == None:
@@ -93,40 +81,66 @@ def find_one_user(username: str, password: str) -> Dict[str, None]:
     conn.commit()
     conn.close()
 
-    if not bcrypt.checkpw(password.encode("utf-8"), result[2].encode("utf-8")):
-        return {}
-
     movie_list: List[Dict[str, Any]] = []
     if result[3] != "{}":
         movie_list_tmp = result[3][2:-2].split("\",\"")
         for movie in movie_list_tmp:
-            m = movie[1:-1].split(",")
+            i = movie.find(",")
+            movie_id = movie[1:i]
+            movie_title = movie[i+1:-1]
             movie_list.append({
-                MOVIE_ID: int(m[0]),
-                MOVIE_TITLE: m[1].replace("\\\"", ""),
+                MOVIE_ID: int(movie_id),
+                MOVIE_TITLE: movie_title.replace("\\\"", ""),
             })
 
     user = {
         USER_ID: result[0],
         USER_USERNAME: result[1],
+        USER_PASSWORD: result[2],
         USER_MOVIE_LIST: movie_list
     }
     return user
 
 
-def add_movie_to_user_list(user_id: int, movie: Dict[str, Any]):
+def insert_new_user(username: str, password: str) -> None:
+    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = "UPDATE users SET movie_list = movie_list || %s::movie WHERE id = %s"
+    query = f"INSERT INTO users ({USER_USERNAME}, {USER_PASSWORD}) VALUES (%s, %s);"
+    cur.execute(query, (username, hashed_password.decode("utf-8")))
+    conn.commit()
+    conn.close()
 
-    movie_title: str = movie[MOVIE_TITLE]
-    movie_id: int = movie[MOVIE_ID]
+
+def authenticate_user(username: str, password: str) -> Dict[str, None]:
+    user = get_user(username)
+    if len(user) == 0:
+        return {}
+
+    if not bcrypt.checkpw(password.encode("utf-8"), user[USER_PASSWORD].encode("utf-8")):
+        return {}
+
+    user.pop(USER_PASSWORD, None)
+    return user
+
+
+def add_movie_to_user_list(movie: Dict[str, Any]) -> Dict[str, Any]:
+    conn = open_db_connection()
+    cur = conn.cursor()
+
+    query = f"UPDATE users SET {USER_MOVIE_LIST} = {USER_MOVIE_LIST} || %s::movie WHERE {USER_ID} = %s"
+
     cur.execute(
         cur.mogrify(
             query, ((movie[MOVIE_ID], movie[MOVIE_TITLE]),
-                    user_id)
+                    store.user[USER_ID])
         )
     )
     conn.commit()
     conn.close()
+
+    user = get_user(store.user[USER_USERNAME])
+    user.pop(USER_PASSWORD, None)
+    return user
