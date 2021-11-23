@@ -46,7 +46,8 @@ class LoginPage(Page):
         password_entry = Entry(form_container,
                                bg="white",
                                fg="black",
-                               insertbackground="black"
+                               insertbackground="black",
+                               show="*"
                                )
         password_entry.grid(row=2, column=1, pady=10)
 
@@ -54,10 +55,10 @@ class LoginPage(Page):
                              font=MyMediumFont(),
                              text="Login",
                              width=15,
-                             command=lambda: self.login(username_entry.get(),
-                                                        password_entry.get()
-                                                        )
-                             )
+                             command=lambda: self.login(
+                                 username_entry.get(),
+                                 password_entry.get()
+                             ))
 
         login_btn.grid(row=3, column=0, pady=20, columnspan=2)
 

@@ -3,7 +3,7 @@ from tkinter.constants import W
 from typing import Any, Callable, Dict, Optional
 
 from .abc_page import Page
-from db.db import insert_new_user
+from db.db import get_user, insert_new_user
 from utils.globals import *
 from utils.my_widgets import MyButton, MyHeading, MyMediumFont, MySmallFont
 
@@ -49,7 +49,8 @@ class SignupPage(Page):
         password_entry = Entry(form_container,
                                bg="white",
                                fg="black",
-                               insertbackground="black"
+                               insertbackground="black",
+                               show="*"
                                )
         password_entry.grid(row=2, column=1, pady=10)
 
@@ -57,13 +58,20 @@ class SignupPage(Page):
                               font=MyMediumFont(),
                               text="Signup",
                               width=15,
-                              command=lambda: self.signup(username_entry.get(),
-                                                          password_entry.get()
-                                                          )
-                              )
+                              command=lambda: self.signup(
+                                  username_entry.get(),
+                                  password_entry.get()
+                              ))
         signup_btn.grid(row=3, column=0, pady=20, columnspan=2)
 
     def signup(self, username: str, password: str) -> None:
+        if not self.__validations[WITHIN_MIN_LEN](username) or not self.__validations[WITHIN_MAX_LEN](username):
+            messagebox.showerror(
+                "Invalid username", f"username must be between {self.__min_len} - {self.__max_len} characters long"
+            )
+            self._page.focus()
+            return
+
         if not self.__validations[WITHIN_MIN_LEN](username) or not self.__validations[WITHIN_MAX_LEN](username):
             messagebox.showerror(
                 "Invalid username", f"username must be between {self.__min_len} - {self.__max_len} characters long"
@@ -78,6 +86,13 @@ class SignupPage(Page):
             self._page.focus()
             return
 
+        if len(get_user(username)) != 0:
+            messagebox.showerror(
+                "Invalid username", f"the username {username} already exist, please try a different username"
+            )
+            self._page.focus()
+            return
+
         if not self.__validations[WITHIN_MIN_LEN](password) or not self.__validations[WITHIN_MAX_LEN](password):
             messagebox.showerror(
                 "Invalid password", f"password must be between {self.__min_len} - {self.__max_len} characters long"
@@ -85,9 +100,7 @@ class SignupPage(Page):
             self._page.focus()
             return
 
-        # save to db/file
         insert_new_user(username, password)
-
         messagebox.showinfo(
             "Signed up", "You have successfully signed up, proceed to login"
         )

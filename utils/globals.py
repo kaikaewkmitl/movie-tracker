@@ -13,6 +13,7 @@ MOVIE_TITLE = "movie_title"
 MOVIE_OVERVIEW = "overview"
 MOVIE_POSTER_PATH = "poster_path"
 MOVIE_POSTER_IMG = "poster_img"
+MOVIE_RATING = "vote_average"
 
 POSTERS_DIR = "posters"
 
