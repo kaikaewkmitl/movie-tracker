@@ -29,8 +29,11 @@ class MyHeading(Label):
                          text=text, fg="orange", wraplength=700, *args, **kwargs
                          )
 
-    def pack(self, *args, **kwargs) -> None:
-        super().pack(pady=15, *args, **kwargs)
+    def pack(self, pady=15, *args, **kwargs) -> None:
+        super().pack(pady=pady, *args, **kwargs)
+
+    def grid(self, pady=15, * args, **kwargs) -> None:
+        super().grid(pady=pady, *args, **kwargs)
 
 
 class MyButton(Button):

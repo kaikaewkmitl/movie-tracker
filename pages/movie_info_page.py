@@ -1,6 +1,6 @@
 import os
-from tkinter import Label, Misc, Frame, Scrollbar, Text, messagebox
-from tkinter.constants import DISABLED, END, LEFT, N, W, RIGHT
+from tkinter import Label, Misc, Frame, Text, messagebox
+from tkinter.constants import DISABLED, END, LEFT, N, NW, W, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict, Optional
 from db.db import add_movie_to_user_list
@@ -40,33 +40,56 @@ class MovieInfoPage(Page):
                         width=50,
                         height=10,
                         font=MySmallFont(),
-                        wrap="word"
+                        wrap="word",
+                        fg="black",
+                        bg="white"
                         )
         overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
 
-        genres_container = Frame(overview_container)
-        genres_container.pack(padx=20, anchor=W)
+        others_container = Frame(overview_container)
+        others_container.pack(padx=20, side=LEFT)
 
-        genres_heading = MyHeading(
-            genres_container, font=MyMediumFont(), text="Genres"
+        movie_genres_id = self.__movie[MOVIE_GENRE_IDS]
+        # if MOVIE_GENRES in self.__movie:
+        #     movie_genres = self.__movie[MOVIE_GENRES]
+
+        genre_heading = MyHeading(
+            others_container, font=MyMediumFont(), text="Genres"
         )
-        genres_heading.pack(anchor=W)
+        genre_heading.grid(row=0, column=0, sticky=W)
 
-        movie_genres = self.__movie[MOVIE_GENRES]
+        genres = MyListbox(
+            others_container,
+            font=MySmallFont(),
+            height=len(movie_genres_id),
+            width=19
+        )
+        genres.grid(row=1, column=0, sticky=NW)
 
-        genres = MyListbox(genres_container,
-                           font=MySmallFont(),
-                           height=len(movie_genres),
-                           )
-        genres.pack()
+        for genre in movie_genres_id:
+            genres.insert(END, store.genre_dict[genre])
 
-        for genre in movie_genres:
-            genres.insert(END, store.genre_list[genre])
+        others_heading = MyHeading(
+            others_container, font=MyMediumFont(), text="Other Info"
+        )
+        others_heading.grid(row=0, column=1, padx=10, sticky=W)
 
-        # scrollbar = Scrollbar(genres_container)
-        # scrollbar.pack(side=RIGHT, fill=BOTH)
+        others = MyListbox(
+            others_container,
+            font=MySmallFont(),
+            height=6,
+            width=30
+        )
+        others.grid(row=1, column=1, padx=10, sticky=NW)
+        others.insert(END,
+                      f"Original Language: {self.__movie[MOVIE_LANGUAGE]}",
+                      "",
+                      f"Release Date: {self.__movie[MOVIE_RELEASE_DATE]}",
+                      "",
+                      f"Rating: {self.__movie[MOVIE_RATING]}"
+                      )
 
         poster_container = Frame(self._page)
         poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)

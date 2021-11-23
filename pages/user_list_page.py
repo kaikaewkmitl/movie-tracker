@@ -4,7 +4,6 @@ from copy import deepcopy
 from typing import Callable, Optional
 
 from pages.abc_page import Page
-from tmdb_api.api import get_movie_by_id
 from utils.my_widgets import MyHeading, MyListbox, MyMediumFont, MySmallFont
 from utils.globals import *
 

@@ -51,6 +51,12 @@ def add_movie_title(movie: Dict[str, Any]) -> None:
     movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
 
 
+def add_genre_ids(movie: Dict[str, Any]) -> None:
+    movie[MOVIE_GENRE_IDS] = []
+    for genre in movie[MOVIE_GENRES]:
+        movie[MOVIE_GENRE_IDS].append(genre["id"])
+
+
 def get_trending() -> List[Dict[str, Any]]:
     url = f"{BASE_URL_WITH_HTTPS}/trending/movie/day?api_key={API_KEY}"
     response = handle_request(url)
@@ -67,6 +73,7 @@ def get_movie_by_name(movie_name: str) -> List[Dict[str, Any]]:
     movies = response.json()["results"]
     for movie in movies:
         add_movie_title(movie)
+        add_genre_ids(movie)
 
     return movies
 
@@ -102,4 +109,5 @@ def get_movie_by_id(movie_id: int) -> Dict[str, Any]:
     response = handle_request(url)
     movie = response.json()
     add_movie_title(movie)
+    add_genre_ids(movie)
     return movie

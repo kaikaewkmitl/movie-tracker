@@ -14,7 +14,10 @@ MOVIE_OVERVIEW = "overview"
 MOVIE_POSTER_PATH = "poster_path"
 MOVIE_POSTER_IMG = "poster_img"
 MOVIE_RATING = "vote_average"
-MOVIE_GENRES = "genre_ids"
+MOVIE_GENRE_IDS = "genre_ids"
+MOVIE_GENRES = "genres"
+MOVIE_LANGUAGE = "original_language"
+MOVIE_RELEASE_DATE = "release_date"
 
 POSTERS_DIR = "posters"
 
@@ -46,15 +49,15 @@ class Store:
         self.curpage: str = ""
         self.trending_movies: List[Dict[str, Any]] = []
         self.search_history: List[Tuple[str, List[Dict[str, Any]]]] = []
-        self.genre_list: Dict[int, str] = {}
+        self.genre_dict: Dict[int, str] = {}
 
     def init_store(self, trending_movies: List[Dict[str, Any]],
-                   genre_list: List[Dict[str, Any]]) -> None:
+                   genre_dict: List[Dict[str, Any]]) -> None:
         self.curpage = MAIN_PAGE
         self.trending_movies = trending_movies
         self.search_history.append(("", trending_movies))
-        for genre in genre_list:
-            self.genre_list[genre["id"]] = genre["name"]
+        for genre in genre_dict:
+            self.genre_dict[genre["id"]] = genre["name"]
 
 
 store = Store()
