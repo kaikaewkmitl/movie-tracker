@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, Button, Misc
+from tkinter import Frame, Label, Button, Misc, Listbox
 from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
 from typing import Callable, Optional, Dict
@@ -38,11 +38,31 @@ class MyButton(Button):
                  text: str = "", *args, **kwargs) -> None:
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         text=text, *args, **kwargs
+                         text=text, cursor="hand2", fg="black",
+                         * args, **kwargs
                          )
+
+        self.bind("<Enter>", lambda _: self.config(fg="orange"))
+        self.bind("<Leave>", lambda _: self.config(fg="black"))
 
     def pack(self, *args, **kwargs) -> None:
         super().pack(pady=10, *args, **kwargs)
+
+
+class MyListbox(Listbox):
+    def __init__(self, parent: Misc, font: Font = MyMediumFont,
+                 *args, **kwargs) -> None:
+        super().__init__(parent,
+                         font=font() if type(font) == type else font,
+                         bg="white",
+                         fg="black",
+                         bd=0,
+                         highlightthickness=0,
+                         selectbackground="gray",
+                         selectforeground="orange",
+                         activestyle="dotbox",
+                         *args, **kwargs
+                         )
 
 
 class MyNavbar(Frame):

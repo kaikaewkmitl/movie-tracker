@@ -1,5 +1,5 @@
 import os
-from tkinter import Label, Misc, Frame, Text, messagebox
+from tkinter import Label, Misc, Frame, Scrollbar, Text, messagebox
 from tkinter.constants import DISABLED, END, LEFT, N, W, RIGHT
 from PIL import ImageTk, Image
 from typing import Any, Callable, Dict, Optional
@@ -7,7 +7,7 @@ from db.db import add_movie_to_user_list
 
 from tmdb_api.api import get_poster
 from .abc_page import Page
-from utils.my_widgets import MyBigFont, MyButton, MyHeading, MyMediumFont, MySmallFont
+from utils.my_widgets import MyBigFont, MyButton, MyHeading, MyListbox, MyMediumFont, MySmallFont
 from utils.globals import *
 
 
@@ -45,6 +45,28 @@ class MovieInfoPage(Page):
         overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
+
+        genres_container = Frame(overview_container)
+        genres_container.pack(padx=20, anchor=W)
+
+        genres_heading = MyHeading(
+            genres_container, font=MyMediumFont(), text="Genres"
+        )
+        genres_heading.pack(anchor=W)
+
+        movie_genres = self.__movie[MOVIE_GENRES]
+
+        genres = MyListbox(genres_container,
+                           font=MySmallFont(),
+                           height=len(movie_genres),
+                           )
+        genres.pack()
+
+        for genre in movie_genres:
+            genres.insert(END, store.genre_list[genre])
+
+        # scrollbar = Scrollbar(genres_container)
+        # scrollbar.pack(side=RIGHT, fill=BOTH)
 
         poster_container = Frame(self._page)
         poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)

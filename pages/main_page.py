@@ -1,10 +1,10 @@
-from tkinter import Label, Misc, Frame, Entry, Listbox, Scrollbar
+from tkinter import Label, Misc, Frame, Entry, Scrollbar
 from tkinter.constants import BOTH, LEFT, END, RIGHT
 from typing import Callable, Dict, Any, Optional
 
 from tmdb_api.api import get_movie_by_name
 from .abc_page import Page
-from utils.my_widgets import MyHeading, MyMediumFont
+from utils.my_widgets import MyHeading, MyListbox, MyMediumFont
 from utils.globals import *
 
 SEARCH_BAR_DEFAULT = "Search for movies"
@@ -59,18 +59,10 @@ class MainPage(Page):
                               )
             no_result.pack()
         else:
-            movie_list = Listbox(movie_list_container,
-                                 font=MyMediumFont(),
-                                 width=30,
-                                 height=15,
-                                 bg="white",
-                                 fg="blue",
-                                 bd=0,
-                                 highlightthickness=0,
-                                 selectbackground="gray",
-                                 selectforeground="orange",
-                                 activestyle="dotbox"
-                                 )
+            movie_list = MyListbox(movie_list_container,
+                                   width=30,
+                                   height=15,
+                                   )
             # movie_list.bind("<<ListboxSelect>>", lambda e: print(
             #     movie_list.curselection()[0])
             # )

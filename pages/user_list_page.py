@@ -1,11 +1,11 @@
-from tkinter import Frame, Label, Misc, Listbox, OptionMenu, Scrollbar, StringVar, messagebox
+from tkinter import Frame, Label, Misc, OptionMenu, Scrollbar, StringVar, messagebox
 from tkinter.constants import LEFT, RIGHT, BOTH, END, X
 from copy import deepcopy
 from typing import Callable, Optional
 
 from pages.abc_page import Page
 from tmdb_api.api import get_movie_by_id
-from utils.my_widgets import MyHeading, MyMediumFont, MySmallFont
+from utils.my_widgets import MyHeading, MyListbox, MyMediumFont, MySmallFont
 from utils.globals import *
 
 LAST_ADDED = "Last Added"
@@ -69,18 +69,10 @@ class UserListPage(Page):
                 movie_list_container = Frame(self._page)
                 movie_list_container.pack(pady=20)
 
-                movie_list = Listbox(movie_list_container,
-                                     font=MyMediumFont(),
-                                     width=30,
-                                     height=15,
-                                     bg="white",
-                                     fg="blue",
-                                     bd=0,
-                                     highlightthickness=0,
-                                     selectbackground="gray",
-                                     selectforeground="orange",
-                                     activestyle="dotbox"
-                                     )
+                movie_list = MyListbox(movie_list_container,
+                                       width=30,
+                                       height=15,
+                                       )
 
                 movie_list.bind("<Double-Button-1>",
                                 lambda _: self._change_page_cb(

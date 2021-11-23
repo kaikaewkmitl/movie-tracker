@@ -5,8 +5,6 @@ from requests.models import Response
 from requests.adapters import HTTPAdapter, Retry
 from typing import Any, Dict, List
 
-from requests.sessions import Session
-
 from utils.globals import *
 
 config = configparser.ConfigParser()
@@ -77,6 +75,12 @@ def get_config() -> Dict[str, Any]:
     url = f"{BASE_URL_WITH_HTTPS}/configuration?api_key={API_KEY}"
     response = handle_request(url)
     return response.json()
+
+
+def get_genre_list() -> List[Dict[str, Any]]:
+    url = f"{BASE_URL_WITH_HTTPS}/genre/movie/list?api_key={API_KEY}&language=en-US"
+    response = handle_request(url)
+    return response.json()["genres"]
 
 
 def get_poster(poster_path: str) -> None:

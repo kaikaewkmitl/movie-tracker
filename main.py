@@ -4,7 +4,7 @@ import shutil
 import signal
 from typing import Any, Dict, cast
 
-from tmdb_api.api import get_trending, init_api
+from tmdb_api.api import get_genre_list, get_trending, init_api
 from db.db import init_db
 from pages.abc_page import Page
 from pages.main_page import MainPage
@@ -76,7 +76,7 @@ class App:
 
 
 if __name__ == "__main__":
-    store.init_store(get_trending())
+    store.init_store(get_trending(), get_genre_list())
     print("fetched trending movies")
 
     init_api()
