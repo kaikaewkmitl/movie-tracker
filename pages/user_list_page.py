@@ -17,7 +17,6 @@ cur_sort_option = LAST_ADDED
 class UserListPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
-        self.__movie_list: List[Dict[str, Any]] = []
 
     def display(self) -> None:
         super().display()
@@ -48,9 +47,6 @@ class UserListPage(Page):
             )
             sort_option_heading.pack(side=RIGHT, padx=10)
 
-            if len(self.__movie_list) == 0:
-                self.__movie_list = deepcopy(store.user[USER_MOVIE_LIST])
-
             movie_list_container = Frame(self._page)
             movie_list_container.pack(pady=20)
 
@@ -72,12 +68,14 @@ class UserListPage(Page):
             #                     movies[movie_list.curselection()[0]]
             #                 ))
             movie_list.bind("<Double-Button-1>",
-                            lambda _: self.listbox_handler(
-                                self.__movie_list[movie_list.curselection()[0]]
+                            lambda _: self._change_page_cb(
+                                MOVIE_INFO_PAGE,
+                                store.user[USER_MOVIE_LIST]
+                                [movie_list.curselection()[0]]
                             ))
             movie_list.pack(side=LEFT)
 
-            for movie in self.__movie_list:
+            for movie in store.user[USER_MOVIE_LIST]:
                 movie_list.insert(
                     END, movie[MOVIE_TITLE]
                 )
@@ -94,27 +92,15 @@ class UserListPage(Page):
             self._page.focus()
             self._change_page_cb(LOGIN_PAGE)
 
-    def listbox_handler(self, movie: Dict[str, Any]) -> None:
-        for search in store.search_history:
-            for m in search[1]:
-                if movie[MOVIE_ID] == m[MOVIE_ID]:
-                    self._change_page_cb(
-                        MOVIE_INFO_PAGE, m
-                    )
-                    return
-
-        retrieved_movie = get_movie_by_id(movie[MOVIE_ID])
-        self._change_page_cb(
-            MOVIE_INFO_PAGE, retrieved_movie
-        )
-
     def dropdown_handler(self, option):
         global cur_sort_option
         if option == LAST_ADDED and cur_sort_option != LAST_ADDED:
-            self.__movie_list = deepcopy(store.user[USER_MOVIE_LIST])
+            store.user[USER_MOVIE_LIST] = deepcopy(
+                store.user[USER_MOVIE_LIST_ORIGINAL]
+            )
             cur_sort_option = LAST_ADDED
             self._change_page_cb(USER_LIST_PAGE)
         elif option == ALPHABETICAL and cur_sort_option != ALPHABETICAL:
-            self.__movie_list.sort(key=lambda m: m[MOVIE_TITLE])
+            store.user[USER_MOVIE_LIST].sort(key=lambda m: m[MOVIE_TITLE])
             cur_sort_option = ALPHABETICAL
             self._change_page_cb(USER_LIST_PAGE)

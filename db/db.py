@@ -1,8 +1,10 @@
 import configparser
+from copy import deepcopy
 from psycopg2 import Error, connect
 from psycopg2._psycopg import connection
 from typing import Dict
 import bcrypt
+from tmdb_api.api import get_movie_by_id
 
 from utils.globals import *
 
@@ -31,24 +33,6 @@ def open_db_connection() -> connection:
         print("DB Error:", err)
 
 
-def create_movie_type() -> None:
-    conn = open_db_connection()
-    cur = conn.cursor()
-
-    # have to use try except because
-    # TYPE doesn't support IF NOT EXISTS
-    try:
-        query = f"""CREATE TYPE movie AS(
-            {MOVIE_ID} INTEGER,
-            {MOVIE_TITLE} VARCHAR
-        );"""
-        cur.execute(query)
-        conn.commit()
-        conn.close()
-    except:
-        print("movie type already exist")
-
-
 def create_user_table() -> None:
     conn = open_db_connection()
     cur = conn.cursor()
@@ -57,14 +41,13 @@ def create_user_table() -> None:
         {USER_ID} SERIAL PRIMARY KEY,
         {USER_USERNAME} VARCHAR NOT NULL,
         {USER_PASSWORD} VARCHAR NOT NULL,
-        {USER_MOVIE_LIST} movie[] DEFAULT """ + "'{}');"
+        {USER_MOVIE_LIST} INTEGER[] DEFAULT """ + "'{}');"
     cur.execute(query)
     conn.commit()
     conn.close()
 
 
 def init_db() -> None:
-    create_movie_type()
     create_user_table()
 
 
@@ -82,22 +65,15 @@ def get_user(username: str) -> Dict[str, Any]:
     conn.close()
 
     movie_list: List[Dict[str, Any]] = []
-    if result[3] != "{}":
-        movie_list_tmp = result[3][2:-2].split("\",\"")
-        for movie in movie_list_tmp:
-            i = movie.find(",")
-            movie_id = movie[1:i]
-            movie_title = movie[i+1:-1]
-            movie_list.append({
-                MOVIE_ID: int(movie_id),
-                MOVIE_TITLE: movie_title.replace("\\\"", ""),
-            })
+    for id in result[3]:
+        movie_list.append(get_movie_by_id(id))
 
     user = {
         USER_ID: result[0],
         USER_USERNAME: result[1],
         USER_PASSWORD: result[2],
-        USER_MOVIE_LIST: movie_list
+        USER_MOVIE_LIST: movie_list,
+        USER_MOVIE_LIST_ORIGINAL: deepcopy(movie_list)
     }
     return user
 
@@ -130,14 +106,9 @@ def add_movie_to_user_list(movie: Dict[str, Any]) -> Dict[str, Any]:
     conn = open_db_connection()
     cur = conn.cursor()
 
-    query = f"UPDATE users SET {USER_MOVIE_LIST} = {USER_MOVIE_LIST} || %s::movie WHERE {USER_ID} = %s"
+    query = f"UPDATE users SET {USER_MOVIE_LIST} = {USER_MOVIE_LIST} || %s WHERE {USER_ID} = %s"
 
-    cur.execute(
-        cur.mogrify(
-            query, ((movie[MOVIE_ID], movie[MOVIE_TITLE]),
-                    store.user[USER_ID])
-        )
-    )
+    cur.execute(query, (movie[MOVIE_ID], store.user[USER_ID]))
     conn.commit()
     conn.close()
 

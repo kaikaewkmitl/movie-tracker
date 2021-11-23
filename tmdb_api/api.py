@@ -54,7 +54,7 @@ def add_movie_title(movie: Dict[str, Any]) -> None:
 
 
 def get_trending() -> List[Dict[str, Any]]:
-    url = f"{BASE_URL_WITH_HTTPS}/trending/all/day?api_key={API_KEY}"
+    url = f"{BASE_URL_WITH_HTTPS}/trending/movie/day?api_key={API_KEY}"
     response = handle_request(url)
     movies = response.json()["results"]
     for movie in movies:

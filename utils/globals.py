@@ -35,6 +35,7 @@ USER_ID = "id"
 USER_USERNAME = "username"
 USER_PASSWORD = "password"
 USER_MOVIE_LIST = "movie_list"
+USER_MOVIE_LIST_ORIGINAL = "user_movie_list_original"
 
 
 class Store:
@@ -45,9 +46,6 @@ class Store:
         self.search_history: List[Tuple[str, List[Dict[str, Any]]]] = []
 
     def init_store(self, trending_movies: List[Dict[str, Any]]) -> None:
-        for movie in trending_movies:
-            movie[MOVIE_TITLE] = movie["title"] if "title" in movie else movie["name"]
-
         self.curpage = MAIN_PAGE
         self.trending_movies = trending_movies
         self.search_history.append(("", trending_movies))
