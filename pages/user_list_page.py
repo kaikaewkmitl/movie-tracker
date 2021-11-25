@@ -4,26 +4,34 @@ from copy import deepcopy
 from typing import Callable, Optional
 
 from pages.abc_page import Page
-from utils.my_widgets import MyHeading, MyListbox, MyMediumFont, MySmallFont
+from utils.my_widgets import MyButton, MyHeading, MyListbox, MyMediumFont, MySmallFont
 from utils.globals import *
 
 LAST_ADDED = "Last Added"
 ALPHABETICAL = "Alphabetical"
 RATING = "Rating"
 
-cur_sort_option = LAST_ADDED
+ALL_MOVIE = "All Movie"
+WATCHED = "Watched"
+WILL_WATCH = "Will Watch"
 
 
 class UserListPage(Page):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
 
+        self.__cur_sort_option = LAST_ADDED
+        self.__cur_status = ALL_MOVIE
+        self.__movies: List[Dict[str, Any]] = []
+
     def display(self) -> None:
         super().display()
 
         if len(store.user) > 0:
-            movies = store.user[USER_MOVIE_LIST]
-            if len(movies) == 0:
+            if len(self.__movies) == 0:
+                self.__movies = deepcopy(store.user[USER_MOVIE_LIST])
+
+            if len(self.__movies) == 0:
                 padder = Label(
                     self._page
                 )
@@ -46,10 +54,34 @@ class UserListPage(Page):
                 )
                 user_heading.pack()
 
+                movie_status_btn_container = Frame(self._page)
+                movie_status_btn_container.pack()
+
+                self.__btns: Dict[str, MyButton] = {
+                    ALL_MOVIE: MyButton(
+                        movie_status_btn_container, text=ALL_MOVIE,
+                        command=lambda: self.set_cur_status(ALL_MOVIE)
+                    ),
+                    WATCHED: MyButton(
+                        movie_status_btn_container, text=WATCHED,
+                        command=lambda: self.set_cur_status(WATCHED)
+                    ),
+                    WILL_WATCH: MyButton(
+                        movie_status_btn_container, text=WILL_WATCH,
+                        command=lambda: self.set_cur_status(WILL_WATCH)
+                    )
+                }
+                self.focus_btn()
+
+                for btn in self.__btns.values():
+                    btn.pack(side=LEFT)
+
                 sort_option_container = Frame(self._page)
                 sort_option_container.pack(pady=10, padx=200, fill=X)
 
-                sort_option = StringVar(sort_option_container, cur_sort_option)
+                sort_option = StringVar(
+                    sort_option_container, self.__cur_sort_option
+                )
 
                 sort_option_dropdown = OptionMenu(
                     sort_option_container, sort_option,
@@ -76,14 +108,23 @@ class UserListPage(Page):
                 movie_list.bind("<Double-Button-1>",
                                 lambda _: self._change_page_cb(
                                     MOVIE_INFO_PAGE,
-                                    movies[movie_list.curselection()[0]]
+                                    self.__movies[movie_list.curselection()[0]]
                                 ))
                 movie_list.pack(side=LEFT)
 
-                for movie in movies:
-                    movie_list.insert(
-                        END, movie[MOVIE_TITLE]
-                    )
+                for movie in self.__movies:
+                    if self.__cur_status == ALL_MOVIE:
+                        movie_list.insert(
+                            END, movie[MOVIE_TITLE]
+                        )
+                    elif self.__cur_status == WATCHED and movie[MOVIE_STATUS] == STATUS_WATCHED:
+                        movie_list.insert(
+                            END, movie[MOVIE_TITLE]
+                        )
+                    elif self.__cur_status == WILL_WATCH and movie[MOVIE_STATUS] == STATUS_WILL_WATCH:
+                        movie_list.insert(
+                            END, movie[MOVIE_TITLE]
+                        )
 
                 scrollbar = Scrollbar(movie_list_container)
                 scrollbar.pack(side=RIGHT, fill=BOTH)
@@ -97,19 +138,30 @@ class UserListPage(Page):
             self._page.focus()
             self._change_page_cb(LOGIN_PAGE)
 
-    def dropdown_handler(self, option):
-        global cur_sort_option
-        if option == LAST_ADDED and cur_sort_option != LAST_ADDED:
-            store.user[USER_MOVIE_LIST] = deepcopy(
+    def dropdown_handler(self, option: str) -> None:
+        if option == LAST_ADDED and self.__cur_sort_option != LAST_ADDED:
+            self.__movies = deepcopy(
                 store.user[USER_MOVIE_LIST_ORIGINAL]
             )
-            cur_sort_option = LAST_ADDED
-        elif option == ALPHABETICAL and cur_sort_option != ALPHABETICAL:
-            store.user[USER_MOVIE_LIST].sort(key=lambda m: m[MOVIE_TITLE])
-            cur_sort_option = ALPHABETICAL
-        elif option == RATING and cur_sort_option != RATING:
-            store.user[USER_MOVIE_LIST].sort(
-                key=lambda m: m[MOVIE_RATING], reverse=True)
-            cur_sort_option = RATING
+            self.__cur_sort_option = LAST_ADDED
+        elif option == ALPHABETICAL and self.__cur_sort_option != ALPHABETICAL:
+            self.__movies.sort(key=lambda m: m[MOVIE_TITLE])
+            self.__cur_sort_option = ALPHABETICAL
+        elif option == RATING and self.__cur_sort_option != RATING:
+            self.__movies.sort(
+                key=lambda m: m[MOVIE_RATING], reverse=True
+            )
+            self.__cur_sort_option = RATING
 
+        self._change_page_cb(USER_LIST_PAGE)
+
+    def focus_btn(self) -> None:
+        for k, v in self.__btns.items():
+            if self.__cur_status == k:
+                v.config(fg="orange")
+            else:
+                v.config(fg="black")
+
+    def set_cur_status(self, status: str) -> None:
+        self.__cur_status = status
         self._change_page_cb(USER_LIST_PAGE)

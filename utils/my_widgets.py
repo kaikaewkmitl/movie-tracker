@@ -45,9 +45,6 @@ class MyButton(Button):
                          * args, **kwargs
                          )
 
-        self.bind("<Enter>", lambda _: self.config(fg="orange"))
-        self.bind("<Leave>", lambda _: self.config(fg="black"))
-
     def pack(self, *args, **kwargs) -> None:
         super().pack(pady=10, *args, **kwargs)
 

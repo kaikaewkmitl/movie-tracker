@@ -18,6 +18,11 @@ MOVIE_GENRE_IDS = "genre_ids"
 MOVIE_GENRES = "genres"
 MOVIE_LANGUAGE = "original_language"
 MOVIE_RELEASE_DATE = "release_date"
+MOVIE_STATUS = "movie_status"
+
+# user's movie progress
+STATUS_WATCHED = "watched"
+STATUS_WILL_WATCH = "will_watch"
 
 POSTERS_DIR = "posters"
 

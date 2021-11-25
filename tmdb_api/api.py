@@ -73,7 +73,6 @@ def get_movie_by_name(movie_name: str) -> List[Dict[str, Any]]:
     movies = response.json()["results"]
     for movie in movies:
         add_movie_title(movie)
-        add_genre_ids(movie)
 
     return movies
 
