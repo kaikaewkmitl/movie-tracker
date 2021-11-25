@@ -52,8 +52,6 @@ class MovieInfoPage(Page):
         others_container.pack(padx=20, side=LEFT)
 
         movie_genres_id = self.__movie[MOVIE_GENRE_IDS]
-        # if MOVIE_GENRES in self.__movie:
-        #     movie_genres = self.__movie[MOVIE_GENRES]
 
         genre_heading = MyHeading(
             others_container, font=MyMediumFont(), text="Genres"
@@ -108,14 +106,53 @@ class MovieInfoPage(Page):
                            )
         poster.pack(padx=20, pady=20)
 
-        if not self.is_in_user_list():
-            add_to_list_btn = MyButton(
-                poster_container,
-                text="Add To My List",
+        add_to_list_container = Frame(poster_container)
+        add_to_list_container.pack()
+
+        movie = self.find_in_user_list()
+        if len(movie) == 0:
+            add_to_list_heading = MyHeading(
+                add_to_list_container,
                 font=MyMediumFont(),
-                command=self.add_to_list
+                text="Add To My List"
             )
-            add_to_list_btn.pack()
+            add_to_list_heading.pack(pady=5)
+
+            watched_btn = MyButton(
+                add_to_list_container,
+                text="Watched",
+                command=lambda: self.add_to_list(STATUS_WATCHED)
+            )
+            watched_btn.pack(pady=5)
+
+            will_watch_btn = MyButton(
+                add_to_list_container,
+                text="Will Watch",
+                command=lambda: self.add_to_list(STATUS_WILL_WATCH)
+            )
+            will_watch_btn.pack(pady=0)
+        else:
+            in_list_heading = MyHeading(
+                add_to_list_container,
+                font=MyMediumFont(),
+                text="In My List"
+            )
+            in_list_heading.pack()
+
+            watch_status = MyHeading(
+                add_to_list_container,
+                font=MySmallFont(),
+                text=f"Status: {movie[MOVIE_STATUS]}"
+            )
+            watch_status.pack(pady=5)
+
+            # add_to_list_btn = MyButton(
+            #     poster_container,
+            #     text="Add To My List",
+            #     font=MyMediumFont(),
+            #     command=self.add_to_list
+            # )
+            # add_to_list_btn.pack()
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie
@@ -134,9 +171,9 @@ class MovieInfoPage(Page):
 
         self.set_on_display(True)
 
-    def add_to_list(self) -> None:
+    def add_to_list(self, status: str) -> None:
         if len(store.user) > 0:
-            user = add_movie_to_user_list(self.__movie)
+            user = add_movie_to_user_list(self.__movie, status)
             store.user = user
             messagebox.showinfo(
                 "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
@@ -150,12 +187,12 @@ class MovieInfoPage(Page):
             self._page.focus()
             self._change_page_cb(LOGIN_PAGE)
 
-    def is_in_user_list(self):
+    def find_in_user_list(self) -> Dict[str, Any]:
         if len(store.user) == 0:
-            return False
+            return {}
 
         for m in store.user[USER_MOVIE_LIST]:
             if self.__movie[MOVIE_ID] == m[MOVIE_ID]:
-                return True
+                return m
 
-        return False
+        return {}

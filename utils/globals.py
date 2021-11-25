@@ -45,7 +45,6 @@ USER_ID = "id"
 USER_USERNAME = "username"
 USER_PASSWORD = "password"
 USER_MOVIE_LIST = "movie_list"
-USER_MOVIE_LIST_ORIGINAL = "user_movie_list_original"
 
 
 class Store:

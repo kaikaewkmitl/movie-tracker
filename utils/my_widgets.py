@@ -45,8 +45,8 @@ class MyButton(Button):
                          * args, **kwargs
                          )
 
-    def pack(self, *args, **kwargs) -> None:
-        super().pack(pady=10, *args, **kwargs)
+    def pack(self, pady=10, *args, **kwargs) -> None:
+        super().pack(pady=pady, *args, **kwargs)
 
 
 class MyListbox(Listbox):

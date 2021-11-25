@@ -95,8 +95,7 @@ def get_user(username: str) -> Dict[str, Any]:
         USER_ID: result[0],
         USER_USERNAME: result[1],
         USER_PASSWORD: result[2],
-        USER_MOVIE_LIST: movie_list,
-        USER_MOVIE_LIST_ORIGINAL: deepcopy(movie_list)
+        USER_MOVIE_LIST: movie_list
     }
     return user
 
@@ -125,7 +124,7 @@ def authenticate_user(username: str, password: str) -> Dict[str, None]:
     return user
 
 
-def add_movie_to_user_list(movie: Dict[str, Any]) -> Dict[str, Any]:
+def add_movie_to_user_list(movie: Dict[str, Any], status: str) -> Dict[str, Any]:
     conn = open_db_connection()
     cur = conn.cursor()
 
@@ -133,7 +132,7 @@ def add_movie_to_user_list(movie: Dict[str, Any]) -> Dict[str, Any]:
 
     cur.execute(
         cur.mogrify(
-            query, ((movie[MOVIE_ID], STATUS_WATCHED),
+            query, ((movie[MOVIE_ID], status),
                     store.user[USER_ID])
         )
     )

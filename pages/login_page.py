@@ -81,7 +81,6 @@ class LoginPage(Page):
         store.user[USER_ID] = user[USER_ID]
         store.user[USER_USERNAME] = user[USER_USERNAME]
         store.user[USER_MOVIE_LIST] = user[USER_MOVIE_LIST]
-        store.user[USER_MOVIE_LIST_ORIGINAL] = user[USER_MOVIE_LIST_ORIGINAL]
 
         messagebox.showinfo("Logged in", "You have logged in")
         self._page.focus()

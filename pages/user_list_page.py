@@ -12,8 +12,6 @@ ALPHABETICAL = "Alphabetical"
 RATING = "Rating"
 
 ALL_MOVIE = "All Movie"
-WATCHED = "Watched"
-WILL_WATCH = "Will Watch"
 
 
 class UserListPage(Page):
@@ -62,13 +60,13 @@ class UserListPage(Page):
                         movie_status_btn_container, text=ALL_MOVIE,
                         command=lambda: self.set_cur_status(ALL_MOVIE)
                     ),
-                    WATCHED: MyButton(
-                        movie_status_btn_container, text=WATCHED,
-                        command=lambda: self.set_cur_status(WATCHED)
+                    STATUS_WATCHED: MyButton(
+                        movie_status_btn_container, text="Watched",
+                        command=lambda: self.set_cur_status(STATUS_WATCHED)
                     ),
-                    WILL_WATCH: MyButton(
-                        movie_status_btn_container, text=WILL_WATCH,
-                        command=lambda: self.set_cur_status(WILL_WATCH)
+                    STATUS_WILL_WATCH: MyButton(
+                        movie_status_btn_container, text="Will Watch",
+                        command=lambda: self.set_cur_status(STATUS_WILL_WATCH)
                     )
                 }
                 self.focus_btn()
@@ -117,11 +115,11 @@ class UserListPage(Page):
                         movie_list.insert(
                             END, movie[MOVIE_TITLE]
                         )
-                    elif self.__cur_status == WATCHED and movie[MOVIE_STATUS] == STATUS_WATCHED:
+                    elif self.__cur_status == STATUS_WATCHED and movie[MOVIE_STATUS] == STATUS_WATCHED:
                         movie_list.insert(
                             END, movie[MOVIE_TITLE]
                         )
-                    elif self.__cur_status == WILL_WATCH and movie[MOVIE_STATUS] == STATUS_WILL_WATCH:
+                    elif self.__cur_status == STATUS_WILL_WATCH and movie[MOVIE_STATUS] == STATUS_WILL_WATCH:
                         movie_list.insert(
                             END, movie[MOVIE_TITLE]
                         )
@@ -141,7 +139,7 @@ class UserListPage(Page):
     def dropdown_handler(self, option: str) -> None:
         if option == LAST_ADDED and self.__cur_sort_option != LAST_ADDED:
             self.__movies = deepcopy(
-                store.user[USER_MOVIE_LIST_ORIGINAL]
+                store.user[USER_MOVIE_LIST]
             )
             self.__cur_sort_option = LAST_ADDED
         elif option == ALPHABETICAL and self.__cur_sort_option != ALPHABETICAL:
