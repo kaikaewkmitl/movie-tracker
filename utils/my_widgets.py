@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, Button, Misc, Listbox
+from tkinter import Frame, Label, Button, Misc, Listbox, messagebox
 from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
 from typing import Callable, Optional, Dict
@@ -91,6 +91,10 @@ class MyNavbar(Frame):
                 self, text="Login",
                 command=lambda: self.__change_page_cb(LOGIN_PAGE)
             ),
+            LOGOUT_BTN: MyButton(
+                self, text="Logout",
+                command=self.logout
+            ),
             BACK_BTN: MyButton(
                 self, text="Back",
                 command=lambda: self.focus_and_change_page(
@@ -115,10 +119,12 @@ class MyNavbar(Frame):
             self.display_btn(SIGNUP_BTN)
             self.display_btn(LOGIN_BTN)
             self.remove_btn(WELCOME_USER)
+            self.remove_btn(LOGOUT_BTN)
         else:
             self.remove_btn(SIGNUP_BTN)
             self.remove_btn(LOGIN_BTN)
 
+            self.display_btn(LOGOUT_BTN)
             username = store.user["username"]
             self.display_btn(WELCOME_USER)
             self.__btns[WELCOME_USER].config(
@@ -153,3 +159,9 @@ class MyNavbar(Frame):
                 v.config(fg="orange")
             else:
                 v.config(fg="black")
+
+    def logout(self):
+        store.user = {}
+        messagebox.showinfo("Logged out", "You have logged out")
+        self.focus()
+        self.__change_page_cb(MAIN_PAGE)

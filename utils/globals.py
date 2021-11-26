@@ -30,6 +30,7 @@ POSTERS_DIR = "posters"
 USER_LIST_BTN = "user_list_btn"
 SIGNUP_BTN = "signup_btn"
 LOGIN_BTN = "login_btn"
+LOGOUT_BTN = "logout_btn"
 BACK_BTN = "back_btn"
 WELCOME_USER = "welcome_user"
 
