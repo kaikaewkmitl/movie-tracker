@@ -61,7 +61,7 @@ class MovieInfoPage(Page):
         genres = MyListbox(
             others_container,
             font=MySmallFont(),
-            height=len(movie_genres_id),
+            height=6,
             width=19
         )
         genres.grid(row=1, column=0, sticky=NW)
@@ -132,27 +132,14 @@ class MovieInfoPage(Page):
             )
             will_watch_btn.pack(pady=0)
         else:
-            in_list_heading = MyHeading(
-                add_to_list_container,
-                font=MyMediumFont(),
-                text="In My List"
-            )
-            in_list_heading.pack()
+            status = "Watched" if movie[MOVIE_STATUS] == STATUS_WATCHED else "Will Watch"
 
             watch_status = MyHeading(
                 add_to_list_container,
-                font=MySmallFont(),
-                text=f"Status: {movie[MOVIE_STATUS]}"
+                font=MyMediumFont(),
+                text=f"Status: {status}"
             )
             watch_status.pack(pady=5)
-
-            # add_to_list_btn = MyButton(
-            #     poster_container,
-            #     text="Add To My List",
-            #     font=MyMediumFont(),
-            #     command=self.add_to_list
-            # )
-            # add_to_list_btn.pack()
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
         self.__movie = movie

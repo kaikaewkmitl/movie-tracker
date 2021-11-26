@@ -26,8 +26,9 @@ class UserListPage(Page):
         super().display()
 
         if len(store.user) > 0:
-            if len(self.__movies) == 0:
+            if len(self.__movies) == 0 or len(self.__movies) != len(store.user[USER_MOVIE_LIST]):
                 self.__movies = deepcopy(store.user[USER_MOVIE_LIST])
+                self.__cur_sort_option = LAST_ADDED
 
             if len(self.__movies) == 0:
                 padder = Label(

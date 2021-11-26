@@ -82,14 +82,17 @@ def get_user(username: str) -> Dict[str, Any]:
     conn.commit()
     conn.close()
 
-    movie_list_tmp = result[3][2:-2].split("\",\"")
-
     movie_list: List[Dict[str, Any]] = []
 
-    for movie in movie_list_tmp:
-        movie_id, movie_status = movie[1:-1].split(",")
-        movie_list.append(get_movie_by_id(int(movie_id)))
-        movie_list[-1][MOVIE_STATUS] = movie_status
+    if result[3] != "{}":
+        movie_list_tmp = result[3][2:-2].split("\",\"")
+
+        for movie in movie_list_tmp:
+            movie_id, movie_status = movie[1:-1].split(",")
+            movie_list.append(get_movie_by_id(int(movie_id)))
+            movie_list[-1][MOVIE_STATUS] = movie_status
+
+    movie_list.reverse()
 
     user = {
         USER_ID: result[0],
