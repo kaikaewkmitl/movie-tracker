@@ -28,7 +28,7 @@ class MovieInfoPage(Page):
         )
         movie_title.pack()
 
-        overview_container = Frame(self._page, bg="#fff")
+        overview_container = Frame(self._page, bg=store.theme[BG])
         overview_container.pack(side=RIGHT)
 
         overview_heading = MyHeading(
@@ -41,18 +41,18 @@ class MovieInfoPage(Page):
                         height=10,
                         font=MySmallFont(),
                         wrap="word",
-                        fg="black",
-                        bg="white",
+                        fg=store.theme[FG],
+                        bg=store.theme[BG],
                         highlightthickness=1,
                         borderwidth=1,
-                        highlightbackground="black",
-                        highlightcolor="black"
+                        highlightbackground=store.theme[FG],
+                        highlightcolor=store.theme[FG]
                         )
         overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
 
-        others_container = Frame(overview_container, bg="#fff")
+        others_container = Frame(overview_container, bg=store.theme[BG])
         others_container.pack(padx=20, side=LEFT)
 
         movie_genres_id = self.__movie[MOVIE_GENRE_IDS]
@@ -93,7 +93,7 @@ class MovieInfoPage(Page):
                       f"Rating: {self.__movie[MOVIE_RATING]}"
                       )
 
-        poster_container = Frame(self._page, bg="#fff")
+        poster_container = Frame(self._page, bg=store.theme[BG])
         poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)
 
         poster: Label
@@ -110,7 +110,7 @@ class MovieInfoPage(Page):
                            )
         poster.pack(padx=20, pady=20)
 
-        add_to_list_container = Frame(poster_container, bg="#fff")
+        add_to_list_container = Frame(poster_container, bg=store.theme[BG])
         add_to_list_container.pack()
 
         movie = self.find_in_user_list()

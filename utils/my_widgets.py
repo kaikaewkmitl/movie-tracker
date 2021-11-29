@@ -26,7 +26,7 @@ class MyHeading(Label):
                  text: str = "", *args, **kwargs) -> None:
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         text=text, fg="orange", bg="#fff", wraplength=700,
+                         text=text, fg=ORANGE, bg=store.theme[BG], wraplength=700,
                          *args, **kwargs
                          )
 
@@ -42,7 +42,7 @@ class MyButton(Button):
                  text: str = "", *args, **kwargs) -> None:
         super().__init__(
             parent, font=font() if type(font) == type else font,
-            text=text, cursor="hand2", fg="black",
+            text=text, cursor="hand2", fg=BLACK,
             highlightthickness=0, bd=0,
             * args, **kwargs
         )
@@ -52,15 +52,15 @@ class MyButton(Button):
 
 
 class MyListbox(Listbox):
-    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectforeground="black",
+    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectforeground=BLACK,
                  * args, **kwargs) -> None:
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         bg="#fff",
-                         fg="black",
+                         bg=WHITE,
+                         fg=BLACK,
                          bd=0,
                          highlightthickness=0,
-                         selectbackground="#fff",
+                         selectbackground=WHITE,
                          selectforeground=selectforeground,
                          activestyle="none",
                          *args, **kwargs
@@ -71,7 +71,7 @@ class MyNavbar(Frame):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
         super().__init__(
-            parent, background=f"#{3:02x}{37:02x}{65:02x}", * args, **kwargs
+            parent, background=DARK_THEME_BG, * args, **kwargs
         )
         self.__change_page_cb = change_page_callback
 
@@ -108,7 +108,7 @@ class MyNavbar(Frame):
             WELCOME_USER: Label(
                 self, font=MySmallFont(),
                 text="",
-                background=f"#{3:02x}{37:02x}{65:02x}"
+                background=DARK_THEME_BG
             )
         }
 
@@ -134,7 +134,7 @@ class MyNavbar(Frame):
             self.display_btn(WELCOME_USER)
             self.__btns[WELCOME_USER].config(
                 text=f"Welcome, {username}",
-                fg="orange"
+                fg=ORANGE
             )
 
         if store.curpage == MAIN_PAGE and len(store.search_history) == 1:
@@ -161,9 +161,9 @@ class MyNavbar(Frame):
     def focus_btn(self) -> None:
         for k, v in self.__btns.items():
             if store.curpage in self.__page_to_btn_dict and k == self.__page_to_btn_dict[store.curpage] and k != BACK_BTN:
-                v.config(fg="orange")
+                v.config(fg=ORANGE)
             else:
-                v.config(fg="black")
+                v.config(fg=BLACK)
 
     def logout(self):
         store.user = {}

@@ -23,38 +23,38 @@ class SignupPage(Page):
     def display(self) -> None:
         super().display()
 
-        form_container = Frame(self._page, bg="#fff")
+        form_container = Frame(self._page, bg=store.theme[BG])
         form_container.pack(padx=250, pady=100, anchor=W)
         form_heading = MyHeading(form_container, text="Signup")
         form_heading.grid(row=0, column=0, pady=20)
         username_label = Label(form_container,
                                font=MySmallFont(),
                                text="Username:",
-                               fg="black",
-                               bg="#fff"
+                               fg=store.theme[FG],
+                               bg=store.theme[BG]
                                )
         username_label.grid(row=1, column=0)
 
         password_label = Label(form_container,
                                font=MySmallFont(),
                                text="Password:",
-                               fg="black",
-                               bg="#fff"
+                               fg=store.theme[FG],
+                               bg=store.theme[BG]
                                )
         password_label.grid(row=2, column=0, pady=10)
 
         username_entry = Entry(form_container,
-                               bg="white",
-                               fg="black",
-                               insertbackground="black",
+                               bg=WHITE,
+                               fg=BLACK,
+                               insertbackground=BLACK,
                                highlightthickness=0,
                                )
         username_entry.grid(row=1, column=1)
 
         password_entry = Entry(form_container,
-                               bg="white",
-                               fg="black",
-                               insertbackground="black",
+                               bg=WHITE,
+                               fg=BLACK,
+                               insertbackground=BLACK,
                                show="*",
                                highlightthickness=0,
                                )

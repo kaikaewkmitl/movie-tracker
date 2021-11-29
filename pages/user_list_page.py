@@ -32,12 +32,14 @@ class UserListPage(Page):
 
             if len(self.__movies) == 0:
                 padder = Label(
-                    self._page
+                    self._page,
+                    bg=store.theme[BG]
                 )
                 padder.pack(pady=100)
 
                 empty_list_heading = MyHeading(
-                    self._page, text="Your list is empty..."
+                    self._page, text="Your list is empty...",
+
                 )
                 empty_list_heading.pack()
 
@@ -61,7 +63,7 @@ class UserListPage(Page):
                 user_heading.pack()
 
                 movie_status_btn_container = Frame(
-                    self._page, background="#fff"
+                    self._page, background=store.theme[BG]
                 )
                 movie_status_btn_container.pack()
 
@@ -86,7 +88,8 @@ class UserListPage(Page):
                 for btn in self.__btns.values():
                     btn.pack(side=LEFT)
 
-                sort_option_container = Frame(self._page, background="#fff")
+                sort_option_container = Frame(
+                    self._page, background=store.theme[BG])
                 sort_option_container.pack(pady=10, padx=200, fill=X)
 
                 sort_option = StringVar(
@@ -100,8 +103,8 @@ class UserListPage(Page):
                 )
                 sort_option_dropdown.pack(side=RIGHT)
                 sort_option_dropdown.config(
-                    font=MySmallFont(), background="#fff", foreground="black",
-                    activeforeground="black"
+                    font=MySmallFont(), background=store.theme[BG],
+                    fg=store.theme[FG], activeforeground=store.theme[FG]
                 )
 
                 sort_option_heading = MyHeading(
@@ -146,27 +149,6 @@ class UserListPage(Page):
 
                 movie_list.config(yscrollcommand=scrollbar.set)
                 scrollbar.config(command=movie_list.yview)
-
-                # movie_stat_container = Frame(self._page)
-                # movie_stat_container.pack()
-
-                # all_movie_cnt = MyHeading(
-                #     movie_stat_container, font=MySmallFont(),
-                #     text=f"Total Movies: {len(self.__movies)}"
-                # )
-                # all_movie_cnt.grid(row=0, column=0, pady=5)
-
-                # watched_movie_cnt = MyHeading(
-                #     movie_stat_container, font=MySmallFont(),
-                #     text=f"Watched: {movie_status_cnt[STATUS_WATCHED]}"
-                # )
-                # watched_movie_cnt.grid(row=0, column=1, pady=5, padx=10)
-
-                # will_watch_movie_cnt = MyHeading(
-                #     movie_stat_container, font=MySmallFont(),
-                #     text=f"Will Watch: {movie_status_cnt[STATUS_WILL_WATCH]}"
-                # )
-                # will_watch_movie_cnt.grid(row=0, column=2, pady=5)
         else:
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
@@ -194,9 +176,9 @@ class UserListPage(Page):
     def focus_btn(self) -> None:
         for k, v in self.__btns.items():
             if self.__cur_status == k:
-                v.config(fg="orange")
+                v.config(fg=ORANGE)
             else:
-                v.config(fg="black")
+                v.config(fg=BLACK)
 
     def set_cur_status(self, status: str) -> None:
         self.__cur_status = status

@@ -1,4 +1,5 @@
-from tkinter import Label, Tk
+from tkinter import Frame, Label, Tk
+from tkinter.constants import BOTH
 from PIL import ImageTk, Image
 import os
 import shutil
@@ -13,7 +14,7 @@ from pages.movie_info_page import MovieInfoPage
 from pages.signup_page import SignupPage
 from pages.login_page import LoginPage
 from pages.user_list_page import UserListPage
-from utils.my_widgets import MyNavbar
+from utils.my_widgets import MyButton, MyNavbar
 from utils.globals import *
 
 
@@ -23,17 +24,11 @@ class App:
         self.__root = Tk()
         self.__root.title("Movie Tracker")
         self.__root.geometry("800x700")
-        self.__root.configure(bg="#fff")
+        self.__root.configure(bg=LIGHT_THEME_BG)
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
         self.__root.after(50, self.check)
-
-        # self.__background_img = ImageTk.PhotoImage(
-        #     Image.open("background.jpeg")
-        # )
-        # self.__background = Label(self.__root, image=self.__background_img)
-        # self.__background.place(x=0, y=0)
 
         self.__navbar = MyNavbar(
             self.__root, self.change_page_callback
@@ -58,7 +53,12 @@ class App:
                 self.__root, self.change_page_callback
             )
         }
-        self.__pages[MAIN_PAGE].set_on_display(True)
+        self.__pages[store.curpage].set_on_display(True)
+
+        self.__theme_btn = MyButton(
+            self.__root, text="Change Theme", command=self.toggle_theme
+        )
+        self.__theme_btn.pack()
 
         self.__root.mainloop()
 
@@ -73,6 +73,7 @@ class App:
         self.__root.after(50, self.check)
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
+        self.__theme_btn.pack_forget()
         self.__pages[store.curpage].set_on_display(False)
         store.curpage = page_name
 
@@ -83,6 +84,18 @@ class App:
             self.__pages[page_name].set_on_display(True)
 
         self.__navbar.display()
+        self.__theme_btn.pack()
+
+    def toggle_theme(self) -> None:
+        if store.theme[FG] == LIGHT_THEME_FG:
+            store.theme[FG] = DARK_THEME_FG
+            store.theme[BG] = DARK_THEME_BG
+        else:
+            store.theme[FG] = LIGHT_THEME_FG
+            store.theme[BG] = LIGHT_THEME_BG
+
+        self.__root.configure(bg=store.theme[BG])
+        self.change_page_callback(store.curpage)
 
 
 if __name__ == "__main__":

@@ -139,7 +139,6 @@ def add_movie_to_user_list(movie: Dict[str, Any], status: str) -> Dict[str, Any]
                     store.user[USER_ID])
         )
     )
-    # cur.execute(query, (movie[MOVIE_ID], store.user[USER_ID]))
     conn.commit()
     conn.close()
 

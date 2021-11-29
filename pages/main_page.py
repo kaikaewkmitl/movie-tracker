@@ -22,11 +22,11 @@ class MainPage(Page):
         appName.pack()
 
         searchbar = Entry(self._page,
-                          bg="white",
-                          fg="black",
+                          bg=WHITE,
+                          fg=BLACK,
                           width=30,
                           font=MyMediumFont(),
-                          insertbackground="black",
+                          insertbackground=LIGHT_THEME_FG,
                           highlightthickness=0,
                           )
         searchbar.insert(0, SEARCH_BAR_DEFAULT)
@@ -49,20 +49,21 @@ class MainPage(Page):
         movie_list_heading = MyHeading(self._page, text=text)
         movie_list_heading.pack()
 
-        movie_list_container = Frame(
-            self._page,
-            borderwidth=1
-        )
+        movie_list_container = Frame(self._page,)
         movie_list_container.pack(pady=20)
 
         movies = store.search_history[-1][1]
         if len(movies) == 0:
             no_result = Label(movie_list_container,
                               text="No Movie Found...\nPlease try some other keywords",
-                              font=MyMediumFont()
+                              font=MyMediumFont(),
+                              fg=store.theme[FG],
+                              bg=store.theme[BG]
                               )
             no_result.pack()
         else:
+            movie_list_container.config(borderwidth=1)
+
             movie_list = MyListbox(movie_list_container,
                                    width=30,
                                    height=15,

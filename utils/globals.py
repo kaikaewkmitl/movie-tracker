@@ -1,5 +1,16 @@
 from typing import Any, Dict, List, Tuple
 
+# theme
+FG = "fg"
+BG = "bg"
+WHITE = "#FFF"
+BLACK = "#000"
+LIGHT_THEME_BG = WHITE
+LIGHT_THEME_FG = BLACK
+DARK_THEME_BG = "#2D1530"
+DARK_THEME_FG = WHITE
+ORANGE = "#F8795D"
+
 # pages
 MAIN_PAGE = "main_page"
 MOVIE_INFO_PAGE = "movie_info_page"
@@ -55,10 +66,15 @@ class Store:
         self.trending_movies: List[Dict[str, Any]] = []
         self.search_history: List[Tuple[str, List[Dict[str, Any]]]] = []
         self.genre_dict: Dict[int, str] = {}
+        self.theme: Dict[str, str] = {}
 
     def init_store(self, trending_movies: List[Dict[str, Any]],
                    genre_dict: List[Dict[str, Any]]) -> None:
         self.curpage = MAIN_PAGE
+        self.theme = {
+            FG: LIGHT_THEME_FG,
+            BG: LIGHT_THEME_BG
+        }
         self.trending_movies = trending_movies
         self.search_history.append(("", trending_movies))
         for genre in genre_dict:
