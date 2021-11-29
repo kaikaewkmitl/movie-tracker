@@ -26,7 +26,8 @@ class MyHeading(Label):
                  text: str = "", *args, **kwargs) -> None:
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         text=text, fg="orange", wraplength=700, *args, **kwargs
+                         text=text, fg="orange", bg="#fff", wraplength=700,
+                         *args, **kwargs
                          )
 
     def pack(self, pady=15, *args, **kwargs) -> None:
@@ -39,28 +40,29 @@ class MyHeading(Label):
 class MyButton(Button):
     def __init__(self, parent: Misc, font: Font = MySmallFont,
                  text: str = "", *args, **kwargs) -> None:
-        super().__init__(parent,
-                         font=font() if type(font) == type else font,
-                         text=text, cursor="hand2", fg="black",
-                         * args, **kwargs
-                         )
+        super().__init__(
+            parent, font=font() if type(font) == type else font,
+            text=text, cursor="hand2", fg="black",
+            highlightthickness=0, bd=0,
+            * args, **kwargs
+        )
 
     def pack(self, pady=10, *args, **kwargs) -> None:
         super().pack(pady=pady, *args, **kwargs)
 
 
 class MyListbox(Listbox):
-    def __init__(self, parent: Misc, font: Font = MyMediumFont,
-                 *args, **kwargs) -> None:
+    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectforeground="black",
+                 * args, **kwargs) -> None:
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         bg="white",
+                         bg="#fff",
                          fg="black",
                          bd=0,
                          highlightthickness=0,
-                         selectbackground="gray",
-                         selectforeground="orange",
-                         activestyle="dotbox",
+                         selectbackground="#fff",
+                         selectforeground=selectforeground,
+                         activestyle="none",
                          *args, **kwargs
                          )
 
@@ -68,7 +70,9 @@ class MyListbox(Listbox):
 class MyNavbar(Frame):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
-        super().__init__(parent, *args, **kwargs)
+        super().__init__(
+            parent, background=f"#{3:02x}{37:02x}{65:02x}", * args, **kwargs
+        )
         self.__change_page_cb = change_page_callback
 
         self.__page_to_btn_dict: Dict[str, str] = {
@@ -103,7 +107,8 @@ class MyNavbar(Frame):
             ),
             WELCOME_USER: Label(
                 self, font=MySmallFont(),
-                text=""
+                text="",
+                background=f"#{3:02x}{37:02x}{65:02x}"
             )
         }
 

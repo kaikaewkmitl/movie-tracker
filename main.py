@@ -1,4 +1,5 @@
-from tkinter import Tk
+from tkinter import Label, Tk
+from PIL import ImageTk, Image
 import os
 import shutil
 import signal
@@ -22,12 +23,21 @@ class App:
         self.__root = Tk()
         self.__root.title("Movie Tracker")
         self.__root.geometry("800x700")
+        self.__root.configure(bg="#fff")
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
         self.__root.after(50, self.check)
 
-        self.__navbar = MyNavbar(self.__root, self.change_page_callback)
+        # self.__background_img = ImageTk.PhotoImage(
+        #     Image.open("background.jpeg")
+        # )
+        # self.__background = Label(self.__root, image=self.__background_img)
+        # self.__background.place(x=0, y=0)
+
+        self.__navbar = MyNavbar(
+            self.__root, self.change_page_callback
+        )
         self.__navbar.pack()
         self.__navbar.remove_btn(BACK_BTN)
 

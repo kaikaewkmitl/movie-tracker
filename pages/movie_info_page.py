@@ -28,7 +28,7 @@ class MovieInfoPage(Page):
         )
         movie_title.pack()
 
-        overview_container = Frame(self._page)
+        overview_container = Frame(self._page, bg="#fff")
         overview_container.pack(side=RIGHT)
 
         overview_heading = MyHeading(
@@ -42,13 +42,17 @@ class MovieInfoPage(Page):
                         font=MySmallFont(),
                         wrap="word",
                         fg="black",
-                        bg="white"
+                        bg="white",
+                        highlightthickness=1,
+                        borderwidth=1,
+                        highlightbackground="black",
+                        highlightcolor="black"
                         )
         overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
 
-        others_container = Frame(overview_container)
+        others_container = Frame(overview_container, bg="#fff")
         others_container.pack(padx=20, side=LEFT)
 
         movie_genres_id = self.__movie[MOVIE_GENRE_IDS]
@@ -89,7 +93,7 @@ class MovieInfoPage(Page):
                       f"Rating: {self.__movie[MOVIE_RATING]}"
                       )
 
-        poster_container = Frame(self._page)
+        poster_container = Frame(self._page, bg="#fff")
         poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)
 
         poster: Label
@@ -106,7 +110,7 @@ class MovieInfoPage(Page):
                            )
         poster.pack(padx=20, pady=20)
 
-        add_to_list_container = Frame(poster_container)
+        add_to_list_container = Frame(poster_container, bg="#fff")
         add_to_list_container.pack()
 
         movie = self.find_in_user_list()

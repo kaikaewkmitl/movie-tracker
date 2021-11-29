@@ -23,26 +23,31 @@ class SignupPage(Page):
     def display(self) -> None:
         super().display()
 
-        form_container = Frame(self._page)
+        form_container = Frame(self._page, bg="#fff")
         form_container.pack(padx=250, pady=100, anchor=W)
         form_heading = MyHeading(form_container, text="Signup")
         form_heading.grid(row=0, column=0, pady=20)
         username_label = Label(form_container,
                                font=MySmallFont(),
-                               text="Username"
+                               text="Username:",
+                               fg="black",
+                               bg="#fff"
                                )
         username_label.grid(row=1, column=0)
 
         password_label = Label(form_container,
                                font=MySmallFont(),
-                               text="Password"
+                               text="Password:",
+                               fg="black",
+                               bg="#fff"
                                )
         password_label.grid(row=2, column=0, pady=10)
 
         username_entry = Entry(form_container,
                                bg="white",
                                fg="black",
-                               insertbackground="black"
+                               insertbackground="black",
+                               highlightthickness=0,
                                )
         username_entry.grid(row=1, column=1)
 
@@ -50,7 +55,8 @@ class SignupPage(Page):
                                bg="white",
                                fg="black",
                                insertbackground="black",
-                               show="*"
+                               show="*",
+                               highlightthickness=0,
                                )
         password_entry.grid(row=2, column=1, pady=10)
 

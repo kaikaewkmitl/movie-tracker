@@ -27,6 +27,7 @@ class MainPage(Page):
                           width=30,
                           font=MyMediumFont(),
                           insertbackground="black",
+                          highlightthickness=0,
                           )
         searchbar.insert(0, SEARCH_BAR_DEFAULT)
         searchbar.bind("<FocusIn>",
@@ -48,7 +49,10 @@ class MainPage(Page):
         movie_list_heading = MyHeading(self._page, text=text)
         movie_list_heading.pack()
 
-        movie_list_container = Frame(self._page)
+        movie_list_container = Frame(
+            self._page,
+            borderwidth=1
+        )
         movie_list_container.pack(pady=20)
 
         movies = store.search_history[-1][1]
@@ -62,10 +66,9 @@ class MainPage(Page):
             movie_list = MyListbox(movie_list_container,
                                    width=30,
                                    height=15,
+                                   cursor="hand2",
+                                   selectforeground="orange"
                                    )
-            # movie_list.bind("<<ListboxSelect>>", lambda e: print(
-            #     movie_list.curselection()[0])
-            # )
             movie_list.bind("<Double-Button-1>",
                             lambda _: self._change_page_cb(
                                 MOVIE_INFO_PAGE,

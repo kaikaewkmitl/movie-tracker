@@ -9,7 +9,7 @@ class Page(ABC):
                  change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         self._on_display = False
         self._change_page_cb = change_page_callback
-        self._page = Frame(parent)
+        self._page = Frame(parent, bg="#fff")
 
     @abstractmethod
     def display(self) -> None:

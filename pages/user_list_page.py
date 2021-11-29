@@ -47,26 +47,37 @@ class UserListPage(Page):
                 )
                 message.pack()
             else:
+                movie_status_cnt = {
+                    STATUS_WATCHED: 0,
+                    STATUS_WILL_WATCH: 0
+                }
+                for movie in self.__movies:
+                    movie_status_cnt[movie[MOVIE_STATUS]] += 1
+
                 username = store.user[USER_USERNAME]
                 user_heading = MyHeading(
                     self._page, text=f"{username}'s Movie List"
                 )
                 user_heading.pack()
 
-                movie_status_btn_container = Frame(self._page)
+                movie_status_btn_container = Frame(
+                    self._page, background="#fff"
+                )
                 movie_status_btn_container.pack()
 
                 self.__btns: Dict[str, MyButton] = {
                     ALL_MOVIE: MyButton(
-                        movie_status_btn_container, text=ALL_MOVIE,
+                        movie_status_btn_container, text=f"{ALL_MOVIE} ({len(self.__movies)})",
                         command=lambda: self.set_cur_status(ALL_MOVIE)
                     ),
                     STATUS_WATCHED: MyButton(
-                        movie_status_btn_container, text="Watched",
+                        movie_status_btn_container,
+                        text=f"Watched ({movie_status_cnt[STATUS_WATCHED]})",
                         command=lambda: self.set_cur_status(STATUS_WATCHED)
                     ),
                     STATUS_WILL_WATCH: MyButton(
-                        movie_status_btn_container, text="Will Watch",
+                        movie_status_btn_container,
+                        text=f"Will Watch ({movie_status_cnt[STATUS_WILL_WATCH]})",
                         command=lambda: self.set_cur_status(STATUS_WILL_WATCH)
                     )
                 }
@@ -75,7 +86,7 @@ class UserListPage(Page):
                 for btn in self.__btns.values():
                     btn.pack(side=LEFT)
 
-                sort_option_container = Frame(self._page)
+                sort_option_container = Frame(self._page, background="#fff")
                 sort_option_container.pack(pady=10, padx=200, fill=X)
 
                 sort_option = StringVar(
@@ -85,10 +96,13 @@ class UserListPage(Page):
                 sort_option_dropdown = OptionMenu(
                     sort_option_container, sort_option,
                     LAST_ADDED, ALPHABETICAL, RATING,
-                    command=self.dropdown_handler
+                    command=self.dropdown_handler,
                 )
                 sort_option_dropdown.pack(side=RIGHT)
-                sort_option_dropdown.config(font=MySmallFont())
+                sort_option_dropdown.config(
+                    font=MySmallFont(), background="#fff", foreground="black",
+                    activeforeground="black"
+                )
 
                 sort_option_heading = MyHeading(
                     sort_option_container,
@@ -97,11 +111,13 @@ class UserListPage(Page):
                 sort_option_heading.pack(side=RIGHT, padx=10)
 
                 movie_list_container = Frame(self._page)
-                movie_list_container.pack(pady=20)
+                movie_list_container.pack(pady=10)
 
                 movie_list = MyListbox(movie_list_container,
                                        width=30,
                                        height=15,
+                                       cursor="hand2",
+                                       selectforeground="orange"
                                        )
 
                 movie_list.bind("<Double-Button-1>",
@@ -130,6 +146,27 @@ class UserListPage(Page):
 
                 movie_list.config(yscrollcommand=scrollbar.set)
                 scrollbar.config(command=movie_list.yview)
+
+                # movie_stat_container = Frame(self._page)
+                # movie_stat_container.pack()
+
+                # all_movie_cnt = MyHeading(
+                #     movie_stat_container, font=MySmallFont(),
+                #     text=f"Total Movies: {len(self.__movies)}"
+                # )
+                # all_movie_cnt.grid(row=0, column=0, pady=5)
+
+                # watched_movie_cnt = MyHeading(
+                #     movie_stat_container, font=MySmallFont(),
+                #     text=f"Watched: {movie_status_cnt[STATUS_WATCHED]}"
+                # )
+                # watched_movie_cnt.grid(row=0, column=1, pady=5, padx=10)
+
+                # will_watch_movie_cnt = MyHeading(
+                #     movie_stat_container, font=MySmallFont(),
+                #     text=f"Will Watch: {movie_status_cnt[STATUS_WILL_WATCH]}"
+                # )
+                # will_watch_movie_cnt.grid(row=0, column=2, pady=5)
         else:
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
