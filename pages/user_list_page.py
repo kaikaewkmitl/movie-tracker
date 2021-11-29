@@ -113,14 +113,16 @@ class UserListPage(Page):
                 )
                 sort_option_heading.pack(side=RIGHT, padx=10)
 
-                movie_list_container = Frame(self._page)
+                movie_list_container = Frame(
+                    self._page, bg=store.theme[FG], borderwidth=1
+                )
                 movie_list_container.pack(pady=10)
 
                 movie_list = MyListbox(movie_list_container,
                                        width=30,
                                        height=15,
                                        cursor="hand2",
-                                       selectforeground="orange"
+                                       selectable=True
                                        )
 
                 movie_list.bind("<Double-Button-1>",

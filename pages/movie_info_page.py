@@ -187,3 +187,6 @@ class MovieInfoPage(Page):
                 return m
 
         return {}
+
+    def get_movie(self):
+        return self.__movie

@@ -25,7 +25,7 @@ class Page(ABC):
 
             self.display()
             self._page.pack(fill=BOTH)
-            self._page.configure(background=store.theme[BG])
+            self._page.config(background=store.theme[BG])
         else:
             self._page.pack_forget()
 

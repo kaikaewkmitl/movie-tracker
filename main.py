@@ -1,5 +1,4 @@
-from tkinter import Frame, Label, Tk
-from tkinter.constants import BOTH
+from tkinter import Label, Tk
 from PIL import ImageTk, Image
 import os
 import shutil
@@ -55,10 +54,25 @@ class App:
         }
         self.__pages[store.curpage].set_on_display(True)
 
-        self.__theme_btn = MyButton(
-            self.__root, text="Change Theme", command=self.toggle_theme
+        self.__dark_img = ImageTk.PhotoImage(
+            Image.open(
+                os.path.join("images", "dark_theme.png")
+            ).resize((75, 40), Image.ANTIALIAS)
         )
-        self.__theme_btn.pack()
+        self.__light_img = ImageTk.PhotoImage(
+            Image.open(
+                os.path.join("images", "light_theme.png")
+            ).resize((75, 40), Image.ANTIALIAS)
+        )
+
+        self.__theme_btn = Label(
+            self.__root,
+            image=self.__light_img,
+            bg=LIGHT_THEME_BG,
+            cursor="hand2"
+        )
+        self.__theme_btn.place(x=10, y=650)
+        self.__theme_btn.bind("<Button-1>", lambda _: self.toggle_theme())
 
         self.__root.mainloop()
 
@@ -73,7 +87,7 @@ class App:
         self.__root.after(50, self.check)
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
-        self.__theme_btn.pack_forget()
+        self.__theme_btn.place_forget()
         self.__pages[store.curpage].set_on_display(False)
         store.curpage = page_name
 
@@ -84,18 +98,27 @@ class App:
             self.__pages[page_name].set_on_display(True)
 
         self.__navbar.display()
-        self.__theme_btn.pack()
+        self.__theme_btn.place(x=10, y=650)
 
     def toggle_theme(self) -> None:
         if store.theme[FG] == LIGHT_THEME_FG:
             store.theme[FG] = DARK_THEME_FG
             store.theme[BG] = DARK_THEME_BG
+            self.__theme_btn.config(image=self.__dark_img)
         else:
             store.theme[FG] = LIGHT_THEME_FG
             store.theme[BG] = LIGHT_THEME_BG
+            self.__theme_btn.config(image=self.__light_img)
 
-        self.__root.configure(bg=store.theme[BG])
-        self.change_page_callback(store.curpage)
+        self.__root.config(bg=store.theme[BG])
+        self.__theme_btn.config(bg=store.theme[BG])
+        if store.curpage == MOVIE_INFO_PAGE:
+            page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
+            self.change_page_callback(
+                store.curpage, page.get_movie()
+            )
+        else:
+            self.change_page_callback(store.curpage)
 
 
 if __name__ == "__main__":

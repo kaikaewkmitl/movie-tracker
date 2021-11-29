@@ -52,16 +52,19 @@ class MyButton(Button):
 
 
 class MyListbox(Listbox):
-    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectforeground=BLACK,
+    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectable=False,
                  * args, **kwargs) -> None:
+
+        select_fg = store.theme[FG] if not selectable else ORANGE
+
         super().__init__(parent,
                          font=font() if type(font) == type else font,
-                         bg=WHITE,
-                         fg=BLACK,
+                         bg=store.theme[BG],
+                         fg=store.theme[FG],
                          bd=0,
                          highlightthickness=0,
-                         selectbackground=WHITE,
-                         selectforeground=selectforeground,
+                         selectbackground=store.theme[BG],
+                         selectforeground=select_fg,
                          activestyle="none",
                          *args, **kwargs
                          )
@@ -71,7 +74,7 @@ class MyNavbar(Frame):
     def __init__(self, parent: Misc, change_page_callback: Callable[[str, Optional[int]], None],
                  *args, **kwargs) -> None:
         super().__init__(
-            parent, background=DARK_THEME_BG, * args, **kwargs
+            parent, bg=DARK_THEME_BG, * args, **kwargs
         )
         self.__change_page_cb = change_page_callback
 
@@ -117,6 +120,10 @@ class MyNavbar(Frame):
     def display(self):
         self.update()
         self.focus_btn()
+
+        bg = LIGHT_THEME_BG if store.theme[BG] == DARK_THEME_BG else DARK_THEME_BG
+        self.config(bg=bg)
+        self.__btns[WELCOME_USER].config(bg=bg)
 
         self.display_btn(USER_LIST_BTN, LEFT)
 

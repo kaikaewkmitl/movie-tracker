@@ -63,7 +63,6 @@ class Store:
     def __init__(self) -> None:
         self.user: Dict[str, Any] = {}
         self.curpage: str = ""
-        self.trending_movies: List[Dict[str, Any]] = []
         self.search_history: List[Tuple[str, List[Dict[str, Any]]]] = []
         self.genre_dict: Dict[int, str] = {}
         self.theme: Dict[str, str] = {}
@@ -75,7 +74,6 @@ class Store:
             FG: LIGHT_THEME_FG,
             BG: LIGHT_THEME_BG
         }
-        self.trending_movies = trending_movies
         self.search_history.append(("", trending_movies))
         for genre in genre_dict:
             self.genre_dict[genre["id"]] = genre["name"]
