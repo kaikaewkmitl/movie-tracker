@@ -1,0 +1,4 @@
+bcrypt
+Pillow
+psycopg2
+requests
