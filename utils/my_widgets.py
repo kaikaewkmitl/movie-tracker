@@ -15,7 +15,7 @@ class MyBigFont(Font):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(
             family="Helvetica",
-            size=30 if not is_windows else 30 * WINDOWS_SCALE,
+            size=30 if not is_windows else int(30 * WINDOWS_SCALE),
             weight="bold",
             *args, **kwargs
         )
@@ -25,7 +25,7 @@ class MyMediumFont(Font):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(
             family="Helvetica",
-            size=20 if not is_windows else 20 * WINDOWS_SCALE,
+            size=20 if not is_windows else int(20 * WINDOWS_SCALE),
             weight="bold",
             *args, **kwargs
         )
@@ -35,7 +35,7 @@ class MySmallFont(Font):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(
             family="Helvetica",
-            size=15 if not is_windows else 15 * WINDOWS_SCALE,
+            size=15 if not is_windows else int(15 * WINDOWS_SCALE),
             weight="bold",
             *args, **kwargs
         )
