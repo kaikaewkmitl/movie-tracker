@@ -1,24 +1,44 @@
 from tkinter import Frame, Label, Button, Misc, Listbox, messagebox
 from tkinter.constants import X, LEFT, RIGHT
 from tkinter.font import Font
+import platform
 from typing import Callable, Optional, Dict
 
 from utils.globals import *
 
+WINDOWS_SCALE = 0.8
+
+is_windows = True if platform.system() == "Windows" else False
+
 
 class MyBigFont(Font):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(family="Helvetica", size=30, weight="bold", *args, **kwargs)
+        super().__init__(
+            family="Helvetica",
+            size=30 if not is_windows else 30 * WINDOWS_SCALE,
+            weight="bold",
+            *args, **kwargs
+        )
 
 
 class MyMediumFont(Font):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(family="Helvetica", size=20, weight="bold", *args, **kwargs)
+        super().__init__(
+            family="Helvetica",
+            size=20 if not is_windows else 20 * WINDOWS_SCALE,
+            weight="bold",
+            *args, **kwargs
+        )
 
 
 class MySmallFont(Font):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(family="Helvetica", size=15, weight="bold", *args, **kwargs)
+        super().__init__(
+            family="Helvetica",
+            size=15 if not is_windows else 15 * WINDOWS_SCALE,
+            weight="bold",
+            *args, **kwargs
+        )
 
 
 class MyHeading(Label):

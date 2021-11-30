@@ -21,9 +21,14 @@ class UserListPage(Page):
         self.__cur_sort_option = LAST_ADDED
         self.__cur_status = ALL_MOVIE
         self.__movies: List[Dict[str, Any]] = []
+        self.__watched_movies: List[Dict[str, Any]] = []
+        self.__will_watch_movies: List[Dict[str, Any]] = []
 
     def display(self) -> None:
         super().display()
+
+        self.__watched_movies = []
+        self.__will_watch_movies = []
 
         if len(store.user) > 0:
             if len(self.__movies) == 0 or len(self.__movies) != len(store.user[USER_MOVIE_LIST]):
@@ -49,12 +54,11 @@ class UserListPage(Page):
                 )
                 message.pack()
             else:
-                movie_status_cnt = {
-                    STATUS_WATCHED: 0,
-                    STATUS_WILL_WATCH: 0
-                }
                 for movie in self.__movies:
-                    movie_status_cnt[movie[MOVIE_STATUS]] += 1
+                    if movie[MOVIE_STATUS] == STATUS_WATCHED:
+                        self.__watched_movies.append(movie)
+                    elif movie[MOVIE_STATUS] == STATUS_WILL_WATCH:
+                        self.__will_watch_movies.append(movie)
 
                 username = store.user[USER_USERNAME]
                 user_heading = MyHeading(
@@ -74,12 +78,12 @@ class UserListPage(Page):
                     ),
                     STATUS_WATCHED: MyButton(
                         movie_status_btn_container,
-                        text=f"Watched ({movie_status_cnt[STATUS_WATCHED]})",
+                        text=f"Watched ({len(self.__watched_movies)})",
                         command=lambda: self.set_cur_status(STATUS_WATCHED)
                     ),
                     STATUS_WILL_WATCH: MyButton(
                         movie_status_btn_container,
-                        text=f"Will Watch ({movie_status_cnt[STATUS_WILL_WATCH]})",
+                        text=f"Will Watch ({len(self.__will_watch_movies)})",
                         command=lambda: self.set_cur_status(STATUS_WILL_WATCH)
                     )
                 }
@@ -126,9 +130,8 @@ class UserListPage(Page):
                                        )
 
                 movie_list.bind("<Double-Button-1>",
-                                lambda _: self._change_page_cb(
-                                    MOVIE_INFO_PAGE,
-                                    self.__movies[movie_list.curselection()[0]]
+                                lambda _: self.listbox_handler(
+                                    movie_list.curselection()[0]
                                 ))
                 movie_list.pack(side=LEFT)
 
@@ -174,6 +177,17 @@ class UserListPage(Page):
             self.__cur_sort_option = RATING
 
         self._change_page_cb(USER_LIST_PAGE)
+
+    def listbox_handler(self, i: int) -> None:
+        movie: Dict[str, Any] = self.__movies[i]
+        if self.__cur_status == STATUS_WATCHED:
+            movie = self.__watched_movies[i]
+        elif self.__cur_status == STATUS_WILL_WATCH:
+            movie = self.__will_watch_movies[i]
+
+        self._change_page_cb(
+            MOVIE_INFO_PAGE, movie
+        )
 
     def focus_btn(self) -> None:
         for k, v in self.__btns.items():

@@ -13,7 +13,7 @@ from pages.movie_info_page import MovieInfoPage
 from pages.signup_page import SignupPage
 from pages.login_page import LoginPage
 from pages.user_list_page import UserListPage
-from utils.my_widgets import MyButton, MyNavbar
+from utils.my_widgets import MyNavbar
 from utils.globals import *
 
 
@@ -24,6 +24,7 @@ class App:
         self.__root.title("Movie Tracker")
         self.__root.geometry("800x700")
         self.__root.configure(bg=LIGHT_THEME_BG)
+        self.__root.focus()
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
@@ -52,7 +53,6 @@ class App:
                 self.__root, self.change_page_callback
             )
         }
-        self.__pages[store.curpage].set_on_display(True)
 
         self.__dark_img = ImageTk.PhotoImage(
             Image.open(
@@ -73,6 +73,8 @@ class App:
         )
         self.__theme_btn.place(x=10, y=650)
         self.__theme_btn.bind("<Button-1>", lambda _: self.toggle_theme())
+
+        self.__pages[store.curpage].set_on_display(True)
 
         self.__root.mainloop()
 
