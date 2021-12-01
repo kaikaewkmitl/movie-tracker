@@ -145,3 +145,26 @@ def add_movie_to_user_list(movie: Dict[str, Any], status: str) -> Dict[str, Any]
     user = get_user(store.user[USER_USERNAME])
     user.pop(USER_PASSWORD, None)
     return user
+
+
+def update_movie_status(movie: Dict[str, Any], status: str) -> Dict[str, Any]:
+    conn = open_db_connection()
+    cur = conn.cursor()
+
+    query = f"UPDATE users SET {USER_MOVIE_LIST} = array_replace({USER_MOVIE_LIST}, %s::movie, %s::movie) WHERE {USER_ID} = %s"
+
+    cur.execute(
+        cur.mogrify(
+            query, (
+                (movie[MOVIE_ID], movie[MOVIE_STATUS]),
+                (movie[MOVIE_ID], status),
+                store.user[USER_ID]
+            )
+        )
+    )
+    conn.commit()
+    conn.close()
+
+    user = get_user(store.user[USER_USERNAME])
+    user.pop(USER_PASSWORD, None)
+    return user
