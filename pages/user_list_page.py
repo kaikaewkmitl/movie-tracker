@@ -1,3 +1,4 @@
+from logging import log
 from tkinter import Frame, Label, Misc, OptionMenu, Scrollbar, StringVar, messagebox
 from tkinter.constants import LEFT, RIGHT, BOTH, END, X
 from copy import deepcopy
@@ -26,6 +27,7 @@ class UserListPage(Page):
 
     def display(self) -> None:
         super().display()
+        print("displaying")
 
         self.__watched_movies = []
         self.__will_watch_movies = []
@@ -155,11 +157,33 @@ class UserListPage(Page):
                 movie_list.config(yscrollcommand=scrollbar.set)
                 scrollbar.config(command=movie_list.yview)
         else:
-            messagebox.showerror(
-                "Unauthenticated", "You are unauthenticated, please log in first"
+            padder = Label(
+                self._page,
+                bg=store.theme[BG]
             )
-            self._page.focus()
-            self._change_page_cb(LOGIN_PAGE)
+            padder.pack(pady=100)
+
+            message = MyHeading(
+                self._page,
+                font=MyMediumFont(),
+                text="You are unauthenticated, please log in first"
+            )
+            message.pack()
+
+            login_btn = MyButton(
+                self._page,
+                font=MyMediumFont(),
+                text="Go To Login Page",
+                command=lambda: self._change_page_cb(LOGIN_PAGE)
+            )
+            login_btn.pack()
+            # messagebox.showerror(
+            #     "Unauthenticated", "You are unauthenticated, please log in first"
+            # )
+            # self._page.focus()
+            # self._change_page_cb(LOGIN_PAGE)
+
+        print("undisplaying")
 
     def dropdown_handler(self, option: str) -> None:
         if option == LAST_ADDED and self.__cur_sort_option != LAST_ADDED:
