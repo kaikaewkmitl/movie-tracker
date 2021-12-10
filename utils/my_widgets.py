@@ -44,11 +44,15 @@ class MySmallFont(Font):
 class MyHeading(Label):
     def __init__(self, parent: Misc, font: Font = MyBigFont,
                  text: str = "", *args, **kwargs) -> None:
-        super().__init__(parent,
-                         font=font() if type(font) == type else font,
-                         text=text, fg=ORANGE, bg=store.theme[BG], wraplength=700,
-                         *args, **kwargs
-                         )
+        super().__init__(
+            parent,
+            font=font() if type(font) == type else font,
+            text=text,
+            fg=ORANGE,
+            bg=store.theme[BG],
+            wraplength=700,
+            *args, **kwargs
+        )
 
     def pack(self, pady=15, *args, **kwargs) -> None:
         super().pack(pady=pady, *args, **kwargs)
@@ -62,8 +66,11 @@ class MyButton(Button):
                  text: str = "", *args, **kwargs) -> None:
         super().__init__(
             parent, font=font() if type(font) == type else font,
-            text=text, cursor="hand2", fg=BLACK,
-            highlightthickness=0, bd=0,
+            text=text,
+            cursor="hand2",
+            fg=BLACK,
+            highlightthickness=0,
+            bd=0,
             * args, **kwargs
         )
 
@@ -72,22 +79,23 @@ class MyButton(Button):
 
 
 class MyListbox(Listbox):
-    def __init__(self, parent: Misc, font: Font = MyMediumFont, selectable=False,
-                 * args, **kwargs) -> None:
+    def __init__(self, parent: Misc, font: Font = MyMediumFont,
+                 selectable: bool = False, * args, **kwargs) -> None:
 
         select_fg = store.theme[FG] if not selectable else ORANGE
 
-        super().__init__(parent,
-                         font=font() if type(font) == type else font,
-                         bg=store.theme[BG],
-                         fg=store.theme[FG],
-                         bd=0,
-                         highlightthickness=0,
-                         selectbackground=store.theme[BG],
-                         selectforeground=select_fg,
-                         activestyle="none",
-                         *args, **kwargs
-                         )
+        super().__init__(
+            parent,
+            font=font() if type(font) == type else font,
+            bg=store.theme[BG],
+            fg=store.theme[FG],
+            bd=0,
+            highlightthickness=0,
+            selectbackground=store.theme[BG],
+            selectforeground=select_fg,
+            activestyle="none",
+            *args, **kwargs
+        )
 
 
 class MyNavbar(Frame):
@@ -96,40 +104,46 @@ class MyNavbar(Frame):
         super().__init__(
             parent, bg=DARK_THEME_BG, * args, **kwargs
         )
-        self.__change_page_cb = change_page_callback
 
-        self.__page_to_btn_dict: Dict[str, str] = {
+        self.change_page_cb = change_page_callback
+        self.page_to_btn_dict: Dict[str, str] = {
             USER_LIST_PAGE: USER_LIST_BTN,
             SIGNUP_PAGE: SIGNUP_BTN,
             LOGIN_PAGE: LOGIN_BTN,
             MAIN_PAGE: BACK_BTN
         }
 
-        self.__btns: Dict[str, MyButton] = {
+        self.btns: Dict[str, MyButton] = {
             USER_LIST_BTN: MyButton(
-                self, text="My List",
-                command=lambda: self.__change_page_cb(USER_LIST_PAGE)
+                self,
+                text="My List",
+                command=lambda: self.change_page_cb(USER_LIST_PAGE)
             ),
             SIGNUP_BTN: MyButton(
-                self, text="Signup",
-                command=lambda: self.__change_page_cb(SIGNUP_PAGE)
+                self,
+                text="Signup",
+                command=lambda: self.change_page_cb(SIGNUP_PAGE)
             ),
             LOGIN_BTN: MyButton(
-                self, text="Login",
-                command=lambda: self.__change_page_cb(LOGIN_PAGE)
+                self,
+                text="Login",
+                command=lambda: self.change_page_cb(LOGIN_PAGE)
             ),
             LOGOUT_BTN: MyButton(
-                self, text="Logout",
+                self,
+                text="Logout",
                 command=self.logout
             ),
             BACK_BTN: MyButton(
-                self, text="Back",
+                self,
+                text="Back",
                 command=lambda: self.focus_and_change_page(
                     BACK_BTN, MAIN_PAGE
                 )
             ),
             WELCOME_USER: Label(
-                self, font=MySmallFont(),
+                self,
+                font=MySmallFont(),
                 text="",
                 background=DARK_THEME_BG
             )
@@ -143,7 +157,7 @@ class MyNavbar(Frame):
 
         bg = LIGHT_THEME_BG if store.theme[BG] == DARK_THEME_BG else DARK_THEME_BG
         self.config(bg=bg)
-        self.__btns[WELCOME_USER].config(bg=bg)
+        self.btns[WELCOME_USER].config(bg=bg)
 
         self.display_btn(USER_LIST_BTN, LEFT)
 
@@ -159,7 +173,7 @@ class MyNavbar(Frame):
             self.display_btn(LOGOUT_BTN)
             username = store.user["username"]
             self.display_btn(WELCOME_USER)
-            self.__btns[WELCOME_USER].config(
+            self.btns[WELCOME_USER].config(
                 text=f"Welcome, {username}",
                 fg=ORANGE
             )
@@ -177,17 +191,17 @@ class MyNavbar(Frame):
             if len(store.search_history) > 1 and store.curpage == MAIN_PAGE:
                 store.search_history.pop()
 
-        self.__change_page_cb(page_name)
+        self.change_page_cb(page_name)
 
     def display_btn(self, btn_name: str, side: str = RIGHT) -> None:
-        self.__btns[btn_name].pack(side=side, padx=10)
+        self.btns[btn_name].pack(side=side, padx=10)
 
     def remove_btn(self, btn_name: str) -> None:
-        self.__btns[btn_name].pack_forget()
+        self.btns[btn_name].pack_forget()
 
     def focus_btn(self) -> None:
-        for k, v in self.__btns.items():
-            if store.curpage in self.__page_to_btn_dict and k == self.__page_to_btn_dict[store.curpage] and k != BACK_BTN:
+        for k, v in self.btns.items():
+            if store.curpage in self.page_to_btn_dict and k == self.page_to_btn_dict[store.curpage] and k != BACK_BTN:
                 v.config(fg=ORANGE)
             else:
                 v.config(fg=BLACK)
@@ -196,4 +210,4 @@ class MyNavbar(Frame):
         store.user = {}
         messagebox.showinfo("Logged out", "You have logged out")
         self.focus()
-        self.__change_page_cb(MAIN_PAGE)
+        self.change_page_cb(MAIN_PAGE)

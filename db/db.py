@@ -66,6 +66,7 @@ def create_user_table() -> None:
 
 
 def init_db() -> None:
+    create_movie_type()
     create_user_table()
 
 

@@ -31,13 +31,15 @@ MOVIE_LANGUAGE = "original_language"
 MOVIE_RELEASE_DATE = "release_date"
 MOVIE_STATUS = "movie_status"
 
-# user's movie progress
+# user's movie status
 STATUS_WATCHED = "watched"
 STATUS_WILL_WATCH = "will_watch"
 
+# directories
 POSTERS_DIR = "posters"
+IMAGES_DIR = "images"
 
-# widget names
+# navbar widget's names
 USER_LIST_BTN = "user_list_btn"
 SIGNUP_BTN = "signup_btn"
 LOGIN_BTN = "login_btn"
@@ -45,12 +47,10 @@ LOGOUT_BTN = "logout_btn"
 BACK_BTN = "back_btn"
 WELCOME_USER = "welcome_user"
 
-# validations
+# user authentication validations
 WITHIN_MIN_LEN = "min_len"
 WITHIN_MAX_LEN = "max_len"
 IS_ALNUM = "is_alnum"
-IS_FOUND = "is_found"
-IS_MATCH = "is_match"
 
 # store.user keys
 USER_ID = "id"

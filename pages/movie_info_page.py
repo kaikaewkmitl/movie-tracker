@@ -15,20 +15,20 @@ class MovieInfoPage(Page):
     def __init__(self, parent: Misc,
                  change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
-        self.__movie: Dict[str, Any] = {}
-        self.__movie[MOVIE_POSTER_IMG] = None
-        self.__movie[MOVIE_TITLE] = ""
-        self.__movie[MOVIE_OVERVIEW] = ""
+        self.movie: Dict[str, Any] = {}
+        self.movie[MOVIE_POSTER_IMG] = None
+        self.movie[MOVIE_TITLE] = ""
+        self.movie[MOVIE_OVERVIEW] = ""
 
     def display(self) -> None:
         super().display()
 
         movie_title = MyHeading(
-            self._page, text=f"{self.__movie[MOVIE_TITLE]}"
+            self.page, text=f"{self.movie[MOVIE_TITLE]}"
         )
         movie_title.pack()
 
-        overview_container = Frame(self._page, bg=store.theme[BG])
+        overview_container = Frame(self.page, bg=store.theme[BG])
         overview_container.pack(side=RIGHT)
 
         overview_heading = MyHeading(
@@ -36,26 +36,27 @@ class MovieInfoPage(Page):
         )
         overview_heading.pack(padx=20, anchor=W)
 
-        overview = Text(overview_container,
-                        width=50,
-                        height=10,
-                        font=MySmallFont(),
-                        wrap="word",
-                        fg=store.theme[FG],
-                        bg=store.theme[BG],
-                        highlightthickness=1,
-                        borderwidth=1,
-                        highlightbackground=store.theme[FG],
-                        highlightcolor=store.theme[FG]
-                        )
-        overview.insert(END, f"\t{self.__movie[MOVIE_OVERVIEW]}")
+        overview = Text(
+            overview_container,
+            width=50,
+            height=10,
+            font=MySmallFont(),
+            wrap="word",
+            fg=store.theme[FG],
+            bg=store.theme[BG],
+            highlightthickness=1,
+            borderwidth=1,
+            highlightbackground=store.theme[FG],
+            highlightcolor=store.theme[FG]
+        )
+        overview.insert(END, f"\t{self.movie[MOVIE_OVERVIEW]}")
         overview.config(state=DISABLED)
         overview.pack(padx=20)
 
         others_container = Frame(overview_container, bg=store.theme[BG])
         others_container.pack(padx=20, side=LEFT)
 
-        movie_genres_id = self.__movie[MOVIE_GENRE_IDS]
+        movie_genres_id = self.movie[MOVIE_GENRE_IDS]
 
         genre_heading = MyHeading(
             others_container, font=MyMediumFont(), text="Genres"
@@ -74,7 +75,9 @@ class MovieInfoPage(Page):
             genres.insert(END, store.genre_dict[genre])
 
         others_heading = MyHeading(
-            others_container, font=MyMediumFont(), text="Other Info"
+            others_container,
+            font=MyMediumFont(),
+            text="Other Info"
         )
         others_heading.grid(row=0, column=1, padx=10, sticky=W)
 
@@ -86,28 +89,30 @@ class MovieInfoPage(Page):
         )
         others.grid(row=1, column=1, padx=10, sticky=NW)
         others.insert(END,
-                      f"Original Language: {self.__movie[MOVIE_LANGUAGE]}",
+                      f"Original Language: {self.movie[MOVIE_LANGUAGE]}",
                       "",
-                      f"Release Date: {self.__movie[MOVIE_RELEASE_DATE]}",
+                      f"Release Date: {self.movie[MOVIE_RELEASE_DATE]}",
                       "",
-                      f"Rating: {self.__movie[MOVIE_RATING]}"
+                      f"Rating: {self.movie[MOVIE_RATING]}"
                       )
 
-        poster_container = Frame(self._page, bg=store.theme[BG])
+        poster_container = Frame(self.page, bg=store.theme[BG])
         poster_container.pack(side=LEFT, padx=20, pady=15, anchor=N)
 
         poster: Label
-        if self.__movie[MOVIE_POSTER_IMG] != None:
-            poster = Label(poster_container,
-                           image=self.__movie[MOVIE_POSTER_IMG], borderwidth=0
-                           )
+        if self.movie[MOVIE_POSTER_IMG] != None:
+            poster = Label(
+                poster_container,
+                image=self.movie[MOVIE_POSTER_IMG], borderwidth=0
+            )
         else:
-            poster = Label(poster_container,
-                           text="No Poster",
-                           font=MyBigFont(),
-                           fg="orange",
-                           height=6
-                           )
+            poster = Label(
+                poster_container,
+                text="No Poster",
+                font=MyBigFont(),
+                fg="orange",
+                height=6
+            )
         poster.pack(padx=20, pady=20)
 
         add_to_list_container = Frame(poster_container, bg=store.theme[BG])
@@ -137,7 +142,7 @@ class MovieInfoPage(Page):
             )
             will_watch_btn.pack(pady=0)
         else:
-            self.__movie[MOVIE_STATUS] = movie[MOVIE_STATUS]
+            self.movie[MOVIE_STATUS] = movie[MOVIE_STATUS]
 
             status = StringVar(
                 add_to_list_container,
@@ -165,44 +170,44 @@ class MovieInfoPage(Page):
             )
 
     def set_movie_and_display(self, movie: Dict[str, Any]) -> None:
-        self.__movie = movie
-        if MOVIE_POSTER_PATH in self.__movie and self.__movie[MOVIE_POSTER_PATH] != None:
+        self.movie = movie
+        if MOVIE_POSTER_PATH in self.movie and self.movie[MOVIE_POSTER_PATH] != None:
             path = os.path.join(
-                POSTERS_DIR, self.__movie[MOVIE_POSTER_PATH][1:]
+                POSTERS_DIR, self.movie[MOVIE_POSTER_PATH][1:]
             )
             if not os.path.exists(path):
                 get_poster(movie[MOVIE_POSTER_PATH])
 
-            self.__movie[MOVIE_POSTER_IMG] = ImageTk.PhotoImage(
+            self.movie[MOVIE_POSTER_IMG] = ImageTk.PhotoImage(
                 Image.open(path)
             )
         else:
-            self.__movie[MOVIE_POSTER_IMG] = None
+            self.movie[MOVIE_POSTER_IMG] = None
 
         self.set_on_display(True)
 
     def add_to_list(self, status: str) -> None:
         if len(store.user) > 0:
-            user = add_movie_to_user_list(self.__movie, status)
+            user = add_movie_to_user_list(self.movie, status)
             store.user = user
             messagebox.showinfo(
-                "Updated User List", f"You've added {self.__movie[MOVIE_TITLE]} to your list"
+                "Updated User List", f"You've added {self.movie[MOVIE_TITLE]} to your list"
             )
-            self._page.focus()
-            self._change_page_cb(MOVIE_INFO_PAGE, self.__movie)
+            self.page.focus()
+            self.change_page_cb(MOVIE_INFO_PAGE, self.movie)
         else:
             messagebox.showerror(
                 "Unauthenticated", "You are unauthenticated, please log in first"
             )
-            self._page.focus()
-            self._change_page_cb(LOGIN_PAGE)
+            self.page.focus()
+            self.change_page_cb(LOGIN_PAGE)
 
     def find_in_user_list(self) -> Dict[str, Any]:
         if len(store.user) == 0:
             return {}
 
         for m in store.user[USER_MOVIE_LIST]:
-            if self.__movie[MOVIE_ID] == m[MOVIE_ID]:
+            if self.movie[MOVIE_ID] == m[MOVIE_ID]:
                 return m
 
         return {}
@@ -213,16 +218,16 @@ class MovieInfoPage(Page):
             "Will Watch":  STATUS_WILL_WATCH
         }
 
-        if status_dict[status] != self.__movie[MOVIE_STATUS]:
+        if status_dict[status] != self.movie[MOVIE_STATUS]:
             user = update_movie_status(
-                self.__movie, status_dict[status]
+                self.movie, status_dict[status]
             )
             store.user = user
             messagebox.showinfo(
-                "Updated User List", f"You've updated {self.__movie[MOVIE_TITLE]}'s watch status"
+                "Updated User List", f"You've updated {self.movie[MOVIE_TITLE]}'s watch status"
             )
-            self._page.focus()
-            self._change_page_cb(MOVIE_INFO_PAGE, self.__movie)
+            self.page.focus()
+            self.change_page_cb(MOVIE_INFO_PAGE, self.movie)
 
     def get_movie(self):
-        return self.__movie
+        return self.movie

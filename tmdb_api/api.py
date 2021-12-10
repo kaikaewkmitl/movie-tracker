@@ -38,13 +38,13 @@ def handle_request(url: str, stream: bool = False) -> Response:
         return response
 
     except requests.exceptions.HTTPError as errh:
-        print("Http Error:", errh)
+        print(f"Http Error: {errh}")
     except requests.exceptions.ConnectionError as errc:
-        print("Error Connecting:", errc)
+        print(f"Connection Error: {errc}")
     except requests.exceptions.Timeout as errt:
-        print("Timeout Error:", errt)
+        print(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
-        print("Oops: Something Else", err)
+        print(f"Error: {err}")
 
 
 def add_movie_title(movie: Dict[str, Any]) -> None:

@@ -13,67 +13,74 @@ class LoginPage(Page):
                  change_page_callback: Callable[[str, Optional[Dict[str, Any]]], None]) -> None:
         super().__init__(parent, change_page_callback)
 
-        self.__validations: Dict[str, Callable[[str], bool]] = {
+        self.validations: Dict[str, Callable[[str], bool]] = {
             IS_ALNUM: lambda s: s.isalnum()
         }
 
     def display(self) -> None:
         super().display()
 
-        form_container = Frame(self._page, bg=store.theme[BG])
+        form_container = Frame(self.page, bg=store.theme[BG])
         form_container.pack(padx=250, pady=100, anchor=W)
+
         form_heading = MyHeading(form_container, text="Login")
         form_heading.grid(row=0, column=0, pady=20)
-        username_label = Label(form_container,
-                               font=MySmallFont(),
-                               text="Username:",
-                               fg=store.theme[FG],
-                               bg=store.theme[BG]
-                               )
+
+        username_label = Label(
+            form_container,
+            font=MySmallFont(),
+            text="Username:",
+            fg=store.theme[FG],
+            bg=store.theme[BG]
+        )
         username_label.grid(row=1, column=0)
 
-        password_label = Label(form_container,
-                               font=MySmallFont(),
-                               text="Password:",
-                               fg=store.theme[FG],
-                               bg=store.theme[BG]
-                               )
+        password_label = Label(
+            form_container,
+            font=MySmallFont(),
+            text="Password:",
+            fg=store.theme[FG],
+            bg=store.theme[BG]
+        )
         password_label.grid(row=2, column=0, pady=10)
 
-        username_entry = Entry(form_container,
-                               bg=WHITE,
-                               fg=BLACK,
-                               insertbackground=BLACK,
-                               highlightthickness=0,
-                               )
+        username_entry = Entry(
+            form_container,
+            bg=WHITE,
+            fg=BLACK,
+            insertbackground=BLACK,
+            highlightthickness=0,
+        )
         username_entry.grid(row=1, column=1)
 
-        password_entry = Entry(form_container,
-                               bg=WHITE,
-                               fg=BLACK,
-                               insertbackground=BLACK,
-                               show="*",
-                               highlightthickness=0,
-                               )
+        password_entry = Entry(
+            form_container,
+            bg=WHITE,
+            fg=BLACK,
+            insertbackground=BLACK,
+            show="*",
+            highlightthickness=0,
+        )
         password_entry.grid(row=2, column=1, pady=10)
 
-        login_btn = MyButton(form_container,
-                             font=MyMediumFont(),
-                             text="Login",
-                             width=15,
-                             command=lambda: self.login(
-                                 username_entry.get(),
-                                 password_entry.get()
-                             ))
+        login_btn = MyButton(
+            form_container,
+            font=MyMediumFont(),
+            text="Login",
+            width=15,
+            command=lambda: self.login(
+                username_entry.get(),
+                password_entry.get()
+            ))
 
         login_btn.grid(row=3, column=0, pady=20, columnspan=2)
 
     def login(self, username: str, password: str) -> None:
-        if not self.__validations[IS_ALNUM](username):
+        if not self.validations[IS_ALNUM](username):
             messagebox.showerror(
                 "Invalid username", "username must contains only letters or digits"
             )
-            self._page.focus()
+            self.page.focus()
             return
 
         user = authenticate_user(username, password)
@@ -81,7 +88,7 @@ class LoginPage(Page):
             messagebox.showerror(
                 "Invalid", "the username or password is incorrect"
             )
-            self._page.focus()
+            self.page.focus()
             return
 
         store.user[USER_ID] = user[USER_ID]
@@ -89,5 +96,5 @@ class LoginPage(Page):
         store.user[USER_MOVIE_LIST] = user[USER_MOVIE_LIST]
 
         messagebox.showinfo("Logged in", "You have logged in")
-        self._page.focus()
-        self._change_page_cb(MAIN_PAGE)
+        self.page.focus()
+        self.change_page_cb(MAIN_PAGE)

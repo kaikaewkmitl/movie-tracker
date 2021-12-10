@@ -18,17 +18,18 @@ class MainPage(Page):
     def display(self) -> None:
         super().display()
 
-        appName = MyHeading(self._page, text="Movie Tracker")
+        appName = MyHeading(self.page, text="Movie Tracker")
         appName.pack()
 
-        searchbar = Entry(self._page,
-                          bg=WHITE,
-                          fg=BLACK,
-                          width=30,
-                          font=MyMediumFont(),
-                          insertbackground=LIGHT_THEME_FG,
-                          highlightthickness=0,
-                          )
+        searchbar = Entry(
+            self.page,
+            bg=WHITE,
+            fg=BLACK,
+            width=30,
+            font=MyMediumFont(),
+            insertbackground=LIGHT_THEME_FG,
+            highlightthickness=0,
+        )
         searchbar.insert(0, SEARCH_BAR_DEFAULT)
         searchbar.bind("<FocusIn>",
                        lambda _: searchbar.get() == SEARCH_BAR_DEFAULT and searchbar.delete(0, END)
@@ -46,32 +47,34 @@ class MainPage(Page):
         text = "Trending Movies"
         if search_result != "":
             text = f"Search Result: {search_result}"
-        movie_list_heading = MyHeading(self._page, text=text)
+        movie_list_heading = MyHeading(self.page, text=text)
         movie_list_heading.pack()
 
-        movie_list_container = Frame(self._page, bg=store.theme[FG])
+        movie_list_container = Frame(self.page, bg=store.theme[FG])
         movie_list_container.pack(pady=20)
 
         movies = store.search_history[-1][1]
         if len(movies) == 0:
-            no_result = Label(movie_list_container,
-                              text="No Movie Found...\nPlease try some other keywords",
-                              font=MyMediumFont(),
-                              fg=store.theme[FG],
-                              bg=store.theme[BG]
-                              )
+            no_result = Label(
+                movie_list_container,
+                text="No Movie Found...\nPlease try some other keywords",
+                font=MyMediumFont(),
+                fg=store.theme[FG],
+                bg=store.theme[BG]
+            )
             no_result.pack()
         else:
             movie_list_container.config(borderwidth=1)
 
-            movie_list = MyListbox(movie_list_container,
-                                   width=30,
-                                   height=15,
-                                   cursor="hand2",
-                                   selectable=True
-                                   )
+            movie_list = MyListbox(
+                movie_list_container,
+                width=30,
+                height=15,
+                cursor="hand2",
+                selectable=True
+            )
             movie_list.bind("<Double-Button-1>",
-                            lambda _: self._change_page_cb(
+                            lambda _: self.change_page_cb(
                                 MOVIE_INFO_PAGE,
                                 movies[movie_list.curselection()[0]]
                             ))
@@ -96,4 +99,4 @@ class MainPage(Page):
         movie_name_encoded = "%20".join(movie_name.split())
         searched_movies = get_movie_by_name(movie_name_encoded)
         store.search_history.append((movie_name, searched_movies))
-        self._change_page_cb(MAIN_PAGE)
+        self.change_page_cb(MAIN_PAGE)

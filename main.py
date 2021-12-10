@@ -20,102 +20,102 @@ from utils.globals import *
 class App:
     def __init__(self) -> None:
         print("creating an app...")
-        self.__root = Tk()
-        self.__root.title("Movie Tracker")
-        self.__root.geometry("800x700")
-        self.__root.configure(bg=LIGHT_THEME_BG)
-        self.__root.focus()
+        self.root = Tk()
+        self.root.title("Movie Tracker")
+        self.root.geometry("800x700")
+        self.root.configure(bg=LIGHT_THEME_BG)
+        self.root.focus()
 
         signal.signal(signal.SIGINT, lambda x, y: self.interrupt())
 
-        self.__root.after(50, self.check)
+        self.root.after(50, self.check)
 
-        self.__navbar = MyNavbar(
-            self.__root, self.change_page_callback
+        self.navbar = MyNavbar(
+            self.root, self.change_page_callback
         )
-        self.__navbar.pack()
-        self.__navbar.remove_btn(BACK_BTN)
+        self.navbar.pack()
+        self.navbar.remove_btn(BACK_BTN)
 
-        self.__pages: Dict[str, Page] = {
+        self.pages: Dict[str, Page] = {
             MAIN_PAGE: MainPage(
-                self.__root, self.change_page_callback
+                self.root, self.change_page_callback
             ),
             MOVIE_INFO_PAGE: MovieInfoPage(
-                self.__root, self.change_page_callback
+                self.root, self.change_page_callback
             ),
             SIGNUP_PAGE: SignupPage(
-                self.__root, self.change_page_callback
+                self.root, self.change_page_callback
             ),
             LOGIN_PAGE: LoginPage(
-                self.__root, self.change_page_callback
+                self.root, self.change_page_callback
             ),
             USER_LIST_PAGE: UserListPage(
-                self.__root, self.change_page_callback
+                self.root, self.change_page_callback
             )
         }
 
-        self.__dark_img = ImageTk.PhotoImage(
+        self.dark_img = ImageTk.PhotoImage(
             Image.open(
                 os.path.join("images", "dark_theme.png")
             ).resize((75, 40), Image.ANTIALIAS)
         )
-        self.__light_img = ImageTk.PhotoImage(
+        self.light_img = ImageTk.PhotoImage(
             Image.open(
                 os.path.join("images", "light_theme.png")
             ).resize((75, 40), Image.ANTIALIAS)
         )
 
-        self.__theme_btn = Label(
-            self.__root,
-            image=self.__light_img,
+        self.theme_btn = Label(
+            self.root,
+            image=self.light_img,
             bg=LIGHT_THEME_BG,
             cursor="hand2"
         )
-        self.__theme_btn.place(x=10, y=650)
-        self.__theme_btn.bind("<Button-1>", lambda _: self.toggle_theme())
+        self.theme_btn.place(x=10, y=650)
+        self.theme_btn.bind("<Button-1>", lambda _: self.toggle_theme())
 
-        self.__pages[store.curpage].set_on_display(True)
+        self.pages[store.curpage].set_on_display(True)
 
-        self.__root.mainloop()
+        self.root.mainloop()
 
         if os.path.exists(POSTERS_DIR):
             shutil.rmtree(POSTERS_DIR)
 
     def interrupt(self) -> None:
         print("terminate by ctrl c")
-        self.__root.destroy()
+        self.root.destroy()
 
     def check(self) -> None:
-        self.__root.after(50, self.check)
+        self.root.after(50, self.check)
 
     def change_page_callback(self, page_name: str, movie: Dict[str, Any] = None) -> None:
-        self.__theme_btn.place_forget()
-        self.__pages[store.curpage].set_on_display(False)
+        self.theme_btn.place_forget()
+        self.pages[store.curpage].set_on_display(False)
         store.curpage = page_name
 
         if page_name == MOVIE_INFO_PAGE:
-            page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
+            page = cast(MovieInfoPage, self.pages[MOVIE_INFO_PAGE])
             page.set_movie_and_display(movie)
         else:
-            self.__pages[page_name].set_on_display(True)
+            self.pages[page_name].set_on_display(True)
 
-        self.__navbar.display()
-        self.__theme_btn.place(x=10, y=650)
+        self.navbar.display()
+        self.theme_btn.place(x=10, y=650)
 
     def toggle_theme(self) -> None:
         if store.theme[FG] == LIGHT_THEME_FG:
             store.theme[FG] = DARK_THEME_FG
             store.theme[BG] = DARK_THEME_BG
-            self.__theme_btn.config(image=self.__dark_img)
+            self.theme_btn.config(image=self.dark_img)
         else:
             store.theme[FG] = LIGHT_THEME_FG
             store.theme[BG] = LIGHT_THEME_BG
-            self.__theme_btn.config(image=self.__light_img)
+            self.theme_btn.config(image=self.light_img)
 
-        self.__root.config(bg=store.theme[BG])
-        self.__theme_btn.config(bg=store.theme[BG])
+        self.root.config(bg=store.theme[BG])
+        self.theme_btn.config(bg=store.theme[BG])
         if store.curpage == MOVIE_INFO_PAGE:
-            page = cast(MovieInfoPage, self.__pages[MOVIE_INFO_PAGE])
+            page = cast(MovieInfoPage, self.pages[MOVIE_INFO_PAGE])
             self.change_page_callback(
                 store.curpage, page.get_movie()
             )
