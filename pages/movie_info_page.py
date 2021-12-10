@@ -110,7 +110,8 @@ class MovieInfoPage(Page):
                 poster_container,
                 text="No Poster",
                 font=MyBigFont(),
-                fg="orange",
+                fg=ORANGE,
+                bg=store.theme[BG],
                 height=6
             )
         poster.pack(padx=20, pady=20)
