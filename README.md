@@ -1,14 +1,69 @@
 # Movie Tracker
 
-## Proposal Structure
-The proposal will include the following sections:
-* **Project Title:** Movie Tracker
-* **Description:** allows users to keep track of and manage movies the user have watched
-* **Project By:** Mahnun Saratunti (64011456)
+A GUI program built using tkinter. Allows user to conveniently keep track of the movies they've watched.
+
+KMITL's Introduction To Computers And Programming project by Mahnun Saratunti (64011456)
+
+All data related to movies are provided by [The Movie Database (TMDb) API](https://developers.themoviedb.org/3)
+
+## Install
+
+```
+git clone https://github.com/kaikaewkmitl/movie-tracker.git
+cd movie-tracker
+pip install -r requirements.txt
+python3 main.py
+```
 
 ## Features
 
-* display a list of trending movies
-* allow users to search for specific movies
-* allow users to record a list of movies they've watched
-* etc
+* Displays a list of trending movies on the program’s Main Page.
+* Users can search for a specific movies via search bar.
+* All information related to movie is fetched from TMDb API.
+* Users can view information of a specific movie. The movie's information includes:
+  * movie's overview
+  * poster
+  * genres
+  * rating
+  * release date
+  * etc.
+* Basic user authentication. Users' data are stored in Heroku Postgres (SQL database managed by Heroku).
+* The users' password are encrypted using Python's bcrypt library.
+* After login, users have a freedom the add movies to their 'watech list' or 'will-watch list'.
+* Users can view thier list on User List Page, they can view all movies, or filter down to just 'watched list' or 'will-watch list'.
+* Users can also sort their list by movies' name, rating.
+* Toggle between dark and light theme.
+
+Previews
+
+Main Page
+
+<img src="./images/main_page.png" alt="drawing" width="500"/>
+
+Login Page
+
+<img src="./images/login_page.png" alt="drawing" width="500"/>
+
+Signup Page
+
+<img src="./images/signup_page.png" alt="drawing" width="500"/>
+
+Movie Information Page
+
+<img src="./images/movie_info_page.png" alt="drawing" width="500"/>
+
+User's Movie List Page
+
+<img src="./images/user_list_page.png" alt="drawing" width="500"/>
+
+Searching For Movies
+
+<img src="./images/main_page_searched.png" alt="drawing" width="500"/>
+
+Enable Dark Theme
+
+<img src="./images/main_page_dark.png" alt="drawing" width="500"/>
+
+## Credits
+
+[The Movie Database (TMDb) API](https://developers.themoviedb.org/3)
