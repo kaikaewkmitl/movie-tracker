@@ -48,7 +48,7 @@ def open_db_connection() -> connection:
             sslmode="require"
         )
     except (Exception, Error) as err:
-        print("DB Error:", err)
+        print(f"DB Error: {err}")
 
 
 def create_user_table() -> None:
