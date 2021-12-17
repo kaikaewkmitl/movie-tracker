@@ -34,7 +34,7 @@ python3 main.py
 * Users can also sort their list by movies' name, rating.
 * Toggle between dark and light theme.
 
-Previews
+## Previews
 
 Main Page
 
